@@ -11,3 +11,8 @@ info: Microsoft.Hosting.Lifetime[0]
       Hosting environment: Development
 info: Microsoft.Hosting.Lifetime[0]
       Content root path: /Users/jalfaro/Lector PDF/Backend
+dotnet watch ⌚ File updated: ./obj/Debug/net10.0/Backend.AssemblyInfo.cs
+dotnet watch 🔥 Restart is needed to apply the changes.
+dotnet watch ❌ /Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/Backend.AssemblyInfo.cs(16,12): error ENC0003: Para actualizar "atributo" es necesario reiniciar la aplicación.
+  ❔ Do you want to restart your app? Yes (y) / No (n) / Always (a) / Never (v)
+  ❔ 

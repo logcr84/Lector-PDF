@@ -38,3 +38,4 @@
 /Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/Backend.pdb
 /Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/Backend.genruntimeconfig.cache
 /Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/ref/Backend.dll
+/Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/Backend.sourcelink.json
