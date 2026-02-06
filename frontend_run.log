@@ -15,3 +15,37 @@ Application bundle generation complete. [0.943 seconds] - 2026-02-06T23:22:46.96
 Watch mode enabled. Watching for file changes...
 NOTE: Raw file sizes do not reflect development server per-request transformations.
   ➜  Local:   http://localhost:4200/
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names | Raw size
+main.js             | main  |  2.24 kB | 
+
+Application bundle generation complete. [1.268 seconds] - 2026-02-06T23:39:48.234Z
+
+Page reload sent to client(s).
+5:39:48 PM [vite] (client) Pre-transform error: Failed to resolve import "zone.js" from ".angular/vite-root/Frontend/main.js". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/jalfaro/Lector PDF/Frontend/.angular/vite-root/Frontend/main.js:1:7
+  1  |  // src/main.ts
+  2  |  import "zone.js";
+     |          ^
+  3  |  import { bootstrapApplication } from "@angular/platform-browser";
+  4  |  
+5:39:48 PM [vite] Internal server error: Failed to resolve import "zone.js" from ".angular/vite-root/Frontend/main.js". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/jalfaro/Lector PDF/Frontend/.angular/vite-root/Frontend/main.js:1:7
+  1  |  // src/main.ts
+  2  |  import "zone.js";
+     |          ^
+  3  |  import { bootstrapApplication } from "@angular/platform-browser";
+  4  |  
+      at TransformPluginContext._formatLog (file:///Users/jalfaro/Lector%20PDF/Frontend/node_modules/vite/dist/node/chunks/config.js:28998:43)
+      at TransformPluginContext.error (file:///Users/jalfaro/Lector%20PDF/Frontend/node_modules/vite/dist/node/chunks/config.js:28995:14)
+      at normalizeUrl (file:///Users/jalfaro/Lector%20PDF/Frontend/node_modules/vite/dist/node/chunks/config.js:27118:18)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      at async file:///Users/jalfaro/Lector%20PDF/Frontend/node_modules/vite/dist/node/chunks/config.js:27176:32
+      at async Promise.all (index 0)
+      at async TransformPluginContext.transform (file:///Users/jalfaro/Lector%20PDF/Frontend/node_modules/vite/dist/node/chunks/config.js:27144:4)
+      at async EnvironmentPluginContainer.transform (file:///Users/jalfaro/Lector%20PDF/Frontend/node_modules/vite/dist/node/chunks/config.js:28796:14)
+      at async loadAndTransform (file:///Users/jalfaro/Lector%20PDF/Frontend/node_modules/vite/dist/node/chunks/config.js:22669:26)
+      at async viteTransformMiddleware (file:///Users/jalfaro/Lector%20PDF/Frontend/node_modules/vite/dist/node/chunks/config.js:24541:20)
