@@ -49,3 +49,25 @@ Page reload sent to client(s).
       at async EnvironmentPluginContainer.transform (file:///Users/jalfaro/Lector%20PDF/Frontend/node_modules/vite/dist/node/chunks/config.js:28796:14)
       at async loadAndTransform (file:///Users/jalfaro/Lector%20PDF/Frontend/node_modules/vite/dist/node/chunks/config.js:22669:26)
       at async viteTransformMiddleware (file:///Users/jalfaro/Lector%20PDF/Frontend/node_modules/vite/dist/node/chunks/config.js:24541:20)
+5:40:45 PM [vite] (client) ✨ new dependencies optimized: zone.js
+5:40:45 PM [vite] (client) ✨ optimized dependencies changed. reloading
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names | Raw size
+main.js             | main  | 22.06 kB | 
+
+Application bundle generation complete. [1.804 seconds] - 2026-02-06T23:41:57.554Z
+
+Page reload sent to client(s).
+5:41:58 PM [vite] (client) ✨ new dependencies optimized: @angular/common
+5:41:58 PM [vite] (client) ✨ optimized dependencies changed. reloading
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names         | Raw size
+main.js             | main          | 22.06 kB | 
+styles.css          | styles        |  4.86 kB | 
+
+                    | Initial total | 26.92 kB
+
+Application bundle generation complete. [0.116 seconds] - 2026-02-06T23:41:59.477Z
+
