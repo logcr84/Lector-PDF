@@ -39,7 +39,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/PdfReader.sln"
+                "${workspaceFolder}/Backend/Backend.csproj"
             ],
             "options": {
                 "env": {
