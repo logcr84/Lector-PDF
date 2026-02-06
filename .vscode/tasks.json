@@ -1,0 +1,53 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/PdfReader.sln",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary;ForceNoAlign"
+            ],
+            "options": {
+                "env": {
+                    "NUGET_SCRATCH": "${workspaceFolder}/tmp/nuget",
+                    "DOTNET_CLI_HOME": "${workspaceFolder}/tmp/dotnet"
+                }
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/PdfReader.sln",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary;ForceNoAlign"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "--project",
+                "${workspaceFolder}/PdfReader.sln"
+            ],
+            "options": {
+                "env": {
+                    "NUGET_SCRATCH": "${workspaceFolder}/tmp/nuget",
+                    "DOTNET_CLI_HOME": "${workspaceFolder}/tmp/dotnet"
+                }
+            },
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

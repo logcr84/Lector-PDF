@@ -1,0 +1,2785 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boletín Oficial de Remates - Generado</title>
+    <style>
+        :root {
+            --prop-primary: #2c3e50;
+            --prop-light: #ecf0f1;
+            --car-primary: #d35400;
+            --car-light: #fbeee6;
+            --text-main: #333;
+            --text-muted: #7f8c8d;
+            --bg-body: #f4f6f7;
+            --card-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 30px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        /* CONTROLS AREA */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .filter-btn {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            background: #f8f9fa;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--prop-primary);
+            color: white;
+            border-color: var(--prop-primary);
+        }
+
+        .search-box {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 250px;
+            font-size: 14px;
+        }
+        
+        .pagination {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        
+        .page-btn {
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .page-btn.active {
+            background: var(--prop-primary);
+            color: white;
+            border-color: var(--prop-primary);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--prop-primary);
+            margin-bottom: 30px;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+        }
+
+        /* Estilos del Acordeón (Encabezado) */
+        .accordion {
+            background-color: #fff;
+            cursor: pointer;
+            padding: 15px 20px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 16px;
+            transition: 0.3s;
+            margin-bottom: 5px;
+            border-radius: 6px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 6px solid transparent;
+        }
+
+        .prop-item { border-left-color: var(--prop-primary); }
+        .car-item { border-left-color: var(--car-primary); }
+
+        .accordion:hover, .accordion.active { background-color: #fafafa; }
+
+        /* Layout del Encabezado */
+        .header-grid {
+            display: grid;
+            grid-template-columns: 3fr 1fr 1.2fr;
+            width: 100%;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .h-title { 
+            font-weight: 600; 
+            color: #444; 
+            font-size: 0.95em;
+            /* Truncate long titles */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+        .h-area { text-align: center; color: var(--text-muted); font-size: 0.9em; }
+        .h-price { text-align: right; font-weight: 700; font-size: 1.1em; color: #27ae60; }
+
+        /* Panel de Contenido Desplegable */
+        .panel {
+            padding: 0 20px;
+            background-color: #fff;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            margin-bottom: 10px;
+            border-radius: 0 0 6px 6px;
+            border: 1px solid #eee;
+            border-top: none;
+            display: none; /* Hidden by default for logic control */
+        }
+        
+        .panel.show {
+            display: block;
+            /* max-height handled by JS */
+        }
+
+        .panel-content { padding: 25px 0; }
+
+        /* Etiquetas */
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: bold;
+            color: #fff;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+        .bg-prop { background-color: var(--prop-primary); }
+        .bg-car { background-color: var(--car-primary); }
+
+        /* Tarjetas Remates */
+        .remates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .remate-card {
+            background-color: #f8f9fa;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+        .remate-label { display: block; font-size: 0.75em; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-bottom: 5px; }
+        .remate-price { display: block; font-size: 1.1em; font-weight: bold; color: var(--text-main); margin-bottom: 8px; }
+        .remate-date { font-size: 0.85em; color: #555; line-height: 1.3; }
+
+        .expediente-info {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: var(--prop-primary);
+            background: #eef2f5;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px dashed #ccc;
+        }
+
+        /* Detalles */
+        .details-box {
+            background-color: #fcfcfc;
+            border-left: 3px solid #ddd;
+            padding: 15px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        .detail-row { display: flex; margin-bottom: 6px; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-key { font-weight: 600; width: 130px; flex-shrink: 0; color: var(--prop-primary); }
+        .detail-value { flex-grow: 1; }
+        .section-title {
+            font-weight: 700; color: var(--prop-primary); margin-bottom: 10px;
+            text-transform: uppercase; font-size: 0.8em; letter-spacing: 0.5px;
+            border-bottom: 2px solid #eee; padding-bottom: 3px;
+        }
+        
+        .hidden { display: none !important; }
+
+        @media (max-width: 768px) {
+            .header-grid { grid-template-columns: 1fr; gap: 5px; }
+            .h-area, .h-price { text-align: left; }
+            .h-price { margin-top: 5px; }
+            .controls { flex-direction: column; align-items: stretch; }
+            .pagination { justify-content: center; margin-top: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Listado Oficial de Remates</h1>
+        
+        <div class="controls">
+            <div>
+                <button class="filter-btn active" onclick="filterItems('all')">Todos</button>
+                <button class="filter-btn" onclick="filterItems('propiedad')">Propiedades</button>
+                <button class="filter-btn" onclick="filterItems('vehiculo')">Vehículos</button>
+            </div>
+            <div>
+                 <input type="text" id="searchInput" class="search-box" placeholder="Buscar expediente, título o contenido..." onkeyup="filterItems()">
+            </div>
+            <div class="pagination" id="paginationControls">
+                <!-- JS will inject buttons here -->
+            </div>
+        </div>
+
+        <div id="itemsContainer">
+            
+        <!-- ITEM 1 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">SUZUKI S CROSS GL (Fabricación: 2017)</span>
+                <span class="h-area">--</span>
+                <span class="h-price">₡4,535,370.75</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡4,535,370.75</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡3,401,528.06</span>
+                        <span class="remate-date">Ocho  Treinta  Del Veintiocho De Abril Del Año Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡1,133,842.69</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-006327-</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Motor:</span> <span class="detail-value">M16A2029171</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-006327-</span></div><div class="detail-row"><span class="detail-key">Juzgado:</span> <span class="detail-value">DE COBRO DE PUNTARENAS</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">GRACE DE LOS ANGELES ESQUIVEL MUÑOZ</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de CUATRO MILLONES CUATROCIENTOS OCHENTA MIL QUINIENTOS SESENTA Y CIN...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 2 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">Vehículo</span>
+                <span class="h-area">--</span>
+                <span class="h-price">₡10,445,122.23</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡10,445,122.23</span>
+                        <span class="remate-date">Trece  Treinta  Del Seis De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡7,833,841.67</span>
+                        <span class="remate-date">Trece  Treinta  Del Catorce De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡2,611,280.56</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-</span></div><div class="detail-row"><span class="detail-key">Juzgado:</span> <span class="detail-value">ESPECIALIZADO DE COBRO DEL II CIRCUITO JUDICIAL DE SAN JOSÉ (SECCIÓN PRIMERA)</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">JAFFETH ANDRES JIMENEZ CAMPOS</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de DIEZ MILLONES TRESCIENTOS TREINTA Y UN MIL OCHOCIENTOS CUATRO COLO...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 3 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 01-BUENOS AIRES, CANTÓN 03-BUENOS AIRES</span>
+                <span class="h-area">200 m²</span>
+                <span class="h-price">₡15,122,000.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡15,122,000.00</span>
+                        <span class="remate-date">Quince  Cero  Del Seis De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡11,341,500.00</span>
+                        <span class="remate-date">Quince  Cero  Del Catorce De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡3,780,500.00</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 24-003071-1200-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Naturaleza:</span> <span class="detail-value">terreno PARA CONSTRUIR.-</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">24-003071-1200-CJ</span></div><div class="detail-row"><span class="detail-key">Juzgado:</span> <span class="detail-value">DE COBRO DEL I CIRCUITO JUDICIAL DE LA ZONA SUR</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">GRACE DE LOS ANGELES MEDINA HERNANDEZ</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de QUINCE MILLONES CIENTO VEINTIDÓS MIL COLONES EXACTOS, soportando R...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 4 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">Vehículo</span>
+                <span class="h-area">--</span>
+                <span class="h-price">$25,494.98</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$25,494.98</span>
+                        <span class="remate-date">Diez  Cero  Del Dieciocho De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">$19,121.24</span>
+                        <span class="remate-date">Diez  Cero  Del Veintiséis De Marzo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$6,373.74</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-001575-1203-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Placa:</span> <span class="detail-value">JPF030</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-001575-1203-CJ</span></div><div class="detail-row"><span class="detail-key">Juzgado:</span> <span class="detail-value">DE COBRO DEL III CIRCUITO JUDICIAL DE ALAJUELA (SAN RAMÓN)</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">JOSE PABLO FLORES HERRERA</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, con una base de VEINTICINCO MIL DOSCIENTOS TREINTA Y DOS DÓLARES CON SESENTA Y SEI...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 5 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">HYUNDAI Estilo: ACCENT ACCENT (Fabricación: 2012)</span>
+                <span class="h-area">--</span>
+                <span class="h-price">₡6,651,766.73</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡6,651,766.73</span>
+                        <span class="remate-date">Ocho  Cero  Del Veintitrés De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡4,988,825.05</span>
+                        <span class="remate-date">Ocho  Cero  Del Siete De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡1,662,941.68</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 26-000139-1204-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">26-000139-1204-CJ</span></div><div class="detail-row"><span class="detail-key">Juzgado:</span> <span class="detail-value">DE COBRO DE GRECIA</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">JENNIFER DE LOS ANGELES RODRIGUEZ ARTAVIA</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de SEIS MILLONES QUINIENTOS SETENTA Y SEIS MIL SEIS COLONES CON SESEN...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 6 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">HYUNDAI Estilo: TUCSON Categoría: AUTOMOVIL Capacidad: 5 Personas TUCSON Categoría: AUTOMOVIL Capacidad: 5 Personas</span>
+                <span class="h-area">--</span>
+                <span class="h-price">₡13,595,981.33</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡13,595,981.33</span>
+                        <span class="remate-date">Ocho  Treinta  Del Veintitrés De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡10,196,986.00</span>
+                        <span class="remate-date">Ocho  Treinta  Del Siete De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡3,398,995.33</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 26-000140-1204-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">26-000140-1204-CJ</span></div><div class="detail-row"><span class="detail-key">Juzgado:</span> <span class="detail-value">DE COBRO DE GRECIA</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">ISAAC DANIEL ROJAS VILLALOBOS</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de TRECE MILLONES CUATROCIENTOS CINCUENTA Y UN MIL CUATROCIENTOS SESE...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 7 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO SAN VITO, CANTÓN COTO BRUS</span>
+                <span class="h-area">17291 m²</span>
+                <span class="h-price">₡10,000,000.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡10,000,000.00</span>
+                        <span class="remate-date">Nueve  Cero  Del Once De Febrero De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡7,500,000.00</span>
+                        <span class="remate-date">Nueve  Cero  Del Diecinueve De Febrero De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡2,500,000.00</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 24-001876-1201-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">24-001876-1201-CJ</span></div><div class="detail-row"><span class="detail-key">Juzgado:</span> <span class="detail-value">DE COBRO DE GOLFITO</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">EVELIO ARAYA SEGURA</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de DIEZ MILLONES DE COLONES EXACTOS, libre de gravámenes hipotecarios...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 8 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 4-BAHIA BALLENA, CANTÓN 5-OSA</span>
+                <span class="h-area">1140 m²</span>
+                <span class="h-price">$82,634.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$82,634.00</span>
+                        <span class="remate-date">Nueve  Treinta  Del Once De Febrero De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">$61,975.50</span>
+                        <span class="remate-date">Nueve  Treinta  Del Diecinueve De Febrero De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$20,658.50</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 20-002041-1201-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">20-002041-1201-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">SMILING TO NATURE S.A</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de OCHENTA Y DOS MIL SEISCIENTOS TREINTA Y CUATRO DÓLARES EXACTOS, li...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 9 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 5-PIEDADES SUR, CANTÓN 2-SAN RAMON</span>
+                <span class="h-area">391 m²</span>
+                <span class="h-price">₡3,057,293.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡3,057,293.00</span>
+                        <span class="remate-date">Trece  Treinta  Del Siete De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡2,292,969.75</span>
+                        <span class="remate-date">Trece  Treinta  Del Quince De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡764,323.25</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-001864-1203-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE GERARDINA PEREZ UGALDE; al SUR CALLE PUBLICA CON 15,08 METROS; al ESTE GERARDINA PEREZ UGALDE y al OESTE GERARDINA PEREZ UGALDE.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-001864-1203-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">EVELIO RAFAEL DEL CARMEN FERNÁNDEZ ARAYA.</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de TRES MILLONES CINCUENTA Y SIETE MIL DOSCIENTOS NOVENTA Y TRES COLO...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 10 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">EL DISTRITO 3-AGUABUENA CANTON 8-COTO BRUS DE LA PROVINCIA DE PUNTARENAS LINDEROS: NORTE: ARALI S</span>
+                <span class="h-area">346 m²</span>
+                <span class="h-price">₡32,000,000.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡32,000,000.00</span>
+                        <span class="remate-date">Ocho  Cero  Del Nueve De Febrero De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡24,000,000.00</span>
+                        <span class="remate-date">Ocho  Cero  Del Diecisiete De Febrero De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡8,000,000.00</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 23-002388-1201-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">23-002388-1201-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">LAURA IVETH NÚÑEZ SOLÓRZANO</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, se señalan las ocho horas cero minutos del nueve de febrero de dos mil veintiséis....</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 11 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">DFM Estilo: T5 EVO Categoría: AUTOMOVIL Capacidad: 5 personas # de Serie: LMXA14AF9RZ350001 Peso Carroceria: TODO TERRENO 4 PUERTAS Tracción: 4X2 # de Chasis: LMXA14AF9RZ350001 Año Fabricación: 2023 Color: NEGRO # de VIN: LMXA14AF9RZ350001 CARACTERÍSTICAS DEL MOTOR N T5 EVO Categoría: AUTOMOVIL Capacidad: 5 personas # de Serie: LMXA14AF9RZ350001 Peso Carroceria: TODO TERRENO 4 PUERTAS Tracción: 4X2 # de Chasis: LMXA14AF9RZ350001 Año Fabricación: 2023 Color: NEGRO # de VIN: LMXA14AF9RZ350001 CARACTERÍSTICAS DEL MOTOR N (Fabricación: 2023 Color: NEGRO # de VIN: LMXA14AF9RZ350001 CARACTERÍSTICAS DEL MOTOR N)</span>
+                <span class="h-area">--</span>
+                <span class="h-price">$31,276.75</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$31,276.75</span>
+                        <span class="remate-date">Siete  Treinta  Del Once De Febrero De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">$23,457.56</span>
+                        <span class="remate-date">Siete  Treinta  Del Diecinueve De Febrero De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$7,819.19</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-000710-1201-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Motor:</span> <span class="detail-value">4A95TD3UH925 Marca: DFM # de Serie: NO INDICADO Modelo: NO INDICADO Cilindrada: 1500 C</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-000710-1201-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">OTONIEL RAMON FLORES AGUILAR</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, se señalan las siete horas treinta minutos del once de febrero de dos mil veintisé...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 12 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 1-CONCEPCION, CANTÓN 2-SAN RAMON</span>
+                <span class="h-area">579 m²</span>
+                <span class="h-price">₡17,088,996.16</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡17,088,996.16</span>
+                        <span class="remate-date">Diez  Cero  Del Siete De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡12,816,747.12</span>
+                        <span class="remate-date">Diez  Cero  Del Quince De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡4,272,249.04</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-000054-1203-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-000054-1203-CJ</span></div><div class="detail-row"><span class="detail-key">Juzgado:</span> <span class="detail-value">DE COBRO DEL III CIRCUITO JUDICIAL DE ALAJUELA (SAN RAMÓN)</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">MIGUEL ANGEL GONZALEZ ALFARO</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de DIECISÉIS MILLONES NOVECIENTOS NUEVE MIL OCHOCIENTOS NOVENTA Y SIE...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 13 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">HYUNDAI Estilo: I20 ACTIVE I20 ACTIVE (Fabricación: 2017)</span>
+                <span class="h-area">--</span>
+                <span class="h-price">₡7,517,457.77</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡7,517,457.77</span>
+                        <span class="remate-date">Diez  Cero  Del Diez De Febrero De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡5,638,093.33</span>
+                        <span class="remate-date">Diez  Cero  Del Dieciocho De Febrero De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡1,879,364.44</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 19-004847-1200-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">19-004847-1200-CJ</span></div><div class="detail-row"><span class="detail-key">Juzgado:</span> <span class="detail-value">DE COBRO DE GOLFITO</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">FABIAN ANTONIO CALVO LEON</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, se señalan las diez horas cero minutos del diez de febrero de dos mil veintiséis. ...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 14 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 4-PIEDADES NORTE, CANTÓN 2-SAN RAMON</span>
+                <span class="h-area">244 m²</span>
+                <span class="h-price">₡18,000,000.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡18,000,000.00</span>
+                        <span class="remate-date">Once  Cero  Del Siete De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡13,500,000.00</span>
+                        <span class="remate-date">Once  Cero  Del Quince De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡4,500,000.00</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-001788-1203-CJ.</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-001788-1203-CJ.</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">HECTOR MANUEL MATAMOROS CHAVES</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de DIECIOCHO MILLONES DE COLONES EXACTOS, libre de gravámenes hipotec...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 15 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 1-PUERTO JIMÉNEZ, CANTÓN 1- PUERTO JIMÉNEZ</span>
+                <span class="h-area">435 m²</span>
+                <span class="h-price">₡4,750,000.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡4,750,000.00</span>
+                        <span class="remate-date">Ocho  Treinta  Del Cinco De Febrero De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡3,562,500.00</span>
+                        <span class="remate-date">Ocho  Treinta  Del Trece De Febrero De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡1,187,500.00</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 21-001553-1201-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE CALLE PUBLICA CON UN FRENTE DE 12 METROS; al SUR INOCENTE SANCHEZ SANCHEZ; al ESTE INOCENTE SANCHEZ SANCHEZ y al OESTE ASDRUBAL CALDERON GONZALEZ.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">21-001553-1201-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">GREDVIN ABRAHAM SYLVESTER GUEVARA</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de CUATRO MILLONES SETECIENTOS CINCUENTA MIL COLONES EXACTOS, libre d...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 16 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">Vehículo VERSA (Fabricación: 2017)</span>
+                <span class="h-area">--</span>
+                <span class="h-price">₡5,166,654.95</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡5,166,654.95</span>
+                        <span class="remate-date">Catorce  Cero  Del Veinticuatro De Febrero De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡3,874,991.21</span>
+                        <span class="remate-date">Catorce  Cero  Del Cuatro De Marzo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡1,291,663.74</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-003401-1764-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Motor:</span> <span class="detail-value">HR16862427M</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-003401-1764-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">GUILLERMO ZUÑIGA SABORIO</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de CINCO MILLONES CIENTO CINCO MIL QUINIENTOS NOVENTA Y OCHO COLONES ...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 17 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO (11) QUEBRADILLA, CANTÓN (01) CARTAGO</span>
+                <span class="h-area">151 m²</span>
+                <span class="h-price">₡55,794,269.82</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡55,794,269.82</span>
+                        <span class="remate-date">Ocho  Treinta  Del Dieciocho De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡41,845,702.37</span>
+                        <span class="remate-date">Ocho  Treinta  Del Veintiséis De Marzo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡13,948,567.46</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-013101-1164-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE FINCA FILIAL PRIMARIA INDIVIDUALIZADA 9-N; al SUR FINCA FILIAL PRIMARIA INDIVIDUALIZADA 7-N; al ESTE FINCA FILIAL PRIMARIA INDIVIDUALIZADA 45-N y al OESTE ACCESO 3 DE AREA COMÚN LIBRE.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-013101-1164-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">MAGDALY MORERA SERRANO</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de CINCUENTA Y CINCO MILLONES DOSCIENTOS TREINTA Y UN MIL NOVECIENTOS...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 18 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 3-POTRERO CERRADO, CANTÓN 7-OREAMUNO</span>
+                <span class="h-area">1045 m²</span>
+                <span class="h-price">₡13,040,000.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡13,040,000.00</span>
+                        <span class="remate-date">Once  Treinta  Del Veintitrés De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡9,780,000.00</span>
+                        <span class="remate-date">Once  Treinta  Del Cuatro De Mayo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡3,260,000.00</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-009650-1164-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Naturaleza:</span> <span class="detail-value">terreno LOTE 2 TERRENO DE AGRICULTURA.</span></div><div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE JERÓNIMO AGUILAR BRENES; al NOROESTE: LOTE DE JOSÉ MANUEL BRENES VÍQUEZ; al SURESTE: LOTE DE JOSÉ FRANCISCO BRENES VÍQUEZ y al SUROESTE: CON CALLE PUBLICA.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-009650-1164-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">MANUEL DE JESUS VIQUEZ COTO</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de TRECE MILLONES CUARENTA MIL COLONES EXACTOS, soportando HIPOTECA P...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 19 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 5-AGUACALIENTE (SAN FRANCISCO, CANTÓN 1-CARTAGO</span>
+                <span class="h-area">142 m²</span>
+                <span class="h-price">₡45,366,000.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡45,366,000.00</span>
+                        <span class="remate-date">Once  Treinta  Del Veinticuatro De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡34,024,500.00</span>
+                        <span class="remate-date">Once  Treinta  Del Ocho De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡11,341,500.00</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-008556-1164-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE ACCESO B TRES; al SUR ZONA DE PARQUE B DOS; al ESTE FILIAL B NOVENTA Y CINCO y al OESTE FILIAL B NOVENTA Y SIETE.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-008556-1164-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">SAUL ANDRES ELIZONDO MORALES, WENDY VANESSA ABARCA BERROCAL</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, con una base de CUARENTA Y CINCO MILLONES TRESCIENTOS SESENTA Y SEIS MIL COLONES E...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 20 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 11-LA ISABEL, CANTÓN 5-TURRIALBA</span>
+                <span class="h-area">214 m²</span>
+                <span class="h-price">₡865,451.54</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡865,451.54</span>
+                        <span class="remate-date">Ocho  Cero  Del Dieciocho De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡649,088.66</span>
+                        <span class="remate-date">Ocho  Cero  Del Veintiséis De Marzo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡216,362.89</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 19-007169-1164-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE CALLE PUBLICA CON FRENTE DE 6M; al SUR CARLOS Y EDWIN CALDERÓN FONSECA; al ESTE LOTE-218 y al OESTE LOTE-216.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">19-007169-1164-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">ALFONSO ALEJANDRO ARAYA SOLIS</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de OCHOCIENTOS CINCUENTA Y SEIS MIL OCHOCIENTOS SETENTA Y DOS COLONES...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 21 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 1- TURRIALBA, CANTÓN 5-TURRIALBA</span>
+                <span class="h-area">165 m²</span>
+                <span class="h-price">₡6,500,000.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡6,500,000.00</span>
+                        <span class="remate-date">Catorce  Cero  Del Veintitrés De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡4,875,000.00</span>
+                        <span class="remate-date">Catorce  Cero  Del Cuatro De Mayo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡1,625,000.00</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 18-</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE ENTRADA PUBLICA CON 9.00M; al SUR JOSE ENRIQUE AGUILAR; al ESTE JOSE ENRIQUE AGUILAR y al OESTE JOSE ENRIQUE AGUILAR.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">18-</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">LEONARDO FABIO ARAYA SALAZAR</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de SEIS MILLONES QUINIENTOS MIL COLONES EXACTOS libre de gravámenes h...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 22 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 4 GRIFO, CANTÓN 4 PURISCAL</span>
+                <span class="h-area">4389 m²</span>
+                <span class="h-price">₡27,021,974.54</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡27,021,974.54</span>
+                        <span class="remate-date">Catorce  Quince  Del Diez De Febrero De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡20,266,480.91</span>
+                        <span class="remate-date">Catorce  Quince  Del Dieciocho De Febrero De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡6,755,493.63</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 24-011238-1338-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE BOLIVAR GOMEZ DELGADO; al SUR CALLE PUBLICA; al ESTE BOLIVAR GOMEZ DELGADO y al OESTE CALLE PUBLICA DOS DIAZ S.A. Y OTRO.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">24-011238-1338-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">VICTOR EMILIO AGUERO FLORES, WILBERTH JOSE DEL CARMEN GOMEZ BARQUERO</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de VEINTISÉIS MILLONES SETECIENTOS CUARENTA Y CUATRO MIL QUINIENTOS V...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 23 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">CHERY TIGGO 2 PRO (Fabricación: 2025)</span>
+                <span class="h-area">--</span>
+                <span class="h-price">$20,744.00</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$20,744.00</span>
+                        <span class="remate-date">Once  Cero  Del Diecinueve De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">$15,558.00</span>
+                        <span class="remate-date">Once  Cero  Del Veintisiete De Marzo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$5,186.00</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-013155-1170-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Motor:</span> <span class="detail-value">SQRD4G15BYPM60405</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-013155-1170-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">DENIS ZÚÑIGA ANGULO</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de VEINTE MIL QUINIENTOS VEINTIOCHO DÓLARES CON SETENTA Y DOS CENTAVO...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 24 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO SANTIAGO, CANTÓN PURISCAL</span>
+                <span class="h-area">183 m²</span>
+                <span class="h-price">₡61,852,741.69</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡61,852,741.69</span>
+                        <span class="remate-date">Catorce  Treinta  Del Dieciséis De Febrero De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡46,389,556.27</span>
+                        <span class="remate-date">Catorce  Treinta  Del Veinticuatro De Febrero De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡15,463,185.42</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-006313-1338-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE QUIVA S.A.; al SUR QUIVA S.A.; al ESTE CALLE PUBLICA CON 10,00 MTS y al OESTE QUIVA S.A.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-006313-1338-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">SONIA DE LOS ANGELES VALVERDE VALERIN</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de SESENTA Y UN MILLONES DOSCIENTOS TREINTA MIL CUATROCIENTOS TREINTA...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 25 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">EL DISTRITO 3-ANSELMO LLORENTE CANTÓN 13- TIBÁS DE LA PROVINCIA DE SAN JOSÉ LINDEROS: NORTE: VICTOR ESPINOZA ARCE Y ARISTIDES GUZMÁN MORA, SUR: NURIA ESPINOZA DELGADO Y SERVIDUMBRE DE PASO ESTE: MARIO QUIROS LEIVA OESTE: GERARDO QUIROS GUILLEN, MIDE: CIENTO OCHENTA Y OCHO METROS CON VEINTIOCHO DECÍMETROS CUADRADOS, PLANO: SJ-0236733-1995</span>
+                <span class="h-area">216 m²</span>
+                <span class="h-price">$194,270.94</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$194,270.94</span>
+                        <span class="remate-date">Ocho  Treinta  Del Dos De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$48,567.74</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-007256-1170-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-007256-1170-CJ</span></div><div class="detail-row"><span class="detail-key">Juzgado:</span> <span class="detail-value">SEGUNDO ESPECIALIZADO DE COBRO DEL I CIRCUITO JUDICIAL DE SAN JOSÉ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">JAVIER SANTIAGO CASCANTE ELIZONDO, YAMILETH DE LOS ANGELES ESPINOZA DELGADO</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de CIENTO NOVENTA Y DOS MIL TRESCIENTOS TREINTA Y SIETE DÓLARES CON C...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 26 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">Vehículo</span>
+                <span class="h-area">--</span>
+                <span class="h-price">$17,326.17</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$17,326.17</span>
+                        <span class="remate-date">Catorce  Cero  Del Doce De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">$12,994.63</span>
+                        <span class="remate-date">Catorce  Cero  Del Veinte De Marzo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$4,331.54</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 21-010535-1170-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">21-010535-1170-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">RODOLFO ADRIÁN BAGNARELLO MÉNDEZ</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de DIECISIETE MIL CIENTO CUARENTA Y CUATRO DÓLARES CON SETENTA Y TRES...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 27 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">EL DISTRITO 1-ASERRI CANTON 6-ASERRI DE LA PROVINCIA DE SAN JOSÉ LINDEROS: NORTE: CALLE PUBLICA CON UN FRENTE DE SEIS METROS, OCHEENTA Y SEIS CENTIMETROS</span>
+                <span class="h-area">174 m²</span>
+                <span class="h-price">₡6,115,661.77</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡6,115,661.77</span>
+                        <span class="remate-date">Catorce  Cero  Del Diecinueve De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡4,586,746.33</span>
+                        <span class="remate-date">Catorce  Cero  Del Veintisiete De Marzo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡1,528,915.44</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">JOSE LUIS ACUÑA LEDEZMA, VERA VIOLETA DE LA TRINIDAD ALFARO MARTINEZ</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de SEIS MILLONES CUARENTA Y CINCO MIL DOSCIENTOS NUEVE COLONES CON SE...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 28 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">Vehículo</span>
+                <span class="h-area">--</span>
+                <span class="h-price">$21,799.81</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$21,799.81</span>
+                        <span class="remate-date">Catorce  Diez  Del Siete De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">$16,349.86</span>
+                        <span class="remate-date">Catorce  Diez  Del Dieciséis De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$5,449.95</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 26-000794-1170-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">26-000794-1170-CJ</span></div><div class="detail-row"><span class="detail-key">Juzgado:</span> <span class="detail-value">SEGUNDO ESPECIALIZADO DE COBRO DEL I CIRCUITO JUDICIAL DE SAN JOSÉ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">JANIER GONZÁLEZ MORA y MARVIN GERARDO ROJAS HERNÁNDEZ.</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de VEINTIÚN MIL QUINIENTOS SETENTA Y CUATRO DÓLARES CON SIETE CENTAVO...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 29 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">CHERY Estilo: TIGGO 2 PRO MAX Categoría: AUTOMOVIL Capacidad: 5 personas # de Serie: LVVDB21B8SE004865 Peso Vacio: 0 TIGGO 2 PRO MAX Categoría: AUTOMOVIL Capacidad: 5 personas # de Serie: LVVDB21B8SE004865 Peso Vacio: 0 (Fabricación: 2025 Estado Actual: INSCRITO Longitud: 0)</span>
+                <span class="h-area">--</span>
+                <span class="h-price">$26,529.11</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$26,529.11</span>
+                        <span class="remate-date">Nueve  Diez  Del Siete De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">$19,896.83</span>
+                        <span class="remate-date">Nueve  Diez  Del Dieciséis De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$6,632.28</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 26-000686-</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">26-000686-</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">JOSE IGNACIO ROMERO RODA</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de VEINTISÉIS MIL DOSCIENTOS CINCUENTA Y SEIS DÓLARES CON CINCUENTA Y...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 30 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">Vehículo</span>
+                <span class="h-area">--</span>
+                <span class="h-price">₡12,403,554.80</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡12,403,554.80</span>
+                        <span class="remate-date">Nueve  Veinte  Del Veintiséis De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡9,302,666.10</span>
+                        <span class="remate-date">Nueve  Veinte  Del Diez De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡3,100,888.70</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-012467-1170-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-012467-1170-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">JAMES ADIEL CALVO VILLEGAS y KEMBLY LETICIA LÓPEZ PIÑAR</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de DOCE MILLONES DOSCIENTOS SETENTA MIL OCHOCIENTOS CUARENTA Y SEIS C...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 31 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">Vehículo</span>
+                <span class="h-area">--</span>
+                <span class="h-price">$22,236.29</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$22,236.29</span>
+                        <span class="remate-date">Nueve  Treinta  Del Siete De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">$16,677.22</span>
+                        <span class="remate-date">Nueve  Treinta  Del Dieciséis De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$5,559.07</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 26-000706-1170-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">26-000706-1170-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">OSWELL CASTILLO JIRÓN</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de VEINTIDÓS MIL SEIS DÓLARES CON VEINTITRÉS CENTAVOS, libre de gravá...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 32 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">EL DISTRITO 3- BARBACOAS CANTON 4-PURISCAL DE LA PROVINCIA DE SAN JOSÉ LINDEROS: NORTE: MARIA ANGELA BARBOZA BARBOZA Y SERVIDUMBRE DE PASO DE 6M DE ANCHO SUR: ANGELICA MARIA FERNANDEZ HIDAGO ESTE: SERVIDUMBRE DE PASO DE 6M DE ANCHO Y JEJFRY CUBILLO PORRAS OESTE: EDUARDO VINDAS BARBOZA MIDE: MIL CIENTO CINCUENTA METROS CUADRADOS PLANO: SJ-2268322-2021</span>
+                <span class="h-area">1150 m²</span>
+                <span class="h-price">₡78,481,121.46</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡78,481,121.46</span>
+                        <span class="remate-date">Catorce  Cuarenta  Del Diecinueve De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡58,860,841.09</span>
+                        <span class="remate-date">Catorce  Cuarenta  Del Veintisiete De Marzo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡19,620,280.36</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-008077-1170-</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-008077-1170-</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">3101891578 S.A., DAISY MARIA DE LA TRINIDAD HERNANDEZ AGUERO</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de SETENTA Y SIETE MILLONES SEISCIENTOS NOVENTA Y CUATRO MIL CIENTO S...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 33 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">Vehículo</span>
+                <span class="h-area">--</span>
+                <span class="h-price">₡7,089,474.03</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡7,089,474.03</span>
+                        <span class="remate-date">Diez  Cero  Del Veintiséis De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡5,317,105.52</span>
+                        <span class="remate-date">Diez  Cero  Del Diez De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡1,772,368.51</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-000397-1170-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-000397-1170-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">RICARDO FRANCISCO LUNA GUTIÉRREZ y INVERSIONES GALUFA S.R.L.</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de SIETE MILLONES NUEVE MIL TRESCIENTOS OCHENTA COLONES CON VEINTITRÉ...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 34 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">Vehículo</span>
+                <span class="h-area">--</span>
+                <span class="h-price">$29,741.98</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$29,741.98</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">$22,306.49</span>
+                        <span class="remate-date">Nueve  Cincuenta  Del Veinticuatro De Marzo Del Dos Mil Veintiséis,</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$7,435.49</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 26-000112-1170-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">26-000112-1170-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">JOSÉ ALBERTO MARCHENA GONZÁLEZ</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de VEINTINUEVE MIL CUATROCIENTOS TREINTA Y SIETE DÓLARES CON SESENTA ...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 35 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 1-CAÑAS, CANTÓN 6-CAÑAS</span>
+                <span class="h-area">150 m²</span>
+                <span class="h-price">₡6,242,012.17</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡6,242,012.17</span>
+                        <span class="remate-date">Diez  Cero  Del Seis De Julio De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡4,681,509.13</span>
+                        <span class="remate-date">Diez  Cero  Del Catorce De Julio De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡1,560,503.04</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-001971-1205-</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE LUIS ENRIQUE PONCE RODRIGUEZ; al SUR CALLE PUBLICA CON 7 MTS 50 CMS; al ESTE LUIS ENRIQUE PONCE RODRIGUEZ y al OESTE LUIS ENRIQUE PONCE RODRIGUEZ.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-001971-1205-</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">RANDALL BERMUDEZ QUIROS</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de SEIS MILLONES CIENTO SETENTA MIL TRESCIENTOS NUEVE COLONES CON OCH...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 36 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 5-SAN PEDRO, CANTÓN 19-PEREZ ZELEDON</span>
+                <span class="h-area">1589 m²</span>
+                <span class="h-price">₡33,733,216.06</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡33,733,216.06</span>
+                        <span class="remate-date">Diez  Cero  Del Trece De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡25,299,912.05</span>
+                        <span class="remate-date">Diez  Cero  Del Veintiuno De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡8,433,304.02</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 26-000149-1200-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Naturaleza:</span> <span class="detail-value">terreno PARA CONSTRUIR.</span></div><div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE GISELLE CECILIANO MORA; al SUR CALLE PUBLICA; al ESTE JUAN CECILIANO MORA y al OESTE GISELLE CECILIANO MORA.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">26-000149-1200-CJ</span></div><div class="detail-row"><span class="detail-key">Juzgado:</span> <span class="detail-value">DE COBRO DEL I CIRCUITO JUDICIAL DE LA ZONA SUR</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">3-102- 853374 srl, MARIAM ANDREA BARBOZA CERDAS</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de TREINTA Y TRES MILLONES TRESCIENTOS OCHENTA Y NUEVE MIL TRESCIENTO...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 37 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO TILARAN, CANTÓN TILARAN</span>
+                <span class="h-area">672 m²</span>
+                <span class="h-price">₡26,900,000.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡26,900,000.00</span>
+                        <span class="remate-date">Nueve  Cero  Del Seis De Julio De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡20,175,000.00</span>
+                        <span class="remate-date">Nueve  Cero  Del Catorce De Julio De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡6,725,000.00</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">ERIKA MARIA NUÑEZ LOPEZ</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de VEINTISÉIS MILLONES NOVECIENTOS MIL COLONES EXACTOS, libre de grav...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 38 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 4- COLORADO, CANTÓN 7-ABANGARES</span>
+                <span class="h-area">5236 m²</span>
+                <span class="h-price">₡8,365,632.49</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡8,365,632.49</span>
+                        <span class="remate-date">Ocho  Cero  Del Seis De Julio De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡6,274,224.37</span>
+                        <span class="remate-date">Ocho  Cero  Del Catorce De Julio De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡2,091,408.12</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-001734-1205-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE LOTES 11, 12 Y 13; al SUR LOTE 26; al ESTE SERVIDUMBRE AGRICOLA y al OESTE LOTE 25.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-001734-1205-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">KEILYN JOHANNA CORRALES ACUÑA</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de OCHO MILLONES DOSCIENTOS SETENTA Y DOS MIL NOVECIENTOS TRES COLONE...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 39 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">EL DISTRITO 1-BAGACES CANTON 4-BAGACES DE LA PROVINCIA DE GUANACASTE LINDEROS: NORTE: LOTE DE SENARA Y FELICIANO DUARTE SUR: CARRETERA INTERAMERICANA, HERMANOS QUIROS QUIROS Y LOTE DE SENARA ESTE: HERMANOS QUIROS QUIROS Y AGRICOLA HERMANOS ROJAS S</span>
+                <span class="h-area">441559 m²</span>
+                <span class="h-price">$586,388.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$586,388.00</span>
+                        <span class="remate-date">Quince  Cero  Del Diez De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">$0.00</span>
+                        <span class="remate-date">Quince  Cero  Del Dieciocho De Marzo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$146,597.00</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 19-007777-1205-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">19-007777-1205-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">ALIMENTOS TUTU DE CENTROAMERICA, INMOBILIARIA WANG ZHU S.A., LEI WANG, LI QIU, y SERVICIOS DE RUTEO SERUSA S.A.,</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, se rematara los siguientes bienes; 1) Finca del partido de Guanacaste, matrícula n...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 40 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 1-MONTE VERDE, CANTÓN 12-MONTE VERDE</span>
+                <span class="h-area">292 m²</span>
+                <span class="h-price">₡28,294,617.74</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡28,294,617.74</span>
+                        <span class="remate-date">Diez  Cero  Del Treinta De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡21,220,963.30</span>
+                        <span class="remate-date">Diez  Cero  Del Once De Mayo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡7,073,654.43</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-006993-1207-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Naturaleza:</span> <span class="detail-value">y anotaciones; sáquese a remate la finca del partido de Puntarenas, matrícula número 97544- 001-002, derecho 001, la cual es terreno para construir.</span></div><div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE FEDERICO VALVERDE SÁNCHEZ; al SUR CALLE PUBLICA CON DIEZ METROS; al ESTE CORREOS DE COSTA RICA y al OESTE ORFILIA REYES LAGUNA.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-006993-1207-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">JUAN PABLO DITTEL JIMÉNEZ, SUSANA PATRICIA MORALES URIBE</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de VEINTIOCHO MILLONES CUATRO MIL QUINIENTOS SETENTA Y DOS COLONES CO...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 41 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">HYUNDAI Estilo: GRAND I10 GLS Categoría: AUTOMOVIL Capacidad: 5 personas Carroceria: SEDAN 4 PUERTAS Tracción: 4X2 Año Fabricación: 2019 Color: NEGRO GRAND I10 GLS Categoría: AUTOMOVIL Capacidad: 5 personas Carroceria: SEDAN 4 PUERTAS Tracción: 4X2 Año Fabricación: 2019 Color: NEGRO (Fabricación: 2019 Color: NEGRO)</span>
+                <span class="h-area">--</span>
+                <span class="h-price">$6,722.78</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$6,722.78</span>
+                        <span class="remate-date">Diez  Quince  Del Nueve De Junio De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">$5,042.09</span>
+                        <span class="remate-date">Diez  Quince  Del Diecisiete De Junio De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$1,680.69</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-013177-1338-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-013177-1338-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">JOSE MANUEL MEZA CASCANTE</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de SEIS MIL SEISCIENTOS CUARENTA Y SEIS DÓLARES CON TREINTA Y DOS CEN...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 42 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">JAC Estilo: JS2 JS2 (2023)</span>
+                <span class="h-area">--</span>
+                <span class="h-price">$16,710.49</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$16,710.49</span>
+                        <span class="remate-date">Catorce  Treinta  Del Veinticuatro De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">$12,532.87</span>
+                        <span class="remate-date">Catorce  Treinta  Del Ocho De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$4,177.62</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-013153-1164-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Motor:</span> <span class="detail-value">N3346731</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-013153-1164-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">ESTEBAN FELIPE SOLANO SOLANO</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de DIECISÉIS MIL QUINIENTOS TREINTA Y CINCO DÓLARES CON CATORCE CENTA...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 43 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">CHERY TIGGO 2 PRO Capacidad: 5 personas (2024)</span>
+                <span class="h-area">--</span>
+                <span class="h-price">₡11,015,056.14</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡11,015,056.14</span>
+                        <span class="remate-date">Trece  Treinta  Del Veinticuatro De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡8,261,292.11</span>
+                        <span class="remate-date">Trece  Treinta  Del Ocho De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡2,753,764.04</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-013011-1164-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Motor:</span> <span class="detail-value">SQRD4G15BWPB6003</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-013011-1164-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">MELISSA DE LOS ANGELES BENAVIDES SOLANO</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de DIEZ MILLONES OCHOCIENTOS NOVENTA Y SEIS MIL NOVENTA Y CINCO COLON...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 44 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 1-EL TEJAR, CANTÓN 8-EL GUARCO</span>
+                <span class="h-area">151 m²</span>
+                <span class="h-price">$104,487.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$104,487.00</span>
+                        <span class="remate-date">Ocho  Cero  Del Veintisiete De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">$78,365.25</span>
+                        <span class="remate-date">Ocho  Cero  Del Seis De Mayo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$26,121.75</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-009394-1164-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE FINCA FILIAL H-SEIS; al SUR AVENIDA TRES; al ESTE FINCA FILIAL HVEINTITRÉS y al OESTE FINCA FILIAL H-VEINTIUNO.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-009394-1164-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">DIANA FABIOLA ABARCA CALVO</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de CIENTO CUATRO MIL CUATROCIENTOS OCHENTA Y SIETE DÓLARES CON DOS CÉ...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 45 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 2-CERVANTES, CANTÓN 6-ALVARADO</span>
+                <span class="h-area">242 m²</span>
+                <span class="h-price">₡3,200,000.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡3,200,000.00</span>
+                        <span class="remate-date">Once  Cero  Del Veintiuno De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡2,400,000.00</span>
+                        <span class="remate-date">Once  Cero  Del Veintinueve De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡800,000.00</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> </div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Naturaleza:</span> <span class="detail-value">terreno DE SOLAR.</span></div><div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE CALLE PUBLICA CON UN FRENTE DE 9,76 METROS LINEALES; al SUR CARLOS LUIS AGUERO HERNANDEZ; al ESTE TRINIDAD DEL CARMEN SALAS AGUILAR y al OESTE ROLBIN RIVERA CORDERO.</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">EDSON ARANTES MORA COTO</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de TRES MILLONES DOSCIENTOS MIL COLONES EXACTOS, soportando HIPOTECA ...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 46 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 1- SAN RAFAEL, CANTÓN 7-OREAMUNO</span>
+                <span class="h-area">355 m²</span>
+                <span class="h-price">₡46,158,019.58</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡46,158,019.58</span>
+                        <span class="remate-date">Diez  Treinta  Del Veintiuno De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡34,618,514.69</span>
+                        <span class="remate-date">Diez  Treinta  Del Veintinueve De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡11,539,504.89</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-008330-1164-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Naturaleza:</span> <span class="detail-value">y anotaciones; sáquese a remate la finca del partido de CARTAGO, matrícula número 171221, derecho 001 y 002, la cual es terreno PARA CONSTRUIR CON UNA CASA.</span></div><div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE MARCOS RIVERA GUZMAN; al SUR SERVIDUMBRE DE PASO EN MEDIO URBANIZACION LAS FLORES DEL ESTE; al ESTE VILMA JIMENEZ SOLANO y al OESTE CALLE PUBLICA.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-008330-1164-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">ANDRES FERNANDO SOLANO JIMENEZ, ARACELLY DE LOS ANGELES FERNANDEZ CHACON</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de CUARENTA Y CINCO MILLONES SEISCIENTOS NOVENTA Y UN MIL CIENTO OCHO...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 47 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 6-PAVONES, CANTÓN 5-TURRIALBA</span>
+                <span class="h-area">551 m²</span>
+                <span class="h-price">₡25,200,000.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡25,200,000.00</span>
+                        <span class="remate-date">Catorce  Treinta  Del Siete De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡18,900,000.00</span>
+                        <span class="remate-date">Catorce  Treinta  Del Dieciséis De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡6,300,000.00</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-007081-1164-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-007081-1164-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">STEVEN DE JESUS CONTRERAS SANDOVAL</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de VEINTICINCO MILLONES DOSCIENTOS MIL COLONES EXACTOS, libre de grav...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 48 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">HYUNDAI Estilo: ACCENT GL ACCENT GL (2016)</span>
+                <span class="h-area">--</span>
+                <span class="h-price">₡3,819,555.26</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡3,819,555.26</span>
+                        <span class="remate-date">Ocho  Treinta  Del Veintisiete De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡2,864,666.44</span>
+                        <span class="remate-date">Ocho  Treinta  Del Seis De Mayo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡954,888.81</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 24-003225-1164-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Motor:</span> <span class="detail-value">G4FCFU284593</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">24-003225-1164-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">ANA SUHEY SANABRIA GUEVARA</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de TRES MILLONES SETECIENTOS SETENTA Y UN MIL OCHOCIENTOS TREINTA Y S...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 49 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">HYUNDAI ELANTRA GLS Capacidad: 5 personas (2017)</span>
+                <span class="h-area">--</span>
+                <span class="h-price">$21,155.76</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$21,155.76</span>
+                        <span class="remate-date">Quince  Cero  Del Veinticuatro De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">$15,866.82</span>
+                        <span class="remate-date">Quince  Cero  Del Cuatro De Mayo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$5,288.94</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 22-013322-1164-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Motor:</span> <span class="detail-value">G4FGGU146326</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">22-013322-1164-CJ</span></div><div class="detail-row"><span class="detail-key">Juzgado:</span> <span class="detail-value">ESPECIALIZADO DE COBRO DE CARTAGO</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">MARIA DEL ROCIO CAMPOS MENDEZ</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de VEINTE MIL NOVECIENTOS TREINTA Y SEIS DÓLARES CON CUARENTA CENTAVO...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 50 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 9-SANTA ROSA, CANTÓN 5-TURRIALBA</span>
+                <span class="h-area">220 m²</span>
+                <span class="h-price">₡33,598,700.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡33,598,700.00</span>
+                        <span class="remate-date">Catorce  Treinta  Del Dieciocho De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡25,199,025.00</span>
+                        <span class="remate-date">Catorce  Treinta  Del Veintiséis De Marzo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡8,399,675.00</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 22-000517-1164-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Naturaleza:</span> <span class="detail-value">terreno DE CAFÉ CON UNA CASA DE HABITACIÓN.</span></div><div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE AGROINDUSTRIAS AQUIARES S.A.; al SUR CALLE PUBLICA CON UN FRENTE DE DIEZ METROS; al ESTE AGROINDUSTRIAS AQUIARES S.A. y al OESTE AGROINDUSTRIAS AQUIARES S.A.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">22-000517-1164-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">JORGE LEANDRO SEGURA VARGAS, MARIA DEL PILAR SALAS CALVO</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de TREINTA Y TRES MILLONES QUINIENTOS NOVENTA Y OCHO MIL SETECIENTOS ...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 51 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">CHERY TIGGO 4 (2020)</span>
+                <span class="h-area">--</span>
+                <span class="h-price">₡13,898,641.64</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡13,898,641.64</span>
+                        <span class="remate-date">Quince  Treinta  Del Veinticuatro De Abril De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡10,423,981.23</span>
+                        <span class="remate-date">Quince  Treinta  Del Cuatro De Mayo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡3,474,660.41</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 21-005219-</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Motor:</span> <span class="detail-value">SQRD4G20ACKM00003</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">21-005219-</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">ROGELIO QUIROS WILLIAMS</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de TRECE MILLONES SETECIENTOS CINCUENTA Y UN MIL CIENTO TREINTA COLON...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 52 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">Vehículo</span>
+                <span class="h-area">--</span>
+                <span class="h-price">₡7,267,185.00</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡7,267,185.00</span>
+                        <span class="remate-date">Ocho  Cero  Del Veinticuatro De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡5,450,388.75</span>
+                        <span class="remate-date">Ocho  Cero  Del Ocho De Abril De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡1,816,796.25</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 18-008817-1164-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">18-008817-1164-CJ</span></div><div class="detail-row"><span class="detail-key">Juzgado:</span> <span class="detail-value">ESPECIALIZADO DE COBRO DE CARTAGO</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">DANIEL ALEJANDRO GONZALEZ CALVO</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de SIETE MILLONES DOSCIENTOS SESENTA Y SIETE MIL CIENTO OCHENTA Y CIN...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 53 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">Vehículo</span>
+                <span class="h-area">--</span>
+                <span class="h-price">$9,112.35</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$9,112.35</span>
+                        <span class="remate-date">Once  Cero  Del Nueve De Junio De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">$6,834.26</span>
+                        <span class="remate-date">Once  Cero  Del Diecisiete De Junio De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$2,278.09</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 26-000705-1338-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">26-000705-1338-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">MANUEL SALVADOR BAEZ RODRIGUEZ</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de NUEVE MIL DOCE DÓLARES CON VEINTITRÉS CENTAVOS, soportando DENUNCI...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 54 -->
+        <button class="accordion car-item" data-type="vehiculo">
+            <div class="header-grid">
+                <span class="h-title">KIA Estilo: RIO Categoría: AUTOMOVIL Capacidad: 5 personas # de Serie: 3KPA351CBJE029024 Peso Vacio: 0 RIO Categoría: AUTOMOVIL Capacidad: 5 personas # de Serie: 3KPA351CBJE029024 Peso Vacio: 0 (Fabricación: 2018)</span>
+                <span class="h-area">--</span>
+                <span class="h-price">$5,475.91</span>
+            </div>
+        </button>
+        <div class="panel vehiculo-panel">
+            <div class="panel-content">
+                <span class="badge bg-car">Vehículo</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">$5,475.91</span>
+                        <span class="remate-date">Nueve  Treinta  Del Veintinueve De Junio De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">$4,106.93</span>
+                        <span class="remate-date">Nueve  Treinta  Del Siete De Julio De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">$1,368.98</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-004878-1158-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-004878-1158-CJ</span></div><div class="detail-row"><span class="detail-key">Juzgado:</span> <span class="detail-value">DE COBRO DE HEREDIA</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">BERNER FRANCISCO PAEZ SAENZ, KAREN SUSANA RAMÍREZ FONSECA</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de CINCO MIL CUATROCIENTOS ONCE DÓLARES CON OCHENTA CENTAVOS, libre d...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ITEM 55 -->
+        <button class="accordion prop-item" data-type="propiedad">
+            <div class="header-grid">
+                <span class="h-title">el DISTRITO 2-PALMAR, CANTÓN 5-OSA</span>
+                <span class="h-area">500 m²</span>
+                <span class="h-price">₡11,000,000.00</span>
+            </div>
+        </button>
+        <div class="panel propiedad-panel">
+            <div class="panel-content">
+                <span class="badge bg-prop">Propiedad</span>
+                <div class="remates-grid">
+                    
+                    <div class="remate-card">
+                        <span class="remate-label">Primer Remate</span>
+                        <span class="remate-price">₡11,000,000.00</span>
+                        <span class="remate-date">Diez  Cero  Del Nueve De Marzo De Dos Mil Veintiséis.</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Segundo Remate</span>
+                        <span class="remate-price">₡8,250,000.00</span>
+                        <span class="remate-date">Diez  Cero  Del Diecisiete De Marzo De Dos Mil Veintiséis</span>
+                    </div>
+            
+                    <div class="remate-card">
+                        <span class="remate-label">Tercer Remate</span>
+                        <span class="remate-price">₡2,750,000.00</span>
+                        <span class="remate-date">No Indicado</span>
+                    </div>
+            
+                </div>
+                <div class="expediente-info"><strong>EXP:</strong> 25-002251-1201-CJ</div>
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">Colindantes:</span> <span class="detail-value">al NORTE CALLE PUBLICA CON DIECISIETE METROS DE ANCHO; al SUR MARITZA JIMÉNEZ MESEN; al ESTE ANA LORENA VILLALOBOS VINDAS y al OESTE SERVIDUMBRE DE PASO CON SEIS METROS DE ANCHO.</span></div><div class="detail-row"><span class="detail-key">Expediente:</span> <span class="detail-value">25-002251-1201-CJ</span></div><div class="detail-row"><span class="detail-key">Demandado:</span> <span class="detail-value">CARLOS JOHEL RAMOS ALEMAN</span></div>
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: En este Despacho, Con una base de ONCE MILLONES DE COLONES EXACTOS, libre de gravámenes hipotecarios...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+    </div>
+
+    <script>
+        // === STATE ===
+        const itemsPerPage = 10;
+        let currentPage = 1;
+        let currentFilter = 'all';
+        
+        // === ELEMENTS ===
+        const container = document.getElementById('itemsContainer');
+        const allAccordions = Array.from(container.querySelectorAll('.accordion'));
+        // Pairs of (accordion, panel)
+        // We handle them as atomic units logic-wise
+        // The HTML structure is Button + Div.panel
+        
+        // === LOGIC ===
+        
+        function init() {
+            render();
+            setupAccordionListeners();
+        }
+        
+        function setupAccordionListeners() {
+            allAccordions.forEach(acc => {
+                acc.addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    const panel = this.nextElementSibling;
+                    
+                    if (panel.style.maxHeight) {
+                        panel.style.maxHeight = null;
+                        setTimeout(() => panel.classList.remove('show'), 300); // Wait for transition
+                    } else {
+                        panel.classList.add('show');
+                        // Use timeout to allow display:block to render before calculating height
+                        setTimeout(() => {
+                            panel.style.maxHeight = panel.scrollHeight + "px";
+                        }, 10);
+                    }
+                });
+            });
+        }
+
+        function filterItems(type) {
+            currentFilter = type;
+            currentPage = 1;
+            
+            // Update buttons styling
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if(btn.innerText.toLowerCase().includes(type == 'all' ? 'todos' : type.substring(0,4))) 
+                    btn.classList.add('active');
+                else 
+                    btn.classList.remove('active');
+            });
+            
+            render();
+        }
+        
+        function changePage(page) {
+            currentPage = page;
+            render();
+            // Scroll to top of list
+            document.querySelector('.controls').scrollIntoView({behavior: 'smooth'});
+        }
+
+        function render() {
+            // 1. Filter Content
+            let visibleItems = [];
+            
+            // Group items (Button + Panel)
+            for(let i=0; i < allAccordions.length; i++) {
+                const btn = allAccordions[i];
+                const panel = btn.nextElementSibling;
+                const type = btn.getAttribute('data-type');
+                
+                // Search Logic
+                const searchText = document.getElementById('searchInput').value.toLowerCase();
+                // We search in the button text (Title, Area, Price) and the panel text (Details, Raw)
+                const contentText = (btn.innerText + " " + panel.innerText).toLowerCase();
+                const matchesSearch = !searchText || contentText.includes(searchText);
+
+                if ((currentFilter === 'all' || type === currentFilter) && matchesSearch) {
+                    visibleItems.push({btn, panel});
+                } else {
+                    // Hide completely
+                    btn.classList.add('hidden');
+                    panel.classList.add('hidden');
+                }
+            }
+            
+            // 2. Pagination Logic
+            const totalPages = Math.ceil(visibleItems.length / itemsPerPage);
+            if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
+            
+            const startIdx = (currentPage - 1) * itemsPerPage;
+            const endIdx = startIdx + itemsPerPage;
+            
+            // Show/Hide based on page
+            visibleItems.forEach((item, index) => {
+                if (index >= startIdx && index < endIdx) {
+                    item.btn.classList.remove('hidden');
+                    // Panel follows button state (collapsed/expanded), but ensure it's not hidden by pag
+                    item.panel.classList.remove('hidden'); 
+                    // However, we only show panel content if active. 
+                    // This creates a conflict if we used 'hidden' for both filtering and pagination.
+                    // Let's rely on 'hidden' for filtering AND pagination filtering.
+                } else {
+                    item.btn.classList.add('hidden');
+                    item.panel.classList.add('hidden');
+                }
+            });
+            
+            // 3. Render Pagination Controls
+            const pagContainer = document.getElementById('paginationControls');
+            pagContainer.innerHTML = '';
+            
+            // Prev
+            const prevBtn = document.createElement('button');
+            prevBtn.innerText = '«';
+            prevBtn.className = 'page-btn';
+            prevBtn.onclick = () => changePage(currentPage - 1);
+            if(currentPage === 1) prevBtn.disabled = true;
+            pagContainer.appendChild(prevBtn);
+            
+            // Numbered Buttons (Simple range for now)
+            // Show max 5 buttons
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+            
+            for(let i=startPage; i<=endPage; i++) {
+                const btn = document.createElement('button');
+                btn.innerText = i;
+                btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                btn.onclick = () => changePage(i);
+                pagContainer.appendChild(btn);
+            }
+            
+            // Next
+            const nextBtn = document.createElement('button');
+            nextBtn.innerText = '»';
+            nextBtn.className = 'page-btn';
+            nextBtn.onclick = () => changePage(currentPage + 1);
+            if(currentPage === totalPages || totalPages === 0) nextBtn.disabled = true;
+            pagContainer.appendChild(nextBtn);
+            
+            // Info text
+            const info = document.createElement('span');
+            info.style.marginLeft = '10px';
+            info.style.fontSize = '0.9em';
+            info.innerText = `Pág ${currentPage} de ${totalPages || 1}`;
+            pagContainer.appendChild(info);
+        }
+        
+        // Start
+        init();
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+dotnet watch 🔥 Hot reload enabled. For a list of supported edits, see https://aka.ms/dotnet/hot-reload.
+dotnet watch 💡 Press Ctrl+R to restart.
+dotnet watch 🔨 Building /Users/jalfaro/Lector PDF/Backend/Backend.csproj ...
+dotnet watch 🔨 Build succeeded: /Users/jalfaro/Lector PDF/Backend/Backend.csproj
+Usando la configuración de inicio de /Users/jalfaro/Lector PDF/Backend/Properties/launchSettings.json...
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5032
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/jalfaro/Lector PDF/Backend

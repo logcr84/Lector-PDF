@@ -1,0 +1,76 @@
+<div class="container">
+  <h1>Listado Oficial de Remates</h1>
+  
+  <div class="controls">
+      <div>
+          <button class="filter-btn" [class.active]="filterType === 'all'" (click)="setFilter('all')">Todos</button>
+          <button class="filter-btn" [class.active]="filterType === 'propiedad'" (click)="setFilter('propiedad')">Propiedades</button>
+          <button class="filter-btn" [class.active]="filterType === 'vehiculo'" (click)="setFilter('vehiculo')">Vehículos</button>
+      </div>
+      <div>
+           <input type="file" (change)="onFileSelected($event)" accept=".pdf" style="display: none;" #fileInput>
+           <button class="filter-btn" (click)="fileInput.click()" style="background: #3498db; color: white;">📂 Subir PDF</button>
+      </div>
+      <div>
+           <input type="text" class="search-box" placeholder="Buscar expediente, título..." (keyup)="onSearch($event)">
+      </div>
+  </div>
+
+  <div *ngIf="isLoading" style="text-align: center; padding: 20px;">
+    Loading... <span style="display:inline-block; animation: spin 1s linear infinite;">↻</span>
+  </div>
+  
+  <div *ngIf="error" style="color: red; text-align: center;">{{ error }}</div>
+
+  <div id="itemsContainer">
+      <div *ngFor="let item of filteredRemates">
+        
+        <!-- Accordion Header -->
+        <button class="accordion" 
+                [ngClass]="{'prop-item': item.tipo === 'Propiedad', 'car-item': item.tipo === 'Vehiculo', 'active': item.expanded}" 
+                (click)="toggleExpand(item)">
+            <div class="header-grid">
+                <span class="h-title">{{ item.titulo }}</span>
+                <span class="h-area">{{ item.area || '--' }}</span>
+                <span class="h-price">{{ item.precioBaseDisplay }}</span>
+            </div>
+        </button>
+
+        <!-- Panel Content -->
+        <div class="panel" [style.display]="item.expanded ? 'block' : 'none'">
+            <div class="panel-content">
+                <span class="badge" [ngClass]="{'bg-prop': item.tipo === 'Propiedad', 'bg-car': item.tipo === 'Vehiculo'}">{{ item.tipo }}</span>
+                
+                <div class="remates-grid">
+                    <div class="remate-card" *ngFor="let remate of item.remates">
+                        <span class="remate-label">{{ remate.label }}</span>
+                        <span class="remate-price">{{ remate.precioDisplay }}</span>
+                        <span class="remate-date">{{ remate.fecha }}</span>
+                    </div>
+                    <div *ngIf="item.remates.length === 0" class="remate-card" style="grid-column: 1/-1;">
+                        <span class="remate-price">{{ item.precioBaseDisplay }}</span>
+                        <span class="remate-date">Verificar fechas en texto original</span>
+                    </div>
+                </div>
+
+                <div class="expediente-info"><strong>EXP:</strong> {{ item.expediente }}</div>
+                
+                <div class="details-box">
+                    <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row" *ngIf="item.demandado"><span class="detail-key">Demandado:</span> <span class="detail-value">{{ item.demandado }}</span></div>
+                    <div class="detail-row" *ngIf="item.juzgado"><span class="detail-key">Juzgado:</span> <span class="detail-value">{{ item.juzgado }}</span></div>
+                    
+                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
+                        <em>Texto original extraído: {{ item.textoOriginal | slice:0:300 }}...</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      </div>
+
+      <div *ngIf="filteredRemates.length === 0 && !isLoading" style="text-align: center; color: #777;">
+        No hay elementos para mostrar. Sube un PDF o ajusta los filtros.
+      </div>
+  </div>
+</div>
