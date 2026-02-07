@@ -38,6 +38,12 @@ namespace Backend.Controllers
                     });
                 }
 
+                if (remates.Count > 0)
+                {
+                    var debugJson = System.Text.Json.JsonSerializer.Serialize(remates[0]);
+                    Console.WriteLine($"DEBUG JSON (First Remate): {debugJson}");
+                }
+
                 return Ok(remates);
             }
             catch (Exception ex)
