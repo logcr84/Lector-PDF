@@ -44,9 +44,10 @@ namespace Backend.Services
             {
                 var text = rawDateText.ToLower().Trim();
 
-                // Extract hours (e.g., "catorce horas" → 14 or "once horas" → 11)
+                // Extract hours (e.g., "catorce horas" → 14 or "once horas" → 11, or "quincehoras")
                 int hours = 0;
-                var hoursMatch = Regex.Match(text, @"((?:un(?:a|o)?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciséis|dieciseis|diecisiete|dieciocho|diecinueve|veinte|veintiún|veintiuno|veintidós|veintidos|veintitrés|veintitres|\d+))\s+horas?", RegexOptions.IgnoreCase);
+                // Changed \s+ to \s* to handle "quincehoras"
+                var hoursMatch = Regex.Match(text, @"((?:un(?:a|o)?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciséis|dieciseis|diecisiete|dieciocho|diecinueve|veinte|veintiún|veintiuno|veintidós|veintidos|veintitrés|veintitres|\d+))\s*horas?", RegexOptions.IgnoreCase);
                 if (hoursMatch.Success)
                 {
                     var hourText = hoursMatch.Groups[1].Value.Trim();
@@ -203,7 +204,7 @@ namespace Backend.Services
             {"mil", 1000}, {"millón", 1000000}, {"millon", 1000000}, {"millones", 1000000}
         };
 
-        private decimal ParseSpanishTextToDecimal(string text)
+        private decimal ConvertSpanishTextToDecimal(string text)
         {
             try
             {
@@ -248,6 +249,12 @@ namespace Backend.Services
                         {
                             currentChunk += val;
                         }
+                    }
+                    else
+                    {
+                        // Stop parsing if we hit a word that isn't a number (e.g., "señala", "fecha")
+                        // This prevents merging "diez mil" with "quince" from a date following it.
+                        break;
                     }
                 }
 
@@ -353,7 +360,7 @@ namespace Backend.Services
                         // Filters out short noise, ensures it looks like a number text
                         if (textAmount.Length > 3 && (textAmount.ToLower().Contains("mil") || textAmount.ToLower().Contains("ciento") || textAmount.ToLower().Contains("millon") || textAmount.ToLower().Contains("un") || textAmount.ToLower().Contains("dos")))
                         {
-                            precioBase = ParseSpanishTextToDecimal(textAmount);
+                            precioBase = ConvertSpanishTextToDecimal(textAmount);
                         }
                     }
 
@@ -408,8 +415,9 @@ namespace Backend.Services
 
 
                     // 5. Dates (Remates)
-                    // Look for "señalan las..."
-                    var dateMatches = Regex.Matches(blockText, @"señalan las\s+([^\.]+?)(?:\.|;|,)", RegexOptions.IgnoreCase);
+                    // Look for "señalan las...", "señala fecha...", etc.
+                    // Broadened regex to catch more variations
+                    var dateMatches = Regex.Matches(blockText, @"(?:señalan las|señala fecha|fijan las|fija fecha|hora y fecha|para el)\s+([^\.]+?)(?:\.|;|,|$)", RegexOptions.IgnoreCase);
                     int count = 1;
                     foreach (Match dm in dateMatches)
                     {
