@@ -28,11 +28,25 @@ namespace Backend.Controllers
             {
                 using var stream = file.OpenReadStream();
                 var remates = _pdfParserService.ParsePdf(stream);
+
+                if (remates.Count == 0)
+                {
+                    return BadRequest(new
+                    {
+                        message = "No se encontraron datos de remates en el archivo PDF. Asegúrese de que sea un boletín oficial de remates.",
+                        details = "El archivo podría ser de otro tipo o no contener el formato esperado ('En este Despacho...', expedientes, precios, etc.)"
+                    });
+                }
+
                 return Ok(remates);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(500, new
+                {
+                    message = "Error al procesar el archivo PDF",
+                    details = ex.Message
+                });
             }
         }
     }

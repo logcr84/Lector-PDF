@@ -34,8 +34,20 @@ export class AppComponent {
           this.isLoading = false;
         },
         error: (err) => {
-          this.error = 'Error al procesar el archivo. Asegúrese de que el Backend esté corriendo.';
-          console.error(err);
+          console.error('Upload error:', err);
+          
+          // Extract error message from backend response
+          if (err.error && err.error.message) {
+            this.error = err.error.message;
+            if (err.error.details) {
+              this.error += ' ' + err.error.details;
+            }
+          } else if (err.status === 400) {
+            this.error = 'El archivo no contiene datos válidos de remates. Verifica que sea un boletín oficial.';
+          } else {
+            this.error = 'Error al procesar el archivo. Asegúrese de que el Backend esté corriendo.';
+          }
+          
           this.isLoading = false;
         }
       });

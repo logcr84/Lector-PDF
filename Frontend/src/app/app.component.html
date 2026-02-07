@@ -69,8 +69,12 @@
 
       </div>
 
-      <div *ngIf="filteredRemates.length === 0 && !isLoading" style="text-align: center; color: #777;">
-        No hay elementos para mostrar. Sube un PDF o ajusta los filtros.
+      <div *ngIf="filteredRemates.length === 0 && !isLoading && !error" style="text-align: center; color: #777; padding: 40px 20px;">
+        <div style="font-size: 1.2em; margin-bottom: 10px;">📄 No hay elementos para mostrar</div>
+        <div style="font-size: 0.9em;">
+          Sube un <strong>boletín oficial de remates del Poder Judicial</strong> en formato PDF.<br>
+          El archivo debe contener información como expedientes, precios base, y fechas de remate.
+        </div>
       </div>
   </div>
 </div>

@@ -143,26 +143,37 @@ namespace Backend.Services
                         count++;
                     }
 
-                    remates.Add(remate);
+                    // Only add if we have at least some meaningful data
+                    bool hasExpediente = !string.IsNullOrWhiteSpace(remate.Expediente);
+                    bool hasPrecio = !string.IsNullOrWhiteSpace(remate.PrecioBaseDisplay);
+                    bool hasValidTitle = !string.IsNullOrWhiteSpace(remate.Titulo) && remate.Titulo != "Propiedad en Remate";
+                    bool hasDates = remate.Remates.Count > 0;
+
+                    if (hasExpediente || hasPrecio || hasValidTitle || hasDates)
+                    {
+                        remates.Add(remate);
+                        Console.WriteLine($"✓ Extracted remate: {remate.Titulo} (Expediente: {remate.Expediente ?? "N/A"})");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"⚠ Skipped incomplete block (no critical fields found)");
+                    }
                 }
             }
             catch (Exception ex)
             {
-                // Fallback or log
-                Console.WriteLine($"Error parsing PDF: {ex.Message}");
+                Console.WriteLine($"❌ Error parsing PDF: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
             }
 
-            // Dummy data if nothing found (for testing UI if PDF parsing fails initially)
+
             if (remates.Count == 0)
             {
-                remates.Add(new Remate
-                {
-                    Titulo = "Ejemplo Generado (PDF no leído correctamente)",
-                    Tipo = "Vehiculo",
-                    PrecioBaseDisplay = "₡4,500,000",
-                    Expediente = "25-000000-0000",
-                    TextoOriginal = "Este es un dato de prueba porque el parser no encontró datos."
-                });
+                Console.WriteLine($"⚠ No valid remate data found in PDF");
+            }
+            else
+            {
+                Console.WriteLine($"✓ Successfully extracted {remates.Count} remate(s) from PDF");
             }
 
             return remates;
