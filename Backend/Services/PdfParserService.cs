@@ -34,6 +34,40 @@ namespace Backend.Services
         };
 
         /// <summary>
+        /// Normalizes OCR errors in date text by splitting common concatenated words
+        /// Examples: "lasdiez" -> "las diez", "milveintiséis" -> "mil veintiséis"
+        /// </summary>
+        private string NormalizeOcrDateText(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return text;
+
+            text = text.ToLower();
+
+            // Common hour concatenations
+            text = Regex.Replace(text, @"\blas(diez|once|doce|trece|catorce|quince|dieciséis|dieciseis|diecisiete|dieciocho|diecinueve|veinte|veintiuno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve)\b", "las $1", RegexOptions.IgnoreCase);
+
+            // "Xhoras" -> "X horas"
+            text = Regex.Replace(text, @"\b(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciséis|dieciseis|diecisiete|dieciocho|diecinueve|veinte|veintiuno)horas?\b", "$1 horas", RegexOptions.IgnoreCase);
+
+            // "Xminutos" -> "X minutos"
+            text = Regex.Replace(text, @"\b(cero|un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciséis|dieciseis|veinte|veinticinco|treinta|cuarenta|cincuenta)minutos?\b", "$1 minutos", RegexOptions.IgnoreCase);
+
+            // "dosmil" -> "dos mil" (year concatenation)
+            text = Regex.Replace(text, @"\b(dos)mil\b", "$1 mil", RegexOptions.IgnoreCase);
+
+            // "milveintiséis" -> "mil veintiséis", "milveinticinco" -> "mil veinticinco", etc.
+            text = Regex.Replace(text, @"\bmil(veinti[a-záéíóú]+|treinta|cuarenta|cincuenta|sesenta|setenta|ochenta|noventa|diez|once|doce|trece|catorce|quince|dieciséis|dieciseis|diecisiete|dieciocho|diecinueve|uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve)\b", "mil $1", RegexOptions.IgnoreCase);
+
+            // "delveinti" -> "del veinti", "delagosto" -> "del agosto"
+            text = Regex.Replace(text, @"\bdel(veinti|enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|octubre|noviembre|diciembre)", "del $1", RegexOptions.IgnoreCase);
+
+            // "deaño" -> "de año"
+            text = Regex.Replace(text, @"\bde(año)\b", "de $1", RegexOptions.IgnoreCase);
+
+            return text;
+        }
+
+        /// <summary>
         /// Parses Spanish verbose date text into formatted date string.
         /// Example: "catorce horas treinta minutos del tres de febrero de dos mil veintiséis" 
         /// → "03/02/2026 14:30"
@@ -42,7 +76,9 @@ namespace Backend.Services
         {
             try
             {
-                var text = rawDateText.ToLower().Trim();
+                // First, normalize OCR errors
+                var text = NormalizeOcrDateText(rawDateText);
+                text = text.ToLower().Trim();
 
                 // Strategy 1: strict numeric (dd/MM/yyyy) or (dd-MM-yyyy)
                 // regex look for independent date-like patterns
@@ -497,8 +533,9 @@ namespace Backend.Services
 
                     // 5. Dates (Remates)
                     // Look for "señalan las...", "señala fecha... etc.
-                    // Stop at punctuation OR common keywords like "con", "base", "suma" to avoid capturing "veintiséiscon la base..."
-                    var dateMatches = Regex.Matches(blockText, @"(?:señalan las|señala fecha|fijan las|fija fecha|hora y fecha|para el)\s+([^\.]+?)(?:\.|;|,|\s(?:con|base|suma|en|por)\b)", RegexOptions.IgnoreCase);
+                    // Ignore ordinal prefixes like "primer", "segundo", "tercer" before the keywords
+                    // The (?:...){0,1} makes the ordinal prefix optional and non-capturing
+                    var dateMatches = Regex.Matches(blockText, @"(?:primer[oa]?|segund[oa]?|tercer[oa]?|cuart[oa]?|[\d]+[°º]?)?\s*(?:remate|subasta)?\s*(?:se\s+)?(?:señalan las|señala fecha|señalan|señala|fijan las|fija fecha|fijan|fija|hora y fecha|para el)\s+([^\.]+?)(?:\.|;|,|\s(?:con|base|suma|en|por)\b)", RegexOptions.IgnoreCase);
                     int count = 1;
                     foreach (Match dm in dateMatches)
                     {

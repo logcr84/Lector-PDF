@@ -106,8 +106,43 @@ namespace Backend.Tests
             // 4. Strict Numeric: "10/10/2026"
             Assert.Equal("10/10/2026", r.Remates[3].Fecha.Trim());
 
+
             // 5. OCR Failures: "l0/l0/2O26" (l=1, O=0)
             Assert.Equal("10/10/2026", new PdfParserService().ParseText("\nEn este Despacho fecha l0/l0/2O26.\npublicación número: 2")[0].Remates[0].Fecha.Trim());
+        }
+
+        [Fact]
+        public void ParseText_ShouldHandleOcrConcatenatedWords()
+        {
+            var service = new PdfParserService();
+
+            // Real-world case 1: "lasdiez horas cero minutos del veinticuatro de marzo de dos mil veintiséis"
+            string text1 = @"
+                En este Despacho se saca a remate un bien.
+                Se señalan lasdiez horas cero minutos del veinticuatro de marzo de dos mil veintiséis.
+                Base 10000 colones.
+                Expediente: 24-000001-CIVIL
+                publicación número: 101
+            ";
+
+            var remates1 = service.ParseText(text1);
+            Assert.Single(remates1);
+            Assert.Single(remates1[0].Remates);
+            Assert.Equal("24/03/2026 10:00", remates1[0].Remates[0].Fecha);
+
+            // Real-world case 2: "tercer remate se señalan las nueve horas treinta minutos del diecinueve de marzo de dos milveintiséis"
+            string text2 = @"
+                En este Despacho se saca a remate un bien.
+                tercer remate se señalan las nueve horas treinta minutos del diecinueve de marzo de dos milveintiséis.
+                Base 5000 colones.
+                Expediente: 24-000002-CIVIL
+                publicación número: 102
+            ";
+
+            var remates2 = service.ParseText(text2);
+            Assert.Single(remates2);
+            Assert.Single(remates2[0].Remates);
+            Assert.Equal("19/03/2026 09:30", remates2[0].Remates[0].Fecha);
         }
     }
 }
