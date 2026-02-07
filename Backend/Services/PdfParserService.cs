@@ -101,6 +101,13 @@ namespace Backend.Services
                 if (yearMatch.Success)
                 {
                     var yearText = yearMatch.Groups[1].Value.Trim();
+
+                    // Clean attached noise words (e.g., "veintiséiscon" -> "veintiséis")
+                    // This happens when OCR misses the space between the date and the next sentence ("con la base...")
+                    // CAUTION: Do NOT remove "y" because it's needed for "treinta y tres" etc.
+                    yearText = Regex.Replace(yearText, @"(con|base|suma|por|en|del|al)\s*.*$", "", RegexOptions.IgnoreCase); // Remove trailing sequence tokens
+                    yearText = Regex.Replace(yearText, @"(con|base|suma|por|en)$", "", RegexOptions.IgnoreCase); // Remove robust attached suffix
+
                     year = ParseSpanishYear(yearText);
                 }
 
@@ -110,6 +117,9 @@ namespace Backend.Services
                     var timeStr = hours > 0 || minutes > 0 ? $" {hours:D2}:{minutes:D2}" : "";
                     return $"{day:D2}/{month:D2}/{year}{timeStr}";
                 }
+
+                Console.WriteLine($"FAILED DATE: '{text}' -> H:{hours} M:{minutes} D:{day} Mo:{month} Y:{year}");
+                // DEBUG: Inspect why year is 0 if it is
 
                 // Fallback: return original text if parsing incomplete
                 return rawDateText;
@@ -271,21 +281,30 @@ namespace Backend.Services
 
         public List<Remate> ParsePdf(Stream pdfStream)
         {
-            var remates = new List<Remate>();
+            var fullTextBuilder = new StringBuilder();
 
             try
             {
                 using var document = PdfDocument.Open(pdfStream);
-                var fullTextBuilder = new StringBuilder();
                 foreach (var page in document.GetPages())
                 {
-                    // Basic text extraction; layout analysis might be needed for complex columns
-                    // For now, we append text line by line.
                     fullTextBuilder.AppendLine(page.Text);
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error reading PDF stream: {ex.Message}");
+                return new List<Remate>();
+            }
 
-                string fullText = fullTextBuilder.ToString();
+            return ParseText(fullTextBuilder.ToString());
+        }
+        public List<Remate> ParseText(string fullText)
+        {
+            var remates = new List<Remate>();
 
+            try
+            {
                 // Strategy adapted from parrafo.py:
                 // Find blocks starting with "En este Despacho" and ending with "publicación número:" or similar metadata.
                 // Since PDF text might not be perfectly paragraphed like HTML <p> tags, we'll try to split by known distinct markers or just scan through.
@@ -302,6 +321,8 @@ namespace Backend.Services
                     if (rawBlock.Length < 50) continue;
 
                     var remate = new Remate();
+                    remate.Id = remates.Count + 1;
+
                     // Reconstruct context slightly
                     remate.TextoOriginal = "En este Despacho " + rawBlock.Trim();
 
@@ -314,12 +335,17 @@ namespace Backend.Services
                     // Note: parrafo.py accumulates text until "publicación número" or "Referencia N°".
                     // The Split approach implicitly grabs everything until the next "En este Despacho". 
                     // To be more precise we could truncate at "publicación número" if present to avoid trailing garbage.
-                    var endMarkerMatch = Regex.Match(blockText, @"(publicaci[óo]n n[úu]mero:|Referencia N°)", RegexOptions.IgnoreCase);
+                    var endMarkerMatch = Regex.Match(blockText, @"(publicaci[óo]n n[úu]mero:|Referencia N°)\s*([\w\d\-]+)?", RegexOptions.IgnoreCase);
                     if (endMarkerMatch.Success)
                     {
-                        // Keep text only up to the marker + some chars? 
+                        // Keep text only up to the marker + the number captured
                         // parrafo.py includes the marker line.
-                        blockText = blockText.Substring(0, endMarkerMatch.Index + endMarkerMatch.Length + 20); // +20 to capture the number
+                        // We capture the marker and the potential number following it
+                        int lengthToKeep = endMarkerMatch.Index + endMarkerMatch.Length;
+                        blockText = blockText.Substring(0, Math.Min(lengthToKeep, blockText.Length));
+
+                        // Update TextoOriginal to reflect the clean cut
+                        remate.TextoOriginal = "En este Despacho " + blockText;
                     }
 
                     // --- Extraction Logic ---
@@ -415,9 +441,9 @@ namespace Backend.Services
 
 
                     // 5. Dates (Remates)
-                    // Look for "señalan las...", "señala fecha...", etc.
-                    // Broadened regex to catch more variations
-                    var dateMatches = Regex.Matches(blockText, @"(?:señalan las|señala fecha|fijan las|fija fecha|hora y fecha|para el)\s+([^\.]+?)(?:\.|;|,|$)", RegexOptions.IgnoreCase);
+                    // Look for "señalan las...", "señala fecha... etc.
+                    // Stop at punctuation OR common keywords like "con", "base", "suma" to avoid capturing "veintiséiscon la base..."
+                    var dateMatches = Regex.Matches(blockText, @"(?:señalan las|señala fecha|fijan las|fija fecha|hora y fecha|para el)\s+([^\.]+?)(?:\.|;|,|\s(?:con|base|suma|en|por)\b)", RegexOptions.IgnoreCase);
                     int count = 1;
                     foreach (Match dm in dateMatches)
                     {
@@ -454,18 +480,18 @@ namespace Backend.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error parsing PDF: {ex.Message}");
+                Console.WriteLine($"❌ Error parsing text: {ex.Message}");
                 Console.WriteLine($"Stack trace: {ex.StackTrace}");
             }
 
 
             if (remates.Count == 0)
             {
-                Console.WriteLine($"⚠ No valid remate data found in PDF");
+                Console.WriteLine($"⚠ No valid remate data found in Text");
             }
             else
             {
-                Console.WriteLine($"✓ Successfully extracted {remates.Count} remate(s) from PDF");
+                Console.WriteLine($"✓ Successfully extracted {remates.Count} remate(s) from Text");
             }
 
             return remates;

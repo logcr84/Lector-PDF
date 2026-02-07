@@ -6,6 +6,7 @@ export interface RemateFecha {
 }
 
 export interface Remate {
+    id: number;
     tipo: string; // "Vehiculo" | "Propiedad"
     titulo: string;
     area: string;

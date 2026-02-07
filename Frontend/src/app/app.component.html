@@ -30,6 +30,7 @@
                 [ngClass]="{'prop-item': item.tipo === 'Propiedad', 'car-item': item.tipo === 'Vehiculo', 'active': item.expanded}" 
                 (click)="toggleExpand(item)">
             <div class="header-grid">
+                <span class="h-id">#{{ item.id }}</span>
                 <span class="h-title">{{ item.titulo }}</span>
                 <span class="h-area">{{ item.area || '--' }}</span>
                 <span class="h-price">{{ item.precioBaseDisplay }}</span>
@@ -57,6 +58,7 @@
                 
                 <div class="details-box">
                     <div class="section-title">Detalles & Legal</div>
+                    <div class="detail-row"><span class="detail-key">ID Interno:</span> <span class="detail-value">{{ item.id }}</span></div>
                     <!-- Vehicle-specific fields -->
                     <div class="detail-row" *ngIf="item.detalles?.['Motor']"><span class="detail-key">Motor:</span> <span class="detail-value">{{ item.detalles['Motor'] }}</span></div>
                     <div class="detail-row" *ngIf="item.detalles?.['Placa']"><span class="detail-key">Placa:</span> <span class="detail-value">{{ item.detalles['Placa'] }}</span></div>
