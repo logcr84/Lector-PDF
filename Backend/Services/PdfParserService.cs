@@ -70,21 +70,27 @@ namespace Backend.Services
 
                 // Extract day (e.g., "tres de febrero" → 3)
                 int day = 0;
-                var dayMatch = Regex.Match(text, @"del?\s+([\wáéíóúñ\s]+?)\s+de\s+([\wáéíóú]+)", RegexOptions.IgnoreCase);
+                var dayMatch = Regex.Match(text, @"del?\s+([\wáéíóúñ\s]+?)\s+de\s+([\wáéíóú]+?)(?:de|del?\s)", RegexOptions.IgnoreCase);
                 if (dayMatch.Success)
                 {
                     var dayText = dayMatch.Groups[1].Value.Trim();
                     day = ParseSpanishNumber(dayText);
                 }
 
-                // Extract month (e.g., "de febrero de" → 2)
+                // Extract month (e.g., "de febrero de" → 2, or "de agostode" → 8)
                 int month = 0;
                 if (dayMatch.Success)
                 {
-                    var monthText = dayMatch.Groups[2].Value.Trim();
-                    if (SpanishMonths.TryGetValue(monthText, out int m))
+                    var monthText = dayMatch.Groups[2].Value.Trim().ToLower();
+
+                    // Handle concatenated month+de (e.g., "agostode" → "agosto")
+                    foreach (var monthName in SpanishMonths.Keys)
                     {
-                        month = m;
+                        if (monthText.StartsWith(monthName))
+                        {
+                            month = SpanishMonths[monthName];
+                            break;
+                        }
                     }
                 }
 
@@ -179,6 +185,83 @@ namespace Backend.Services
             return 0;
         }
 
+        private static readonly Dictionary<string, decimal> SpanishAmountValues = new()
+        {
+            {"uno", 1}, {"un", 1}, {"una", 1}, {"dos", 2}, {"tres", 3}, {"cuatro", 4}, {"cinco", 5},
+            {"seis", 6}, {"siete", 7}, {"ocho", 8}, {"nueve", 9}, {"diez", 10},
+            {"once", 11}, {"doce", 12}, {"trece", 13}, {"catorce", 14}, {"quince", 15},
+            {"dieciséis", 16}, {"dieciseis", 16}, {"diecisiete", 17}, {"dieciocho", 18},
+            {"diecinueve", 19}, {"veintiuno", 21}, {"veintiún", 21}, {"veintidós", 22}, {"veintidos", 22},
+            {"veintitrés", 23}, {"veintitres", 23}, {"veinticuatro", 24}, {"veinticinco", 25},
+            {"veintiséis", 26}, {"veintiseis", 26}, {"veintisiete", 27}, {"veintiocho", 28},
+            {"veintinueve", 29},
+            {"veinte", 20}, {"treinta", 30}, {"cuarenta", 40}, {"cincuenta", 50},
+            {"sesenta", 60}, {"setenta", 70}, {"ochenta", 80}, {"noventa", 90},
+            {"cien", 100}, {"ciento", 100}, {"doscientos", 200}, {"trescientos", 300},
+            {"cuatrocientos", 400}, {"quinientos", 500}, {"seiscientos", 600},
+            {"setecientos", 700}, {"ochocientos", 800}, {"novecientos", 900},
+            {"mil", 1000}, {"millón", 1000000}, {"millon", 1000000}, {"millones", 1000000}
+        };
+
+        private decimal ParseSpanishTextToDecimal(string text)
+        {
+            try
+            {
+                // Normalize text: lowercase, remove " y ", remove punctuation
+                var cleanText = text.ToLower()
+                    .Replace(" y ", " ")
+                    .Replace(",", "")
+                    .Replace(".", "");
+
+                var words = cleanText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                decimal totalValue = 0;
+                decimal currentChunk = 0;
+
+                foreach (var word in words)
+                {
+                    if (SpanishAmountValues.TryGetValue(word, out decimal val))
+                    {
+                        if (val == 1000) // mil
+                        {
+                            // "cinco mil" -> 5 * 1000
+                            // "mil" -> 1 * 1000
+                            if (currentChunk == 0) currentChunk = 1;
+                            currentChunk *= 1000;
+                            totalValue += currentChunk;
+                            currentChunk = 0;
+                        }
+                        else if (val == 1000000) // millón/millones
+                        {
+                            // "cinco millones" -> 5 * 1000000
+                            // "un millón" -> 1 * 1000000
+                            if (currentChunk == 0) currentChunk = 1;
+                            currentChunk *= 1000000;
+                            totalValue += currentChunk;
+                            currentChunk = 0;
+                        }
+                        else if (val >= 100) // Hundreds (cien, doscientos...)
+                        {
+                            currentChunk += val;
+                        }
+                        else // 0-99
+                        {
+                            currentChunk += val;
+                        }
+                    }
+                }
+
+                // Add remaining chunk (e.g., "... quinientos")
+                totalValue += currentChunk;
+
+                return totalValue;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
         public List<Remate> ParsePdf(Stream pdfStream)
         {
             var remates = new List<Remate>();
@@ -255,17 +338,43 @@ namespace Backend.Services
                     }
 
                     // 3. Precio Base
-                    // "base de X colones" or symbols.
-                    var precioMatch = Regex.Match(blockText, @"(?:base de|valor de|precio)\s*([₡$¢]\s?[\d,.]+)");
-                    if (precioMatch.Success)
+                    // Priority 1: Text amount (e.g., "base de CINCO MILLONES...")
+                    // Often cleaner in OCR than symbols.
+                    decimal precioBase = 0;
+
+                    var textPriceMatch = Regex.Match(blockText, @"(?:base|suma)\s+(?:de\s+)?([a-zA-ZáéíóúñÁÉÍÓÚÑ\s]+?)(?:\s+(?:colones|d[óo]lares|exactos)|\s*(?:,|\.|$))", RegexOptions.IgnoreCase);
+                    if (textPriceMatch.Success)
                     {
-                        remate.PrecioBaseDisplay = precioMatch.Groups[1].Value;
+                        var textAmount = textPriceMatch.Groups[1].Value;
+                        // Filters out short noise, ensures it looks like a number text
+                        if (textAmount.Length > 3 && (textAmount.ToLower().Contains("mil") || textAmount.ToLower().Contains("ciento") || textAmount.ToLower().Contains("millon") || textAmount.ToLower().Contains("un") || textAmount.ToLower().Contains("dos")))
+                        {
+                            precioBase = ParseSpanishTextToDecimal(textAmount);
+                        }
+                    }
+
+                    if (precioBase > 0)
+                    {
+                        remate.PrecioBase = precioBase;
+                        remate.PrecioBaseDisplay = $"₡{precioBase:N0}"; // Assuming colones mostly
                     }
                     else
                     {
-                        // Fallback: look for just currency
-                        var simplePrice = Regex.Match(blockText, @"[₡$¢]\s?[\d,.]+");
-                        if (simplePrice.Success) remate.PrecioBaseDisplay = simplePrice.Value;
+                        // Priority 2: Numeric digits (e.g., "₡5,000,000")
+                        var precioMatch = Regex.Match(blockText, @"(?:base|valor|precio)[^0-9]*([₡$¢]?\s?[\d,.]+)");
+                        if (precioMatch.Success)
+                        {
+                            remate.PrecioBaseDisplay = precioMatch.Groups[1].Value;
+                            // Attempt to parse explicit number for sorting/logic if needed
+                            // Clean up punctuation: 5.000.000,00 vs 5,000,000.00
+                            // For now just storing display string as requested usually
+                        }
+                        else
+                        {
+                            // Fallback: look for just currency symbol + digits
+                            var simplePrice = Regex.Match(blockText, @"[₡$¢]\s?[\d,.]+");
+                            if (simplePrice.Success) remate.PrecioBaseDisplay = simplePrice.Value;
+                        }
                     }
 
                     // 4. Titulo (Resumen)
@@ -292,6 +401,7 @@ namespace Backend.Services
                             remate.Titulo = "Propiedad en Remate";
                         }
                     }
+
 
                     // 5. Dates (Remates)
                     // Look for "señalan las..."

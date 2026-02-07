@@ -26,7 +26,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference(); // Swagger-like UI at /scalar/v1
+    // app.MapScalarApiReference(); // Temporarily disabled due to restore lock
 }
 
 app.UseHttpsRedirection(); // Optional: might disable if certificate issues arise locally
