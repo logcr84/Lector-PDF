@@ -44,18 +44,24 @@ namespace Backend.Services
             {
                 var text = rawDateText.ToLower().Trim();
 
-                // Extract hours (e.g., "catorce horas" → 14)
+                // Extract hours (e.g., "catorce horas" → 14 or "once horas" → 11)
                 int hours = 0;
-                var hoursMatch = Regex.Match(text, @"([\wáéíóúñ\s]+)\s+horas?", RegexOptions.IgnoreCase);
+                var hoursMatch = Regex.Match(text, @"((?:un(?:a|o)?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciséis|dieciseis|diecisiete|dieciocho|diecinueve|veinte|veintiún|veintiuno|veintidós|veintidos|veintitrés|veintitres|\d+))\s+horas?", RegexOptions.IgnoreCase);
                 if (hoursMatch.Success)
                 {
                     var hourText = hoursMatch.Groups[1].Value.Trim();
                     hours = ParseSpanishNumber(hourText);
                 }
 
-                // Extract minutes (e.g., "treinta minutos" → 30)
+                // Extract minutes (e.g., "treinta minutos" → 30 or "cerominutos" → 0)
                 int minutes = 0;
-                var minutesMatch = Regex.Match(text, @"([\wáéíóúñ\s]+)\s+minutos?", RegexOptions.IgnoreCase);
+                // Try "XXminutos" pattern first (e.g., "cerominutos")
+                var minutesMatch = Regex.Match(text, @"(cero|un(?:a|o)?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|(?:dieci)?(?:seis|siete|ocho|nueve)|veinte|veinticinco|treinta|cuarenta|cincuenta|\d+)minutos?", RegexOptions.IgnoreCase);
+                if (!minutesMatch.Success)
+                {
+                    // Try "XX minutos" pattern (with space)
+                    minutesMatch = Regex.Match(text, @"(cero|un(?:a|o)?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|(?:dieci)?(?:seis|siete|ocho|nueve)|veinte|veinticinco|treinta|cuarenta|cincuenta|\d+)\s+minutos?", RegexOptions.IgnoreCase);
+                }
                 if (minutesMatch.Success)
                 {
                     var minuteText = minutesMatch.Groups[1].Value.Trim();
@@ -82,9 +88,9 @@ namespace Backend.Services
                     }
                 }
 
-                // Extract year (e.g., "del dos mil veintiséis" → 2026, "de dosmil veintiséis" → 2026)
+                // Extract year (e.g., "del dos mil veintiséis" → 2026, "del año dos mil" → 2026)
                 int year = 0;
-                var yearMatch = Regex.Match(text, @"del?\s+(dos\s?mil[\wáéíóúñ\s]*)", RegexOptions.IgnoreCase);
+                var yearMatch = Regex.Match(text, @"del?\s+(?:año\s+)?(dos\s?mil[\wáéíóúñ\s]*)", RegexOptions.IgnoreCase);
                 if (yearMatch.Success)
                 {
                     var yearText = yearMatch.Groups[1].Value.Trim();

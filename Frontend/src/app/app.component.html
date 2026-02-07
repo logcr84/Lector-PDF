@@ -57,8 +57,16 @@
                 
                 <div class="details-box">
                     <div class="section-title">Detalles & Legal</div>
-                    <div class="detail-row" *ngIf="item.demandado"><span class="detail-key">Demandado:</span> <span class="detail-value">{{ item.demandado }}</span></div>
+                    <!-- Vehicle-specific fields -->
+                    <div class="detail-row" *ngIf="item.detalles?.['Motor']"><span class="detail-key">Motor:</span> <span class="detail-value">{{ item.detalles['Motor'] }}</span></div>
+                    <div class="detail-row" *ngIf="item.detalles?.['Placa']"><span class="detail-key">Placa:</span> <span class="detail-value">{{ item.detalles['Placa'] }}</span></div>
+                    <!-- Property-specific fields -->
+                    <div class="detail-row" *ngIf="item.detalles?.['Naturaleza']"><span class="detail-key">Naturaleza:</span> <span class="detail-value">{{ item.detalles['Naturaleza'] }}</span></div>
+                    <div class="detail-row" *ngIf="item.detalles?.['Colindantes']"><span class="detail-key">Colindantes:</span> <span class="detail-value">{{ item.detalles['Colindantes'] }}</span></div>
+                    <!-- Common fields in order -->
+                    <div class="detail-row" *ngIf="item.expediente"><span class="detail-key">Expediente:</span> <span class="detail-value">{{ item.expediente }}</span></div>
                     <div class="detail-row" *ngIf="item.juzgado"><span class="detail-key">Juzgado:</span> <span class="detail-value">{{ item.juzgado }}</span></div>
+                    <div class="detail-row" *ngIf="item.demandado"><span class="detail-key">Demandado:</span> <span class="detail-value">{{ item.demandado }}</span></div>
                     
                     <div style="margin-top:10px; font-size: 0.8em; color: #999;">
                         <em>Texto original extraído: {{ item.textoOriginal | slice:0:300 }}...</em>

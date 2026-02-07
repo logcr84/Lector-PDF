@@ -52,6 +52,10 @@
             "PdfPig": {
               "target": "Package",
               "version": "[0.1.9, )"
+            },
+            "Scalar.AspNetCore": {
+              "target": "Package",
+              "version": "[1.2.68, )"
             }
           },
           "imports": [

@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "iDx/c6CZntE=",
+  "dgSpecHash": "ZQ1s6aBEu5g=",
   "success": true,
   "projectFilePath": "/Users/jalfaro/Lector PDF/Backend/Backend.csproj",
   "expectedPackageFiles": [
     "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/microsoft.aspnetcore.openapi/10.0.1/microsoft.aspnetcore.openapi.10.0.1.nupkg.sha512",
     "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/pdfpig/0.1.9/pdfpig.0.1.9.nupkg.sha512"
+    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/pdfpig/0.1.9/pdfpig.0.1.9.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/scalar.aspnetcore/1.2.68/scalar.aspnetcore.1.2.68.nupkg.sha512"
   ],
   "logs": []
 }

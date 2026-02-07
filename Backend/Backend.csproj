@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
+    <PackageReference Include="Scalar.AspNetCore" Version="1.2.68" />
     <PackageReference Include="PdfPig" Version="0.1.9" />
   </ItemGroup>
 
