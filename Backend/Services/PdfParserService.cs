@@ -298,7 +298,11 @@ namespace Backend.Services
                     // Reconstruct context slightly
                     remate.TextoOriginal = "En este Despacho " + rawBlock.Trim();
 
-                    var blockText = rawBlock;
+                    // Normalize whitespace for regex matching: replace parsing artifacts like newlines within sentences
+                    var blockText = Regex.Replace(rawBlock, @"\s+", " ").Trim();
+
+                    Console.WriteLine($"--- Block Preview: {blockText.Substring(0, Math.Min(100, blockText.Length))}... ---");
+
 
                     // Note: parrafo.py accumulates text until "publicación número" or "Referencia N°".
                     // The Split approach implicitly grabs everything until the next "En este Despacho". 
