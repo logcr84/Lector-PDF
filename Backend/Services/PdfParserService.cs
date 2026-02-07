@@ -82,9 +82,9 @@ namespace Backend.Services
                     }
                 }
 
-                // Extract year (e.g., "dos mil veintiséis" → 2026)
+                // Extract year (e.g., "del dos mil veintiséis" → 2026, "de dosmil veintiséis" → 2026)
                 int year = 0;
-                var yearMatch = Regex.Match(text, @"de\s+(dos\s+mil[\wáéíóúñ\s]*)", RegexOptions.IgnoreCase);
+                var yearMatch = Regex.Match(text, @"del?\s+(dos\s?mil[\wáéíóúñ\s]*)", RegexOptions.IgnoreCase);
                 if (yearMatch.Success)
                 {
                     var yearText = yearMatch.Groups[1].Value.Trim();
@@ -143,16 +143,17 @@ namespace Backend.Services
         }
 
         /// <summary>
-        /// Parses Spanish year text (e.g., "dos mil veintiséis" → 2026)
+        /// Parses Spanish year text (e.g., "dos mil veintiséis" → 2026 or "dosmil veintiséis" → 2026)
         /// </summary>
         private int ParseSpanishYear(string yearText)
         {
             yearText = yearText.ToLower().Trim();
 
-            // Handle "dos mil XXX" pattern
-            if (yearText.StartsWith("dos mil"))
+            // Handle "dos mil XXX" or "dosmil XXX" pattern
+            if (yearText.StartsWith("dos mil") || yearText.StartsWith("dosmil"))
             {
-                var remaining = yearText.Replace("dos mil", "").Trim();
+                // Remove both variants to get the remaining number
+                var remaining = yearText.Replace("dos mil", "").Replace("dosmil", "").Trim();
 
                 if (string.IsNullOrEmpty(remaining))
                 {

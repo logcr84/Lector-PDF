@@ -421,3 +421,239 @@ Unhandled exception. System.IO.IOException: Failed to bind to address http://127
    at Program.<Main>$(String[] args) in /Users/jalfaro/Lector PDF/Backend/Program.cs:line 38
 dotnet watch ❌ [Backend (net10.0)] Exited with error code 134
 dotnet watch ⏳ Waiting for a file to change before restarting ...
+dotnet watch 🔨 Building /Users/jalfaro/Lector PDF/Backend/Backend.csproj ...
+dotnet watch 🔨 Build succeeded: /Users/jalfaro/Lector PDF/Backend/Backend.csproj
+Usando la configuración de inicio de /Users/jalfaro/Lector PDF/Backend/Properties/launchSettings.json...
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5032
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/jalfaro/Lector PDF/Backend
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+      Failed to determine the https port for redirect.
+✓ Extracted remate: Propiedad en Remate (Expediente: )
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-002256-0063-pe)
+✓ Extracted remate: MITSUBISHI MONTERO (Expediente: 25-003246-1204-CJ)
+✓ Extracted remate: M MG (Expediente: 23-001450-1764-CJ)
+✓ Extracted remate: BYD F3 (Expediente: 21-000894-1204-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 24-002367-1764-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-003205-1204-CJJUZGADO)
+✓ Extracted remate: YAMAHA YD110S (Expediente: 17-001016-1207-CJ)
+✓ Extracted remate: JAC JS2 (Expediente: 25-004765-1207-CJ)
+✓ Extracted remate: ISUZU FTR (Expediente: 24-004879-1205-CJ)
+✓ Extracted remate: DFM ZNA (Expediente: 25-004697-1207-CJ)
+✓ Extracted remate: FORMULA NANOR (Expediente: 19-006985-1207-CJ)
+✓ Extracted remate: CHEVROLET N300 (Expediente: 25-002067-1207-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-004376-1158-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 19-009299-1158-CJ)
+✓ Extracted remate: GEELY EMGRAND (Expediente: 23-001032-1158-CJ)
+✓ Extracted remate: TOYOTA HILUX (Expediente: 25-004432-1207-CJ)
+✓ Extracted remate: CHERY TIGGO (Expediente: 25-010722-1338-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 23-008513-1158-CJ)
+✓ Extracted remate: HYUNDAI ACCENT (Expediente: 25-011574-1338-CJJUZGADO)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-005298-1207-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-005497-1207-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-006917-1338-CJ)
+✓ Extracted remate: HYUNDAI TUCSON (Expediente: 25-011919-1338-CJ)
+✓ Extracted remate: UNITED POWERMAX (Expediente: 19-003731-1207-CJ)
+✓ Extracted remate: Distrito SAN RAFAEL, Cantón ESCAZÚ (Expediente: 21-006567-1338-CJ)
+✓ Extracted remate: FREEDOM ZS (Expediente: 17-007440-1338-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 2025-693-RIM)
+✓ Extracted remate: BAJAJ PULSAR (Expediente: 17-006860-1338-CJ)
+✓ Extracted remate: UNITED DSR (Expediente: 17-009328-1338-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-005475-1207-CJ)
+✓ Extracted remate: EUROMOT GXT (Expediente: 17-001031-1207-CJ)
+✓ Extracted remate: FORD F (Expediente: 25-011483-1170-CJ)
+✓ Extracted remate: HYUNDAI ACCENT (Expediente: 25-011900-1170-CJ)
+✓ Extracted remate: HYUNDAI GRAND (Expediente: 25-011706-1170-CJ)
+✓ Extracted remate: FORMULA HAWK (Expediente: 17-012309-1338-CJ)
+✓ Extracted remate: HYUNDAI TUCSON (Expediente: 25-012326-1170-CJ)
+✓ Extracted remate: GEELY GX3 (Expediente: 25-011428-1170-CJ)
+✓ Extracted remate: YUMBO DAKAR (Expediente: 17-010405-1338-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-007970-1170-CJ)
+✓ Extracted remate: CHERY TIGGO (Expediente: 25-012250-1170-CJ)
+✓ Extracted remate: HYUNDAI ACCENT (Expediente: 25-008607-1170-CJ)
+✓ Extracted remate: JAC EJS (Expediente: 25-010157-1157-CJJUZGADO)
+✓ Extracted remate: FREEDOM ZS105 (Expediente: 16-019004-1338-CJ)
+✓ Extracted remate: CHANGAN CS (Expediente: 25-012600-1170-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 17-000844-1765-CJ)
+✓ Extracted remate: JAC E (Expediente: 25-003370-1765-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-002984-1164-CJ)
+✓ Extracted remate: NISSAN KICKS (Expediente: 23-000584-1158-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-000640-1158-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-005038-1207-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 22-010952-1158-CJ)
+✓ Extracted remate: Distrito 5 EL CAIRO, Cantón 03 SIQUIRRES (Expediente: 08-000520-1006-CI)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-003956-1158-CJ)
+✓ Extracted remate: CHERY TIGGO (Expediente: 25-002922-1765-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-005023-1209-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-003237-1204-CJ)
+✓ Extracted remate: NISSAN KICKS (Expediente: 25-003638-1158-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 24-000755-1205-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-003917-1209-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-005788-1209-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-011789-1164-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-011616-1164-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 23-001527-1164-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-005667-1209-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-004377-1209-CJ)
+✓ Extracted remate: Distrito 01 GUÁCIMO, Cantón 06 GUÁCIMO (Expediente: 20-001807-1209-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-005989-1209-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-006071-1209-CJ)
+✓ Extracted remate: JAC JS2 (Expediente: 25-006339-1209-CJ)
+✓ Extracted remate: HYUNDAI ACCENT (Expediente: 25-001851-1209-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 24-004871-1205-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 24-003036-1202-CJ)
+✓ Extracted remate: HYUNDAI (Expediente: 25-004854-1207-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-005295-1207-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-005301-1207-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-005297-1207-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-005294-1207-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-008337-1157-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-012439-1157-CJ)
+✓ Extracted remate: CHERY TIGGO (Expediente: 25-003012-1765-CJ)
+✓ Extracted remate: GEELY GX3 (Expediente: 25-003037-1765-CJ)
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-007538-1158-CJ)
+✓ Extracted remate: HYUNDAI STAREX (Expediente: 25-003244-1204-CJ)
+✓ Extracted remate: KIA RIO (Expediente: 21-003451-1158-CJ)
+✓ Successfully extracted 85 remate(s) from PDF
+dotnet watch ⌚ File updated: ./Services/PdfParserService.cs
+dotnet watch 🔥 [Backend (net10.0)] Hot reload succeeded.
+dotnet watch ❌ [Backend (net10.0)] Exited with error code 137
+dotnet watch ⏳ Waiting for a file to change before restarting ...
+dotnet watch 🔨 Building /Users/jalfaro/Lector PDF/Backend/Backend.csproj ...
+dotnet watch 🔨 Build succeeded: /Users/jalfaro/Lector PDF/Backend/Backend.csproj
+Usando la configuración de inicio de /Users/jalfaro/Lector PDF/Backend/Properties/launchSettings.json...
+fail: Microsoft.Extensions.Hosting.Internal.Host[11]
+      Hosting failed to start
+      System.IO.IOException: Failed to bind to address http://127.0.0.1:5032: address already in use.
+       ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
+       ---> System.Net.Sockets.SocketException (48): Address already in use
+         at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+         at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+         at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+         --- End of inner exception stack trace ---
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+         --- End of inner exception stack trace ---
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+         at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+         at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+Unhandled exception. System.IO.IOException: Failed to bind to address http://127.0.0.1:5032: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
+ ---> System.Net.Sockets.SocketException (48): Address already in use
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Run(IHost host)
+   at Program.<Main>$(String[] args) in /Users/jalfaro/Lector PDF/Backend/Program.cs:line 38
+dotnet watch ❌ [Backend (net10.0)] Exited with error code 134
+dotnet watch ⏳ Waiting for a file to change before restarting ...
+dotnet watch 🔨 Building /Users/jalfaro/Lector PDF/Backend/Backend.csproj ...
+dotnet watch 🔨 Build succeeded: /Users/jalfaro/Lector PDF/Backend/Backend.csproj
+Usando la configuración de inicio de /Users/jalfaro/Lector PDF/Backend/Properties/launchSettings.json...
+fail: Microsoft.Extensions.Hosting.Internal.Host[11]
+      Hosting failed to start
+      System.IO.IOException: Failed to bind to address http://127.0.0.1:5032: address already in use.
+       ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
+       ---> System.Net.Sockets.SocketException (48): Address already in use
+         at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+         at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+         at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+         --- End of inner exception stack trace ---
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+         --- End of inner exception stack trace ---
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+         at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+         at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+Unhandled exception. System.IO.IOException: Failed to bind to address http://127.0.0.1:5032: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
+ ---> System.Net.Sockets.SocketException (48): Address already in use
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Run(IHost host)
+   at Program.<Main>$(String[] args) in /Users/jalfaro/Lector PDF/Backend/Program.cs:line 38
+dotnet watch ❌ [Backend (net10.0)] Exited with error code 134
+dotnet watch ⏳ Waiting for a file to change before restarting ...
+dotnet watch 🔨 Building /Users/jalfaro/Lector PDF/Backend/Backend.csproj ...
+dotnet watch 🔨 Build succeeded: /Users/jalfaro/Lector PDF/Backend/Backend.csproj
+Usando la configuración de inicio de /Users/jalfaro/Lector PDF/Backend/Properties/launchSettings.json...
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5032
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/jalfaro/Lector PDF/Backend
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+      Failed to determine the https port for redirect.
