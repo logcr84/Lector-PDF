@@ -400,3 +400,183 @@ Application bundle generation complete. [1.315 seconds] - 2026-02-07T17:35:15.39
 
 
 Page reload sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names | Raw size
+main.js             | main  | 28.74 kB | 
+
+Application bundle generation complete. [0.914 seconds] - 2026-02-07T18:13:35.271Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be safely removed.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:63:51:
+[37m      63 │ ..."detail-row" *ngIf="[32mitem.detalles?.['Motor'][37m"><span class="deta...
+         ╵                        [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Warning occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:10:15:
+[37m      10 │   templateUrl: [32m'./app.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be safely removed.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:64:51:
+[37m      64 │ ..."detail-row" *ngIf="[32mitem.detalles?.['Placa'][37m"><span class="deta...
+         ╵                        [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Warning occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:10:15:
+[37m      10 │   templateUrl: [32m'./app.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be safely removed.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:66:51:
+[37m      66 │ ...tail-row" *ngIf="[32mitem.detalles?.['Naturaleza'][37m"><span class="de...
+         ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Warning occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:10:15:
+[37m      10 │   templateUrl: [32m'./app.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be safely removed.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:67:51:
+[37m      67 │ ...tail-row" *ngIf="[32mitem.detalles?.['Colindantes'][37m"><span class="d...
+         ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Warning occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:10:15:
+[37m      10 │   templateUrl: [32m'./app.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+Component update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names  | Raw size
+styles.css          | styles |  5.00 kB | 
+
+Application bundle generation complete. [0.019 seconds] - 2026-02-07T18:13:38.693Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be safely removed.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:63:51:
+[37m      63 │ ..."detail-row" *ngIf="[32mitem.detalles?.['Motor'][37m"><span class="deta...
+         ╵                        [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Warning occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:10:15:
+[37m      10 │   templateUrl: [32m'./app.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be safely removed.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:64:51:
+[37m      64 │ ..."detail-row" *ngIf="[32mitem.detalles?.['Placa'][37m"><span class="deta...
+         ╵                        [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Warning occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:10:15:
+[37m      10 │   templateUrl: [32m'./app.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be safely removed.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:66:51:
+[37m      66 │ ...tail-row" *ngIf="[32mitem.detalles?.['Naturaleza'][37m"><span class="de...
+         ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Warning occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:10:15:
+[37m      10 │   templateUrl: [32m'./app.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be safely removed.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:67:51:
+[37m      67 │ ...tail-row" *ngIf="[32mitem.detalles?.['Colindantes'][37m"><span class="d...
+         ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Warning occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:10:15:
+[37m      10 │   templateUrl: [32m'./app.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+Stylesheet update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names  | Raw size
+styles.css          | styles |  5.09 kB | 
+
+Application bundle generation complete. [0.006 seconds] - 2026-02-07T18:13:40.709Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be safely removed.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:63:51:
+[37m      63 │ ..."detail-row" *ngIf="[32mitem.detalles?.['Motor'][37m"><span class="deta...
+         ╵                        [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Warning occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:10:15:
+[37m      10 │   templateUrl: [32m'./app.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be safely removed.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:64:51:
+[37m      64 │ ..."detail-row" *ngIf="[32mitem.detalles?.['Placa'][37m"><span class="deta...
+         ╵                        [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Warning occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:10:15:
+[37m      10 │   templateUrl: [32m'./app.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be safely removed.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:66:51:
+[37m      66 │ ...tail-row" *ngIf="[32mitem.detalles?.['Naturaleza'][37m"><span class="de...
+         ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Warning occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:10:15:
+[37m      10 │   templateUrl: [32m'./app.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be safely removed.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:67:51:
+[37m      67 │ ...tail-row" *ngIf="[32mitem.detalles?.['Colindantes'][37m"><span class="d...
+         ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Warning occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:10:15:
+[37m      10 │   templateUrl: [32m'./app.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+Stylesheet update sent to client(s).
