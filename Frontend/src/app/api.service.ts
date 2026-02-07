@@ -7,7 +7,7 @@ import { Remate } from './remate.model';
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:5032/api/remates'; 
+  private apiUrl = 'http://localhost:5033/api/remates'; 
 
   constructor(private http: HttpClient) {}
 

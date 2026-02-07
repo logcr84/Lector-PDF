@@ -70,5 +70,31 @@ namespace Backend.Tests
             Assert.Single(r.Remates);
             Assert.Equal("15/03/2026 10:00", r.Remates[0].Fecha);
         }
+
+        [Fact]
+        public void ParseText_ShouldHandleVariousDateFormats()
+        {
+            var service = new PdfParserService();
+            string text = @"
+                En este Despacho se saca a remate Varias Fechas.
+                Primero: señalan las nueve horas del cinco de enero de dos mil veinticinco.
+                Segundo: señala fecha del quince de agosto del año dos mil veinticuatro.
+                Expediente: 24-000001-CIVIL
+                publicación número: 101
+            ";
+
+            var remates = service.ParseText(text);
+
+            Assert.Single(remates);
+            var r = remates[0];
+
+            Assert.Equal(2, r.Remates.Count);
+
+            // "nueve horas ... cinco de enero ... dos mil veinticinco" -> 05/01/2025 09:00
+            Assert.Equal("05/01/2025 09:00", r.Remates[0].Fecha);
+
+            // "quince de agosto ... dos mil veinticuatro" -> 15/08/2024
+            Assert.Equal("15/08/2024", r.Remates[1].Fecha.Trim());
+        }
     }
 }
