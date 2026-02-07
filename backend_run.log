@@ -2384,3 +2384,14 @@ dotnet watch ⌚ File updated: ./Program.cs
 dotnet watch ⌚ No C# changes to apply.
 dotnet watch ❌ [Backend (net10.0)] Exited with error code 137
 dotnet watch ⏳ Waiting for a file to change before restarting ...
+dotnet watch 🔨 Building /Users/jalfaro/Lector PDF/Backend/Backend.csproj ...
+dotnet watch 🔨 Build succeeded: /Users/jalfaro/Lector PDF/Backend/Backend.csproj
+Usando la configuración de inicio de /Users/jalfaro/Lector PDF/Backend/Properties/launchSettings.json...
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5032
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/jalfaro/Lector PDF/Backend
