@@ -16,9 +16,10 @@ namespace Backend.Tests
             string text = @"
                 Algún texto irrelevante previo.
                 En este Despacho del Juzgado Civil se vende la finca.
-                Detalles de venta.
+                Base 10000 colones. Expediente: 25-123456-CIVIL.
                 publicación número: 12345 
                 En este Despacho otro remate de vehículo.
+                Base 5000 colones. Expediente: 99-000999-COBRO.
                 Referencia N° 999.
             ";
 
@@ -79,7 +80,10 @@ namespace Backend.Tests
                 En este Despacho se saca a remate Varias Fechas.
                 Primero: señalan las nueve horas del cinco de enero de dos mil veinticinco.
                 Segundo: señala fecha del quince de agosto del año dos mil veinticuatro.
+                Tercero: para el 14 de febrero del 2026.
+                Cuarto: fecha tope 10/10/2026.
                 Expediente: 24-000001-CIVIL
+                Base 10000 colones.
                 publicación número: 101
             ";
 
@@ -88,13 +92,22 @@ namespace Backend.Tests
             Assert.Single(remates);
             var r = remates[0];
 
-            Assert.Equal(2, r.Remates.Count);
+            Assert.Equal(4, r.Remates.Count);
 
-            // "nueve horas ... cinco de enero ... dos mil veinticinco" -> 05/01/2025 09:00
+            // 1. Verbose: "nueve horas ... cinco de enero ... dos mil veinticinco" -> 05/01/2025 09:00
             Assert.Equal("05/01/2025 09:00", r.Remates[0].Fecha);
 
-            // "quince de agosto ... dos mil veinticuatro" -> 15/08/2024
+            // 2. Verbose with extras: "quince de agosto ... dos mil veinticuatro" -> 15/08/2024
             Assert.Equal("15/08/2024", r.Remates[1].Fecha.Trim());
+
+            // 3. Semi-Numeric: "14 de febrero del 2026"
+            Assert.Equal("14/02/2026", r.Remates[2].Fecha.Trim());
+
+            // 4. Strict Numeric: "10/10/2026"
+            Assert.Equal("10/10/2026", r.Remates[3].Fecha.Trim());
+
+            // 5. OCR Failures: "l0/l0/2O26" (l=1, O=0)
+            Assert.Equal("10/10/2026", new PdfParserService().ParseText("\nEn este Despacho fecha l0/l0/2O26.\npublicación número: 2")[0].Remates[0].Fecha.Trim());
         }
     }
 }

@@ -44,91 +44,146 @@ namespace Backend.Services
             {
                 var text = rawDateText.ToLower().Trim();
 
-                // Extract hours (e.g., "catorce horas" → 14 or "once horas" → 11, or "quincehoras")
-                int hours = 0;
-                // Changed \s+ to \s* to handle "quincehoras"
-                var hoursMatch = Regex.Match(text, @"((?:un(?:a|o)?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciséis|dieciseis|diecisiete|dieciocho|diecinueve|veinte|veintiún|veintiuno|veintidós|veintidos|veintitrés|veintitres|\d+))\s*horas?", RegexOptions.IgnoreCase);
-                if (hoursMatch.Success)
+                // Strategy 1: strict numeric (dd/MM/yyyy) or (dd-MM-yyyy)
+                // regex look for independent date-like patterns
+                var numericMatch = Regex.Match(text, @"\b(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})\b");
+                if (numericMatch.Success)
                 {
-                    var hourText = hoursMatch.Groups[1].Value.Trim();
-                    hours = ParseSpanishNumber(hourText);
-                }
-
-                // Extract minutes (e.g., "treinta minutos" → 30 or "cerominutos" → 0)
-                int minutes = 0;
-                // Try "XXminutos" pattern first (e.g., "cerominutos")
-                var minutesMatch = Regex.Match(text, @"(cero|un(?:a|o)?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|(?:dieci)?(?:seis|siete|ocho|nueve)|veinte|veinticinco|treinta|cuarenta|cincuenta|\d+)minutos?", RegexOptions.IgnoreCase);
-                if (!minutesMatch.Success)
-                {
-                    // Try "XX minutos" pattern (with space)
-                    minutesMatch = Regex.Match(text, @"(cero|un(?:a|o)?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|(?:dieci)?(?:seis|siete|ocho|nueve)|veinte|veinticinco|treinta|cuarenta|cincuenta|\d+)\s+minutos?", RegexOptions.IgnoreCase);
-                }
-                if (minutesMatch.Success)
-                {
-                    var minuteText = minutesMatch.Groups[1].Value.Trim();
-                    minutes = ParseSpanishNumber(minuteText);
-                }
-
-                // Extract day (e.g., "tres de febrero" → 3)
-                int day = 0;
-                var dayMatch = Regex.Match(text, @"del?\s+([\wáéíóúñ\s]+?)\s+de\s+([\wáéíóú]+?)(?:de|del?\s)", RegexOptions.IgnoreCase);
-                if (dayMatch.Success)
-                {
-                    var dayText = dayMatch.Groups[1].Value.Trim();
-                    day = ParseSpanishNumber(dayText);
-                }
-
-                // Extract month (e.g., "de febrero de" → 2, or "de agostode" → 8)
-                int month = 0;
-                if (dayMatch.Success)
-                {
-                    var monthText = dayMatch.Groups[2].Value.Trim().ToLower();
-
-                    // Handle concatenated month+de (e.g., "agostode" → "agosto")
-                    foreach (var monthName in SpanishMonths.Keys)
+                    if (int.TryParse(numericMatch.Groups[1].Value, out int d) &&
+                        int.TryParse(numericMatch.Groups[2].Value, out int m) &&
+                        int.TryParse(numericMatch.Groups[3].Value, out int y))
                     {
-                        if (monthText.StartsWith(monthName))
-                        {
-                            month = SpanishMonths[monthName];
-                            break;
-                        }
+                        // Fix short year
+                        if (y < 100) y += 2000;
+
+                        // Try to find time
+                        var timeMatch = Regex.Match(text, @"(\d{1,2})[:\.](\d{2})");
+                        string timePart = timeMatch.Success ? $" {int.Parse(timeMatch.Groups[1].Value):D2}:{int.Parse(timeMatch.Groups[2].Value):D2}" : "";
+
+                        return $"{d:D2}/{m:D2}/{y}{timePart}";
                     }
                 }
 
-                // Extract year (e.g., "del dos mil veintiséis" → 2026, "del año dos mil" → 2026)
-                int year = 0;
-                var yearMatch = Regex.Match(text, @"del?\s+(?:año\s+)?(dos\s?mil[\wáéíóúñ\s]*)", RegexOptions.IgnoreCase);
-                if (yearMatch.Success)
+                // Strategy 2: Semi-numeric (14 de febrero del 2026)
+                // This often appears as "el 14 de febrero del 2026"
+                var semiNumericMatch = Regex.Match(text, @"(\d{1,2})\s+de\s+([a-z]+)\s+(?:de|del|del a[ñn]o)?\s+(\d{4})");
+                if (semiNumericMatch.Success)
                 {
-                    var yearText = yearMatch.Groups[1].Value.Trim();
+                    int d = int.Parse(semiNumericMatch.Groups[1].Value);
+                    string monthName = semiNumericMatch.Groups[2].Value;
+                    int y = int.Parse(semiNumericMatch.Groups[3].Value);
 
-                    // Clean attached noise words (e.g., "veintiséiscon" -> "veintiséis")
-                    // This happens when OCR misses the space between the date and the next sentence ("con la base...")
-                    // CAUTION: Do NOT remove "y" because it's needed for "treinta y tres" etc.
-                    yearText = Regex.Replace(yearText, @"(con|base|suma|por|en|del|al)\s*.*$", "", RegexOptions.IgnoreCase); // Remove trailing sequence tokens
-                    yearText = Regex.Replace(yearText, @"(con|base|suma|por|en)$", "", RegexOptions.IgnoreCase); // Remove robust attached suffix
+                    int m = 0;
+                    foreach (var kvp in SpanishMonths)
+                    {
+                        if (monthName.StartsWith(kvp.Key))
+                        {
+                            m = kvp.Value;
+                            break;
+                        }
+                    }
 
-                    year = ParseSpanishYear(yearText);
+                    if (m > 0)
+                    {
+                        // Try to find time
+                        var timeMatch = Regex.Match(text, @"(\d{1,2})[:\.](\d{2})");
+                        string timePart = timeMatch.Success ? $" {int.Parse(timeMatch.Groups[1].Value):D2}:{int.Parse(timeMatch.Groups[2].Value):D2}" : "";
+
+                        return $"{d:D2}/{m:D2}/{y}{timePart}";
+                    }
                 }
 
-                // Validate all components were extracted
-                if (day > 0 && month > 0 && year > 0)
-                {
-                    var timeStr = hours > 0 || minutes > 0 ? $" {hours:D2}:{minutes:D2}" : "";
-                    return $"{day:D2}/{month:D2}/{year}{timeStr}";
-                }
-
-                Console.WriteLine($"FAILED DATE: '{text}' -> H:{hours} M:{minutes} D:{day} Mo:{month} Y:{year}");
-                // DEBUG: Inspect why year is 0 if it is
-
-                // Fallback: return original text if parsing incomplete
-                return rawDateText;
+                // Strategy 3: Verbose Spanish (Original Logic)
+                return ParseVerboseSpanishDate(text, rawDateText);
             }
             catch
             {
                 // On any error, return original text
                 return rawDateText;
             }
+        }
+
+        private string ParseVerboseSpanishDate(string text, string rawDateText)
+        {
+            // Extract hours (e.g., "catorce horas" -> 14 or "once horas" -> 11, or "quincehoras")
+            int hours = 0;
+            // Changed \s+ to \s* to handle "quincehoras"
+            var hoursMatch = Regex.Match(text, @"((?:un(?:a|o)?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciséis|dieciseis|diecisiete|dieciocho|diecinueve|veinte|veintiún|veintiuno|veintidós|veintidos|veintitrés|veintitres|\d+))\s*horas?", RegexOptions.IgnoreCase);
+            if (hoursMatch.Success)
+            {
+                var hourText = hoursMatch.Groups[1].Value.Trim();
+                hours = ParseSpanishNumber(hourText);
+            }
+
+            // Extract minutes (e.g., "treinta minutos" -> 30 or "cerominutos" -> 0)
+            int minutes = 0;
+            // Try "XXminutos" pattern first (e.g., "cerominutos")
+            var minutesMatch = Regex.Match(text, @"(cero|un(?:a|o)?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|(?:dieci)?(?:seis|siete|ocho|nueve)|veinte|veinticinco|treinta|cuarenta|cincuenta|\d+)minutos?", RegexOptions.IgnoreCase);
+            if (!minutesMatch.Success)
+            {
+                // Try "XX minutos" pattern (with space)
+                minutesMatch = Regex.Match(text, @"(cero|un(?:a|o)?|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|(?:dieci)?(?:seis|siete|ocho|nueve)|veinte|veinticinco|treinta|cuarenta|cincuenta|\d+)\s+minutos?", RegexOptions.IgnoreCase);
+            }
+            if (minutesMatch.Success)
+            {
+                var minuteText = minutesMatch.Groups[1].Value.Trim();
+                minutes = ParseSpanishNumber(minuteText);
+            }
+
+            // Extract day (e.g., "tres de febrero" -> 3)
+            int day = 0;
+            var dayMatch = Regex.Match(text, @"del?\s+([\wáéíóúñ\s]+?)\s+de\s+([\wáéíóú]+?)(?:de|del?\s)", RegexOptions.IgnoreCase);
+            if (dayMatch.Success)
+            {
+                var dayText = dayMatch.Groups[1].Value.Trim();
+                day = ParseSpanishNumber(dayText);
+            }
+
+            // Extract month (e.g., "de febrero de" -> 2, or "de agostode" -> 8)
+            int month = 0;
+            if (dayMatch.Success)
+            {
+                var monthText = dayMatch.Groups[2].Value.Trim().ToLower();
+
+                // Handle concatenated month+de (e.g., "agostode" -> "agosto")
+                foreach (var monthName in SpanishMonths.Keys)
+                {
+                    if (monthText.StartsWith(monthName))
+                    {
+                        month = SpanishMonths[monthName];
+                        break;
+                    }
+                }
+            }
+
+            // Extract year (e.g., "del dos mil veintiséis" -> 2026, "del año dos mil" -> 2026)
+            int year = 0;
+            var yearMatch = Regex.Match(text, @"del?\s+(?:año\s+)?(dos\s?mil[\wáéíóúñ\s]*)", RegexOptions.IgnoreCase);
+            if (yearMatch.Success)
+            {
+                var yearText = yearMatch.Groups[1].Value.Trim();
+
+                // Clean attached noise words (e.g., "veintiséiscon" -> "veintiséis")
+                // This happens when OCR misses the space between the date and the next sentence ("con la base...")
+                // CAUTION: Do NOT remove "y" because it's needed for "treinta y tres" etc.
+                yearText = Regex.Replace(yearText, @"(con|base|suma|por|en|del|al)\s*.*$", "", RegexOptions.IgnoreCase); // Remove trailing sequence tokens
+                yearText = Regex.Replace(yearText, @"(con|base|suma|por|en)$", "", RegexOptions.IgnoreCase); // Remove robust attached suffix
+
+                year = ParseSpanishYear(yearText);
+            }
+
+            // Extra debug for verbose
+            Console.WriteLine($"DEBUG VERBOSE DATE: '{rawDateText}' -> H:{hours} M:{minutes} D:{day} Mo:{month} Y:{year}");
+
+            // Validate all components were extracted
+            if (day > 0 && month > 0 && year > 0)
+            {
+                var timeStr = hours > 0 || minutes > 0 ? $" {hours:D2}:{minutes:D2}" : "";
+                return $"{day:D2}/{month:D2}/{year}{timeStr}";
+            }
+
+            // Fallback: return original text if parsing incomplete
+            return rawDateText;
         }
 
         /// <summary>
