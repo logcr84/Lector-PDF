@@ -2,27 +2,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Backend (.NET)",
-            "type": "coreclr",
+            "name": "Backend (Watch)",
+            "type": "node",
             "request": "launch",
-            "preLaunchTask": "build-backend",
-            "program": "${workspaceFolder}/Backend/bin/Debug/net10.0/Backend.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/Backend",
+            "runtimeExecutable": "echo",
+            "runtimeArgs": [
+                "Backend running in watch mode"
+            ],
+            "preLaunchTask": "watch-backend",
             "console": "integratedTerminal",
-            "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development",
-                "ASPNETCORE_URLS": "http://localhost:5033",
-                "NUGET_PACKAGES": "${workspaceFolder}/Backend/local_nuget",
-                "NUGET_SCRATCH": "${workspaceFolder}/Backend/nuget_scratch"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
+                "pattern": "Now listening on: (https?://\\S+)",
+                "uriFormat": "%s/swagger"
             }
         },
         {
@@ -36,8 +28,8 @@
             "cwd": "${workspaceFolder}/Frontend",
             "console": "integratedTerminal",
             "serverReadyAction": {
-                "pattern": "Local:.*http://localhost:([0-9]+)",
-                "uriFormat": "http://localhost:%s",
+                "pattern": "Local:.*http://localhost:4200",
+                "uriFormat": "http://localhost:4200",
                 "action": "openExternally"
             }
         },
@@ -51,11 +43,10 @@
         {
             "name": "Start All (Backend + Frontend)",
             "configurations": [
-                "Backend (.NET)",
+                "Backend (Watch)",
                 "Frontend (Angular)"
             ],
-            "stopAll": true,
-            "preLaunchTask": "kill-ports"
+            "stopAll": true
         }
     ]
 }

@@ -2,10 +2,18 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "kill-ports",
+            "label": "kill-backend-port",
             "type": "shell",
-            "command": "lsof -ti:5033 | xargs kill -9 2>/dev/null || true; lsof -ti:4200 | xargs kill -9 2>/dev/null || true",
-            "problemMatcher": [],
+            "command": "pkill -f 'Backend.dll' || lsof -ti:5033 | xargs kill -9 2>/dev/null || true",
+            "presentation": {
+                "reveal": "silent",
+                "close": true
+            }
+        },
+        {
+            "label": "kill-frontend-port",
+            "type": "shell",
+            "command": "lsof -ti:4200 | xargs kill -9 2>/dev/null || true",
             "presentation": {
                 "reveal": "silent",
                 "close": true
@@ -30,7 +38,7 @@
             },
             "problemMatcher": "$msCompile",
             "dependsOn": [
-                "kill-ports"
+                "kill-backend-port"
             ]
         },
         {
@@ -74,7 +82,7 @@
                 }
             },
             "dependsOn": [
-                "kill-ports"
+                "kill-frontend-port"
             ]
         },
         {
@@ -90,7 +98,7 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "watch",
+            "label": "watch-backend",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -98,15 +106,44 @@
                 "run",
                 "--project",
                 "${workspaceFolder}/Backend/Backend.csproj",
-                "-p:UseAppHost=false"
+                "--no-launch-profile"
             ],
             "options": {
                 "env": {
+                    "ASPNETCORE_ENVIRONMENT": "Development",
+                    "ASPNETCORE_URLS": "http://localhost:5033",
                     "NUGET_PACKAGES": "${workspaceFolder}/Backend/local_nuget",
                     "NUGET_SCRATCH": "${workspaceFolder}/Backend/nuget_scratch"
                 }
             },
-            "problemMatcher": "$msCompile"
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "^.*$"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Determining projects to restore...",
+                    "endsPattern": "Now listening on: http://localhost:5033"
+                }
+            },
+            "dependsOn": [
+                "kill-backend-port"
+            ]
+        },
+        {
+            "label": "Start App (No Debugger)",
+            "type": "shell",
+            "command": "./start_all.sh",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
         }
     ]
 }

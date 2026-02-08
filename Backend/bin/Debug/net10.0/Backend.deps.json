@@ -9,8 +9,7 @@
       "Backend/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.OpenApi": "10.0.1",
-          "PdfPig": "0.1.9",
-          "Scalar.AspNetCore": "1.2.68"
+          "PdfPig": "0.1.9"
         },
         "runtime": {
           "Backend.dll": {}
@@ -66,14 +65,6 @@
             "fileVersion": "0.1.9.0"
           }
         }
-      },
-      "Scalar.AspNetCore/1.2.68": {
-        "runtime": {
-          "lib/net9.0/Scalar.AspNetCore.dll": {
-            "assemblyVersion": "1.2.68.0",
-            "fileVersion": "1.2.68.0"
-          }
-        }
       }
     }
   },
@@ -103,13 +94,6 @@
       "sha512": "sha512-VU27oq5O0rpD+zWiD639xXkSHtsNXqbPpYV0pzYg9VPhDibH1cq1i67f9DuW2WnzDVEti0HipLcZxDhdayIzGg==",
       "path": "pdfpig/0.1.9",
       "hashPath": "pdfpig.0.1.9.nupkg.sha512"
-    },
-    "Scalar.AspNetCore/1.2.68": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-OolTt/orKpxP6c2oC7XH88KqBL+330aWYAOYvUUQ1ADSVmuSf/P0j8JIOK3h4GuUkYPzSUqrpztJxPsfnrHKAw==",
-      "path": "scalar.aspnetcore/1.2.68",
-      "hashPath": "scalar.aspnetcore.1.2.68.nupkg.sha512"
     }
   }
 }

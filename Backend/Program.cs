@@ -1,6 +1,6 @@
 using Backend.Services;
 using Microsoft.AspNetCore.Http.Features;
-using Scalar.AspNetCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
