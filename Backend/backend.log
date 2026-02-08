@@ -1,5 +1,10 @@
-Usando la configuración de inicio de /Users/jalfaro/Lector PDF/Backend/Properties/launchSettings.json...
-Compilando...
-/usr/local/share/dotnet/sdk/10.0.101/NuGet.targets(780,5): error : No se puede acceder al archivo de bloqueo en "/var/folders/sd/z400ksc902j5s_ln70r5w5n00000gn/T/NuGetScratch/lock/52bcd3a45c64f2b006bfc2e2486cdcf90a4afbf8" para las operaciones en "/Users/jalfaro/.nuget/NuGet/NuGet.Config". Es posible que un usuario o un administrador diferentes estén manteniendo este bloqueo y que el proceso no tenga permiso para acceder a él. Si no hay ningún otro proceso que esté realizando una operación en este archivo, podría significar que un proceso anterior de NuGet se bloqueó y ha dejado un archivo de bloqueo inaccesible. En este caso, al quitar el archivo "/var/folders/sd/z400ksc902j5s_ln70r5w5n00000gn/T/NuGetScratch/lock/52bcd3a45c64f2b006bfc2e2486cdcf90a4afbf8", NuGet podrá continuar. [/Users/jalfaro/Lector PDF/Backend/Backend.csproj]
-
-No se pudo llevar a cabo la compilación. Corrija los errores de compilación y vuelva a ejecutar el proyecto.
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5033
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/jalfaro/Lector PDF/Backend
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
