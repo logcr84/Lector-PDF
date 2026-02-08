@@ -3,6 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Remate } from './remate.model';
 import { ApiService } from './api.service';
 
+/**
+ * Componente principal de la aplicación Lector PDF Boletines.
+ * Gestiona la carga de archivos PDF, extracción de remates y filtrado de resultados.
+ */
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -11,17 +15,39 @@ import { ApiService } from './api.service';
   styleUrls: ['./app.component.css'] // Note: angular.json points to styles.css globally, but component might look for css
 })
 export class AppComponent {
+  /** Título de la aplicación */
   title = 'Lector PDF Boletines';
+  
+  /** Array completo de remates extraídos del PDF */
   remates: Remate[] = [];
+  
+  /** Array de remates filtrados según los criterios de búsqueda y tipo */
   filteredRemates: Remate[] = [];
+  
+  /** Indicador de carga mientras se procesa el archivo PDF */
   isLoading = false;
+  
+  /** Mensaje de error para mostrar al usuario */
   error = '';
   
+  /** Tipo de filtro activo: todos, vehículos o propiedades */
   filterType: 'all' | 'vehiculo' | 'propiedad' = 'all';
+  
+  /** Texto de búsqueda ingresado por el usuario */
   searchQuery = '';
 
+  /**
+   * Constructor del componente.
+   * @param apiService Servicio de comunicación con la API del backend
+   */
   constructor(private apiService: ApiService) {}
 
+  /**
+   * Maneja la selección de archivo PDF por parte del usuario.
+   * Envía el archivo al backend para su procesamiento y actualiza la lista de remates.
+   * Gestiona estados de carga y errores durante el proceso.
+   * @param event Evento de cambio del input de archivo
+   */
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
@@ -54,20 +80,40 @@ export class AppComponent {
     }
   }
 
+  /**
+   * Alterna el estado de expansión de un remate en la interfaz.
+   * Permite mostrar u ocultar los detalles completos del remate.
+   * @param remate Objeto remate cuyo estado de expansión se desea cambiar
+   */
   toggleExpand(remate: Remate) {
     remate.expanded = !remate.expanded;
   }
 
+  /**
+   * Establece el filtro por tipo de bien (todos, vehículo o propiedad).
+   * Aplica automáticamente los filtros para actualizar la vista.
+   * @param type Tipo de filtro a aplicar
+   */
   setFilter(type: 'all' | 'vehiculo' | 'propiedad') {
     this.filterType = type;
     this.applyFilters();
   }
 
+  /**
+   * Maneja el evento de búsqueda de texto.
+   * Actualiza la consulta de búsqueda y aplica los filtros.
+   * @param event Evento de input con el texto de búsqueda
+   */
   onSearch(event: any) {
     this.searchQuery = event.target.value;
     this.applyFilters();
   }
 
+  /**
+   * Aplica los filtros activos (tipo y búsqueda) a la lista de remates.
+   * Actualiza el array filteredRemates con los resultados que coinciden con los criterios.
+   * La búsqueda busca en el título, expediente y texto original del remate.
+   */
   applyFilters() {
     this.filteredRemates = this.remates.filter(r => {
       // Type Filter

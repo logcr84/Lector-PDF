@@ -1,14 +1,31 @@
+/**
+ * VARIABLES CSS GLOBALES
+ * Define la paleta de colores y valores reutilizables para toda la aplicación.
+ */
 :root {
+  /* Colores primarios para propiedades */
   --prop-primary: #2c3e50;
   --prop-light: #ecf0f1;
+
+  /* Colores primarios para vehículos */
   --car-primary: #d35400;
   --car-light: #fbeee6;
+
+  /* Colores de texto */
   --text-main: #333;
   --text-muted: #7f8c8d;
+
+  /* Colores de fondo */
   --bg-body: #f4f6f7;
+
+  /* Sombras */
   --card-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
 }
 
+/**
+ * ESTILOS BASE DEL BODY
+ * Define la tipografía y colores de fondo para toda la aplicación.
+ */
 body {
   font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
   background-color: var(--bg-body);
@@ -18,12 +35,21 @@ body {
   line-height: 1.5;
 }
 
+/**
+ * CONTENEDOR PRINCIPAL
+ * Limita el ancho máximo del contenido y lo centra en la pantalla.
+ */
 .container {
   max-width: 1000px;
   margin: 0 auto;
 }
 
-/* CONTROLS AREA */
+/**
+ * ======================
+ * ÁREA DE CONTROLES
+ * ======================
+ * Barra superior que contiene los botones de filtrado y la caja de búsqueda.
+ */
 .controls {
   display: flex;
   justify-content: space-between;
@@ -37,6 +63,10 @@ body {
   gap: 10px;
 }
 
+/**
+ * BOTONES DE FILTRO
+ * Botones para filtrar por tipo: Todos, Vehículos, Propiedades.
+ */
 .filter-btn {
   padding: 8px 15px;
   border: 1px solid #ddd;
@@ -48,6 +78,7 @@ body {
   margin-right: 5px;
 }
 
+/* Estado hover y activo de los botones */
 .filter-btn:hover,
 .filter-btn.active {
   background: var(--prop-primary);
@@ -55,6 +86,10 @@ body {
   border-color: var(--prop-primary);
 }
 
+/**
+ * CAJA DE BÚSQUEDA
+ * Input de texto para buscar en título, expediente y texto original.
+ */
 .search-box {
   padding: 8px 12px;
   border: 1px solid #ddd;
@@ -63,6 +98,10 @@ body {
   font-size: 14px;
 }
 
+/**
+ * TÍTULO PRINCIPAL
+ * Título h1 de la aplicación con estilos centrados y letterSpacing.
+ */
 h1 {
   text-align: center;
   color: var(--prop-primary);
@@ -74,7 +113,13 @@ h1 {
   padding-bottom: 15px;
 }
 
-/* Estilos del Acordeón (Encabezado) */
+/**
+ * ======================
+ * ESTILOS DEL ACORDEÓN
+ * ======================
+ * Encabezado colapsable de cada remate.
+ * Muestra información resumida y permite expandir para ver detalles completos.
+ */
 .accordion {
   background-color: #fff;
   cursor: pointer;
@@ -92,24 +137,31 @@ h1 {
   justify-content: space-between;
   align-items: center;
   border-left: 6px solid transparent;
+  /* Indicador de color por tipo */
 }
 
+/* Color del borde izquierdo para propiedades */
 .accordion.prop-item,
 .accordion.Propiedad {
   border-left-color: var(--prop-primary);
 }
 
+/* Color del borde izquierdo para vehículos */
 .accordion.car-item,
 .accordion.Vehiculo {
   border-left-color: var(--car-primary);
 }
 
+/* Estado hover y activo del acordeón */
 .accordion:hover,
 .accordion.active {
   background-color: #fafafa;
 }
 
-/* Layout del Encabezado */
+/**
+ * LAYOUT DEL ENCABEZADO DEL ACORDEÓN
+ * Grid de 4 columnas: ID, Título, Área, Precio.
+ */
 .header-grid {
   display: grid;
   grid-template-columns: 0.5fr 3fr 1fr 1.2fr;
@@ -118,12 +170,14 @@ h1 {
   align-items: center;
 }
 
+/* ID del remate (número) */
 .h-id {
   font-weight: 700;
   color: var(--text-muted);
   font-size: 0.9em;
 }
 
+/* Título/descripción del bien */
 .h-title {
   font-weight: 600;
   color: #444;
@@ -134,12 +188,14 @@ h1 {
   display: block;
 }
 
+/* Área del inmueble (solo propiedades) */
 .h-area {
   text-align: center;
   color: var(--text-muted);
   font-size: 0.9em;
 }
 
+/* Precio base del remate */
 .h-price {
   text-align: right;
   font-weight: 700;
@@ -147,7 +203,11 @@ h1 {
   color: #27ae60;
 }
 
-/* Panel de Contenido Desplegable */
+/**
+ * PANEL DE CONTENIDO DESPLEGABLE
+ * Sección que se expande al hacer clic en el acordeón.
+ * Contiene los detalles completos del remate.
+ */
 .panel {
   padding: 0 20px;
   background-color: #fff;
@@ -161,11 +221,17 @@ h1 {
   /* display: none; */
 }
 
+/* Contenido interno del panel */
 .panel-content {
   padding: 25px 0;
 }
 
-/* Etiquetas */
+/**
+ * ======================
+ * ETIQUETAS (BADGES)
+ * ======================
+ * Badges que indican el tipo de bien (Propiedad/Vehículo).
+ */
 .badge {
   display: inline-block;
   padding: 5px 10px;
@@ -178,17 +244,24 @@ h1 {
   letter-spacing: 0.5px;
 }
 
+/* Badge para propiedades */
 .bg-prop,
 .badge.Propiedad {
   background-color: var(--prop-primary);
 }
 
+/* Badge para vehículos */
 .bg-car,
 .badge.Vehiculo {
   background-color: var(--car-primary);
 }
 
-/* Tarjetas Remates */
+/**
+ * ======================
+ * TARJETAS DE REMATES
+ * ======================
+ * Grid responsivo que muestra las fechas de los remates (1°, 2°, 3°).
+ */
 .remates-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -196,6 +269,7 @@ h1 {
   margin-bottom: 25px;
 }
 
+/* Tarjeta individual de cada remate */
 .remate-card {
   background-color: #f8f9fa;
   border: 1px solid #e1e4e8;
@@ -204,6 +278,7 @@ h1 {
   text-align: center;
 }
 
+/* Etiqueta del remate (1° Remate, 2° Remate, etc.) */
 .remate-label {
   display: block;
   font-size: 0.75em;
@@ -213,6 +288,7 @@ h1 {
   margin-bottom: 5px;
 }
 
+/* Precio del remate */
 .remate-price {
   display: block;
   font-size: 1.1em;
@@ -221,6 +297,7 @@ h1 {
   margin-bottom: 8px;
 }
 
+/* Fecha y hora del remate */
 .remate-date {
   font-size: 0.85em;
   color: #555;
@@ -231,6 +308,10 @@ h1 {
   min-height: 2.4em;
 }
 
+/**
+ * INFORMACIÓN DEL EXPEDIENTE
+ * Muestra el número de expediente judicial de forma destacada.
+ */
 .expediente-info {
   text-align: center;
   margin-bottom: 20px;
@@ -242,7 +323,12 @@ h1 {
   border: 1px dashed #ccc;
 }
 
-/* Detalles */
+/**
+ * ======================
+ * DETALLES DEL BIEN
+ * ======================
+ * Caja que muestra información adicional (marca, modelo, ubicación, etc.).
+ */
 .details-box {
   background-color: #fcfcfc;
   border-left: 3px solid #ddd;
@@ -251,6 +337,7 @@ h1 {
   color: #555;
 }
 
+/* Fila individual de detalle (clave-valor) */
 .detail-row {
   display: flex;
   margin-bottom: 6px;
@@ -262,6 +349,7 @@ h1 {
   border-bottom: none;
 }
 
+/* Clave del detalle (ej: "Marca:", "Ubicación:") */
 .detail-key {
   font-weight: 600;
   width: 130px;
@@ -269,10 +357,15 @@ h1 {
   color: var(--prop-primary);
 }
 
+/* Valor del detalle */
 .detail-value {
   flex-grow: 1;
 }
 
+/**
+ * TÍTULO DE SECCIÓN
+ * Usado para separar visualmente las diferentes secciones dentro del panel.
+ */
 .section-title {
   font-weight: 700;
   color: var(--prop-primary);
@@ -286,12 +379,21 @@ h1 {
   overflow-wrap: break-word;
 }
 
+/**
+ * ======================
+ * RESPONSIVE DESIGN
+ * ======================
+ * Media queries para pantallas pequeñas (móviles y tablets).
+ */
 @media (max-width: 768px) {
+
+  /* Convertir el grid del encabezado a una sola columna */
   .header-grid {
     grid-template-columns: 1fr;
     gap: 5px;
   }
 
+  /* Alinear área y precio a la izquierda en móviles */
   .h-area,
   .h-price {
     text-align: left;
@@ -301,6 +403,7 @@ h1 {
     margin-top: 5px;
   }
 
+  /* Apilar controles verticalmente en móviles */
   .controls {
     flex-direction: column;
     align-items: stretch;

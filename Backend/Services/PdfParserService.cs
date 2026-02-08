@@ -6,14 +6,32 @@ using System.Text;
 
 namespace Backend.Services
 {
+    /// <summary>
+    /// Interfaz para el servicio de análisis de documentos PDF.
+    /// Proporciona funcionalidad para extraer información de remates judiciales desde archivos PDF.
+    /// </summary>
     public interface IPdfParserService
     {
+        /// <summary>
+        /// Analiza un archivo PDF para extraer información de remates judiciales.
+        /// </summary>
+        /// <param name="pdfStream">Flujo de datos del archivo PDF a analizar.</param>
+        /// <returns>Lista de objetos <see cref="Remate"/> con la información extraída de cada remate.</returns>
         List<Remate> ParsePdf(Stream pdfStream);
     }
 
+    /// <summary>
+    /// Servicio para el análisis y extracción de información de remates judiciales desde documentos PDF.
+    /// Implementa lógica avanzada para reconocer y extraer fechas, montos, números de expediente y otros datos relevantes
+    /// de documentos en español, incluyendo manejo de errores comunes de OCR.
+    /// </summary>
     public class PdfParserService : IPdfParserService
     {
-        // Spanish number mappings for date parsing
+        /// <summary>
+        /// Mapeo de números en español (palabras) a sus valores numéricos.
+        /// Utilizado para analizar fechas y horas expresadas en formato textual.
+        /// Incluye variantes con y sin tildes para mayor robustez en el análisis OCR.
+        /// </summary>
         private static readonly Dictionary<string, int> SpanishNumbers = new()
         {
             {"cero", 0}, {"un", 1}, {"una", 1}, {"uno", 1}, {"dos", 2}, {"tres", 3}, {"cuatro", 4},
@@ -26,6 +44,10 @@ namespace Backend.Services
             {"veintinueve", 29}, {"treinta", 30}, {"treinta y uno", 31}
         };
 
+        /// <summary>
+        /// Mapeo de meses en español a sus valores numéricos (1-12).
+        /// Incluye variantes comunes como "setiembre" y "septiembre" para el mes 9.
+        /// </summary>
         private static readonly Dictionary<string, int> SpanishMonths = new()
         {
             {"enero", 1}, {"febrero", 2}, {"marzo", 3}, {"abril", 4}, {"mayo", 5}, {"junio", 6},
@@ -34,9 +56,17 @@ namespace Backend.Services
         };
 
         /// <summary>
-        /// Normalizes OCR errors in date text by splitting common concatenated words
-        /// Examples: "lasdiez" -> "las diez", "milveintiséis" -> "mil veintiséis"
+        /// Normaliza errores comunes de OCR en texto de fechas separando palabras concatenadas.
+        /// Ejemplos de correcciones:
+        /// - "lasdiez" → "las diez"
+        /// - "milveintiséis" → "mil veintiséis"
+        /// - "doshoras" → "dos horas"
+        /// - "cerominutos" → "cero minutos"
+        /// - "dosmil" → "dos mil"
+        /// - "delagosto" → "del agosto"
         /// </summary>
+        /// <param name="text">Texto de fecha con posibles errores de OCR.</param>
+        /// <returns>Texto normalizado con palabras separadas correctamente.</returns>
         private string NormalizeOcrDateText(string text)
         {
             if (string.IsNullOrWhiteSpace(text)) return text;
@@ -68,10 +98,19 @@ namespace Backend.Services
         }
 
         /// <summary>
-        /// Parses Spanish verbose date text into formatted date string.
-        /// Example: "catorce horas treinta minutos del tres de febrero de dos mil veintiséis" 
-        /// → "03/02/2026 14:30"
+        /// Analiza texto de fechas en español (verboso o numérico) y lo convierte a formato estándar.
+        /// Soporta tres estrategias de análisis en orden de prioridad:
+        /// 1. Formato numérico estricto: dd/MM/yyyy o dd-MM-yyyy
+        /// 2. Formato semi-numérico: "14 de febrero del 2026"
+        /// 3. Formato verboso completo: "catorce horas treinta minutos del tres de febrero de dos mil veintiséis"
         /// </summary>
+        /// <param name="rawDateText">Texto de fecha en español, puede incluir hora.</param>
+        /// <returns>Fecha formateada como "dd/MM/yyyy" o "dd/MM/yyyy HH:mm" si incluye hora. Retorna el texto original si no se puede analizar.</returns>
+        /// <example>
+        /// ParseSpanishDate("catorce horas treinta minutos del tres de febrero de dos mil veintiséis") → "03/02/2026 14:30"
+        /// ParseSpanishDate("14 de febrero del 2026") → "14/02/2026"
+        /// ParseSpanishDate("03/02/2026") → "03/02/2026"
+        /// </example>
         private string ParseSpanishDate(string rawDateText)
         {
             try
@@ -139,6 +178,18 @@ namespace Backend.Services
             }
         }
 
+        /// <summary>
+        /// Analiza fechas en formato verboso completo en español.
+        /// Extrae componentes individuales (horas, minutos, día, mes, año) del texto y los ensambla en formato estándar.
+        /// Este método es llamado como última estrategia cuando los formatos numéricos y semi-numéricos no funcionan.
+        /// </summary>
+        /// <param name="text">Texto normalizado de la fecha en formato verboso.</param>
+        /// <param name="rawDateText">Texto original sin normalizar (usado como fallback si el análisis falla).</param>
+        /// <returns>Fecha formateada o el texto original si no se pueden extraer todos los componentes.</returns>
+        /// <example>
+        /// Input: "catorce horas treinta minutos del tres de febrero de dos mil veintiséis"
+        /// Output: "03/02/2026 14:30"
+        /// </example>
         private string ParseVerboseSpanishDate(string text, string rawDateText)
         {
             // Extract hours (e.g., "catorce horas" -> 14 or "once horas" -> 11, or "quincehoras")
@@ -223,8 +274,17 @@ namespace Backend.Services
         }
 
         /// <summary>
-        /// Parses Spanish number words to integers
+        /// Convierte palabras numéricas en español a valores enteros.
+        /// Soporta números del 0 al 31, incluyendo formas compuestas con "y" (ej. "treinta y uno").
+        /// Si el texto ya es numérico, lo convierte directamente.
         /// </summary>
+        /// <param name="numberText">Texto con el número en español o dígitos.</param>
+        /// <returns>Valor entero del número, o 0 si no se puede analizar.</returns>
+        /// <example>
+        /// ParseSpanishNumber("treinta y uno") → 31
+        /// ParseSpanishNumber("quince") → 15
+        /// ParseSpanishNumber("25") → 25
+        /// </example>
         private int ParseSpanishNumber(string numberText)
         {
             numberText = numberText.ToLower().Trim();
@@ -257,8 +317,18 @@ namespace Backend.Services
         }
 
         /// <summary>
-        /// Parses Spanish year text (e.g., "dos mil veintiséis" → 2026 or "dosmil veintiséis" → 2026)
+        /// Convierte texto de año en español a valor numérico.
+        /// Maneja el patrón "dos mil XXX" (con o sin espacios) para años del 2000 en adelante.
+        /// También acepta años en formato numérico directo.
         /// </summary>
+        /// <param name="yearText">Texto del año en español o dígitos.</param>
+        /// <returns>Año como entero (ej. 2026), o 0 si no se puede analizar.</returns>
+        /// <example>
+        /// ParseSpanishYear("dos mil veintiséis") → 2026
+        /// ParseSpanishYear("dosmil veintiséis") → 2026
+        /// ParseSpanishYear("dos mil") → 2000
+        /// ParseSpanishYear("2026") → 2026
+        /// </example>
         private int ParseSpanishYear(string yearText)
         {
             yearText = yearText.ToLower().Trim();
@@ -287,6 +357,11 @@ namespace Backend.Services
             return 0;
         }
 
+        /// <summary>
+        /// Mapeo de palabras numéricas en español a valores decimales para montos monetarios.
+        /// Incluye números básicos (0-99), centenas, miles y millones.
+        /// Soporta variantes con y sin tildes para mayor robustez.
+        /// </summary>
         private static readonly Dictionary<string, decimal> SpanishAmountValues = new()
         {
             {"uno", 1}, {"un", 1}, {"una", 1}, {"dos", 2}, {"tres", 3}, {"cuatro", 4}, {"cinco", 5},
@@ -305,6 +380,18 @@ namespace Backend.Services
             {"mil", 1000}, {"millón", 1000000}, {"millon", 1000000}, {"millones", 1000000}
         };
 
+        /// <summary>
+        /// Convierte texto de montos en español a valores decimales.
+        /// Procesa palabras numéricas compuestas, manejando miles, millones y centenas correctamente.
+        /// Normaliza el texto eliminando "y", comas y puntos antes del análisis.
+        /// </summary>
+        /// <param name="text">Texto del monto en español (ej. "cinco millones doscientos mil").</param>
+        /// <returns>Valor decimal del monto, o 0 si no se puede analizar o se encuentra una palabra no numérica.</returns>
+        /// <example>
+        /// ConvertSpanishTextToDecimal("cinco millones doscientos mil") → 5200000
+        /// ConvertSpanishTextToDecimal("tres mil quinientos") → 3500
+        /// ConvertSpanishTextToDecimal("cien mil") → 100000
+        /// </example>
         private decimal ConvertSpanishTextToDecimal(string text)
         {
             try
@@ -370,6 +457,18 @@ namespace Backend.Services
             }
         }
 
+        /// <summary>
+        /// Analiza un archivo PDF para extraer información de remates judiciales.
+        /// Lee todas las páginas del PDF, extrae el texto palabra por palabra (similar a PyMuPDF),
+        /// y luego procesa el texto completo para identificar y extraer datos de remates.
+        /// </summary>
+        /// <param name="pdfStream">Flujo de datos del archivo PDF a analizar.</param>
+        /// <returns>Lista de objetos <see cref="Remate"/> con la información extraída. Retorna lista vacía si hay error al leer el PDF.</returns>
+        /// <remarks>
+        /// Este método utiliza PdfPig para extraer palabras individuales y las une con espacios,
+        /// asegurando mejor separación que usar page.Text directamente.
+        /// Luego delega el análisis del texto completo al método <see cref="ParseText"/>.
+        /// </remarks>
         public List<Remate> ParsePdf(Stream pdfStream)
         {
             var fullTextBuilder = new StringBuilder();
@@ -395,6 +494,23 @@ namespace Backend.Services
 
             return ParseText(fullTextBuilder.ToString());
         }
+        /// <summary>
+        /// Procesa texto completo extraído de un PDF para identificar y extraer información de remates judiciales.
+        /// Divide el texto en bloques que comienzan con "En este Despacho" y extrae datos estructurados de cada bloque.
+        /// </summary>
+        /// <param name="fullText">Texto completo del documento PDF.</param>
+        /// <returns>Lista de objetos <see cref="Remate"/> con la información extraída de cada remate identificado.</returns>
+        /// <remarks>
+        /// Para cada bloque de texto, este método extrae:
+        /// - Tipo de remate (Vehículo o Propiedad)
+        /// - Número de expediente
+        /// - Precio base (en texto o numérico)
+        /// - Título descriptivo
+        /// - Fechas de remates (hasta 3)
+        /// 
+        /// Solo se agregan remates que tengan al menos uno de estos campos: expediente, precio, título válido o fechas.
+        /// La estrategia está adaptada del script Python parrafo.py para coherencia en el análisis.
+        /// </remarks>
         public List<Remate> ParseText(string fullText)
         {
             var remates = new List<Remate>();
