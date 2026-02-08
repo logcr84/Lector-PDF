@@ -17,6 +17,7 @@
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://localhost:5033",
                 "NUGET_PACKAGES": "${workspaceFolder}/Backend/local_nuget",
                 "NUGET_SCRATCH": "${workspaceFolder}/Backend/nuget_scratch"
             },
