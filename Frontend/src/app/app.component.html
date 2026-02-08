@@ -12,6 +12,7 @@
            <button class="filter-btn" (click)="fileInput.click()" style="background: #3498db; color: white;">📂 Subir PDF</button>
       </div>
       <div>
+           <button class="filter-btn" (click)="toggleModal()" style="background: #27ae60; color: white; margin-left: 10px;">📊 Ver Tabla</button>
            <input type="text" class="search-box" placeholder="Buscar expediente, título..." (keyup)="onSearch($event)">
       </div>
   </div>
@@ -71,7 +72,7 @@
                     <div class="detail-row" *ngIf="item.demandado"><span class="detail-key">Demandado:</span> <span class="detail-value">{{ item.demandado }}</span></div>
                     
                     <div style="margin-top:10px; font-size: 0.8em; color: #999;">
-                        <em>Texto original extraído: {{ item.textoOriginal | slice:0:300 }}...</em>
+                        <em>Texto original extraído: {{ item.textoOriginal | slice:0:3000 }}...</em>
                     </div>
                 </div>
             </div>
@@ -87,4 +88,42 @@
         </div>
       </div>
   </div>
+
+  <!-- Modal de Tabla -->
+  <div class="modal-overlay" *ngIf="showModal" (click)="toggleModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 style="margin: 0; color: #2c3e50;">Tabla de Remates</h2>
+        <button class="close-btn" (click)="toggleModal()">×</button>
+      </div>
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width: 50px;">ID</th>
+              <th style="width: 150px;">Expediente</th>
+              <th style="width: 100px;">Tipo</th>
+              <th style="width: 120px;">Precio Base</th>
+              <th style="width: 180px;">1° Fecha</th>
+              <th>Detalles Clave</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of filteredRemates" [class.row-prop]="item.tipo === 'Propiedad'" [class.row-car]="item.tipo === 'Vehiculo'">
+              <td><strong>{{ item.id }}</strong></td>
+              <td>{{ item.expediente || 'N/A' }}</td>
+              <td><span class="badge-mini" [class]="item.tipo">{{ item.tipo }}</span></td>
+              <td style="font-weight: bold; color: #27ae60;">{{ item.precioBaseDisplay }}</td>
+              <td>{{ item.remates[0]?.fecha || 'N/A' }}</td>
+              <td class="small-text">{{ item.titulo }}</td>
+            </tr>
+            <tr *ngIf="filteredRemates.length === 0">
+              <td colspan="6" style="text-align: center; padding: 20px; color: #777;">No hay datos para mostrar</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
 </div>

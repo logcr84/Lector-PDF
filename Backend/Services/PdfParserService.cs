@@ -225,7 +225,7 @@ namespace Backend.Services
             int day = 0;
             // Mejorado: regex más específico que acepta "del" o "el" al inicio
             // y captura correctamente día (con espacios para "treinta y tres") y mes
-            var dayMatch = Regex.Match(text, @"(?:del?|el)\s+([a-záéíóúñ\s]+?)\s+de\s+([a-záéíóúñ]+)\s+de", RegexOptions.IgnoreCase);
+            var dayMatch = Regex.Match(text, @"(?:del?|el)\s+([a-záéíóúñ\s]+?)\s+de\s+([a-záéíóúñ]+)\s+(?:de|del)", RegexOptions.IgnoreCase);
             if (dayMatch.Success)
             {
                 var dayText = dayMatch.Groups[1].Value.Trim();
@@ -260,7 +260,7 @@ namespace Backend.Services
 
             // Extract year (e.g., "del dos mil veintiséis" → 2026, "de dos mil veintiséis" → 2026, "del año dos mil" → 2026)
             int year = 0;
-            var yearMatch = Regex.Match(text, @"de\s+(?:año\s+)?(dos\s?mil[\wáéíóúñ\s]*)", RegexOptions.IgnoreCase);
+            var yearMatch = Regex.Match(text, @"(?:de|del)\s+(?:año\s+)?(dos\s?mil[\wáéíóúñ\s]*)", RegexOptions.IgnoreCase);
             if (yearMatch.Success)
             {
                 var yearText = yearMatch.Groups[1].Value.Trim();

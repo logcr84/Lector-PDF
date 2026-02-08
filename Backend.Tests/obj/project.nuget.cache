@@ -1,27 +1,37 @@
 {
   "version": 2,
-  "dgSpecHash": "DZINia7VXg8=",
+  "dgSpecHash": "0xLBTq5JIuM=",
   "success": true,
   "projectFilePath": "/Users/jalfaro/Lector PDF/Backend.Tests/Backend.Tests.csproj",
   "expectedPackageFiles": [
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/coverlet.collector/6.0.4/coverlet.collector.6.0.4.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/microsoft.aspnetcore.openapi/10.0.1/microsoft.aspnetcore.openapi.10.0.1.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/microsoft.codecoverage/17.14.1/microsoft.codecoverage.17.14.1.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/microsoft.net.test.sdk/17.14.1/microsoft.net.test.sdk.17.14.1.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/microsoft.testplatform.objectmodel/17.14.1/microsoft.testplatform.objectmodel.17.14.1.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/microsoft.testplatform.testhost/17.14.1/microsoft.testplatform.testhost.17.14.1.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/pdfpig/0.1.9/pdfpig.0.1.9.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/scalar.aspnetcore/1.2.68/scalar.aspnetcore.1.2.68.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/xunit/2.9.3/xunit.2.9.3.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/xunit.abstractions/2.0.3/xunit.abstractions.2.0.3.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/xunit.analyzers/1.18.0/xunit.analyzers.1.18.0.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/xunit.assert/2.9.3/xunit.assert.2.9.3.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/xunit.core/2.9.3/xunit.core.2.9.3.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/xunit.extensibility.core/2.9.3/xunit.extensibility.core.2.9.3.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/xunit.extensibility.execution/2.9.3/xunit.extensibility.execution.2.9.3.nupkg.sha512",
-    "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/xunit.runner.visualstudio/3.1.4/xunit.runner.visualstudio.3.1.4.nupkg.sha512"
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/coverlet.collector/6.0.4/coverlet.collector.6.0.4.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/microsoft.aspnetcore.openapi/10.0.1/microsoft.aspnetcore.openapi.10.0.1.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/microsoft.codecoverage/17.14.1/microsoft.codecoverage.17.14.1.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/microsoft.net.test.sdk/17.14.1/microsoft.net.test.sdk.17.14.1.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/microsoft.testplatform.objectmodel/17.14.1/microsoft.testplatform.objectmodel.17.14.1.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/microsoft.testplatform.testhost/17.14.1/microsoft.testplatform.testhost.17.14.1.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/pdfpig/0.1.9/pdfpig.0.1.9.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/scalar.aspnetcore/1.2.68/scalar.aspnetcore.1.2.68.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/xunit/2.9.3/xunit.2.9.3.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/xunit.abstractions/2.0.3/xunit.abstractions.2.0.3.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/xunit.analyzers/1.18.0/xunit.analyzers.1.18.0.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/xunit.assert/2.9.3/xunit.assert.2.9.3.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/xunit.core/2.9.3/xunit.core.2.9.3.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/xunit.extensibility.core/2.9.3/xunit.extensibility.core.2.9.3.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/xunit.extensibility.execution/2.9.3/xunit.extensibility.execution.2.9.3.nupkg.sha512",
+    "/Users/jalfaro/Lector PDF/Backend/local_nuget/xunit.runner.visualstudio/3.1.4/xunit.runner.visualstudio.3.1.4.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "message": "Error al obtener los datos de vulnerabilidad del paquete: Access to the path '/Users/jalfaro/.local/share/NuGet/http-cache/670c1461c29885f9aa22c281d8b7da90845b38e4$ps:_api.nuget.org_v3_index.json/vuln_index.dat-new' is denied.",
+      "projectPath": "/Users/jalfaro/Lector PDF/Backend.Tests/Backend.Tests.csproj",
+      "warningLevel": 1,
+      "filePath": "/Users/jalfaro/Lector PDF/Backend.Tests/Backend.Tests.csproj",
+      "targetGraphs": []
+    }
+  ]
 }

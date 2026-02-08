@@ -4,7 +4,7 @@
         {
             "label": "kill-ports",
             "type": "shell",
-            "command": "lsof -ti:5032 | xargs kill -9 2>/dev/null || true; lsof -ti:4200 | xargs kill -9 2>/dev/null || true",
+            "command": "lsof -ti:5033 | xargs kill -9 2>/dev/null || true; lsof -ti:4200 | xargs kill -9 2>/dev/null || true",
             "problemMatcher": [],
             "presentation": {
                 "reveal": "silent",

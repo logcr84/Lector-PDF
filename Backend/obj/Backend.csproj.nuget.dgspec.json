@@ -10,11 +10,11 @@
         "projectUniqueName": "/Users/jalfaro/Lector PDF/Backend/Backend.csproj",
         "projectName": "Backend",
         "projectPath": "/Users/jalfaro/Lector PDF/Backend/Backend.csproj",
-        "packagesPath": "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/packages/",
+        "packagesPath": "/Users/jalfaro/Lector PDF/Backend/local_nuget",
         "outputPath": "/Users/jalfaro/Lector PDF/Backend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/jalfaro/Lector PDF/tmp/dotnet/.nuget/NuGet/NuGet.Config"
+          "/Users/jalfaro/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"

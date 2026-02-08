@@ -144,5 +144,27 @@ namespace Backend.Tests
             Assert.Single(remates2[0].Remates);
             Assert.Equal("19/03/2026 09:30", remates2[0].Remates[0].Fecha);
         }
+
+        [Fact]
+        public void ParseText_ShouldHandleAdvancedDateFormats()
+        {
+            var service = new PdfParserService();
+
+            // Case reported by user: "once horas cero minutos del diez de marzo del año dos mil veintiséis"
+            string text = @"
+                En este Despacho se saca a remate un bien.
+                once horas cero minutos del diez de marzo del año dos mil veintiséis.
+                Base 10000 colones.
+                Expediente: 24-000003-CIVIL
+                publicación número: 103
+            ";
+
+            var remates = service.ParseText(text);
+
+            Assert.Single(remates);
+            Assert.Single(remates[0].Remates);
+            // "once horas" -> 11, "cero minutos" -> 00, "diez de marzo" -> 10/03, "dos mil veintiséis" -> 2026
+            Assert.Equal("10/03/2026 11:00", remates[0].Remates[0].Fecha);
+        }
     }
 }

@@ -36,11 +36,21 @@ export class AppComponent {
   /** Texto de búsqueda ingresado por el usuario */
   searchQuery = '';
 
+  /** Controla la visibilidad del modal de tabla */
+  showModal = false;
+
   /**
    * Constructor del componente.
    * @param apiService Servicio de comunicación con la API del backend
    */
   constructor(private apiService: ApiService) {}
+
+  /**
+   * Alterna la visibilidad del modal de tabla.
+   */
+  toggleModal() {
+    this.showModal = !this.showModal;
+  }
 
   /**
    * Maneja la selección de archivo PDF por parte del usuario.
