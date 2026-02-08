@@ -105,11 +105,11 @@ namespace Backend.Services
         /// 3. Formato verboso completo: "catorce horas treinta minutos del tres de febrero de dos mil veintiséis"
         /// </summary>
         /// <param name="rawDateText">Texto de fecha en español, puede incluir hora.</param>
-        /// <returns>Fecha formateada como "dd/MM/yyyy" o "dd/MM/yyyy HH:mm" si incluye hora. Retorna el texto original si no se puede analizar.</returns>
+        /// <returns>Fecha formateada como "dd/MM/yyyy HH:mm". Si no se encuentra hora en el texto, retorna "dd/MM/yyyy 00:00". Retorna el texto original si no se puede analizar.</returns>
         /// <example>
         /// ParseSpanishDate("catorce horas treinta minutos del tres de febrero de dos mil veintiséis") → "03/02/2026 14:30"
-        /// ParseSpanishDate("14 de febrero del 2026") → "14/02/2026"
-        /// ParseSpanishDate("03/02/2026") → "03/02/2026"
+        /// ParseSpanishDate("14 de febrero del 2026") → "14/02/2026 00:00"
+        /// ParseSpanishDate("03/02/2026") → "03/02/2026 00:00"
         /// </example>
         private string ParseSpanishDate(string rawDateText)
         {
@@ -131,9 +131,11 @@ namespace Backend.Services
                         // Fix short year
                         if (y < 100) y += 2000;
 
-                        // Try to find time
+                        // Try to find time (always include HH:MM format)
                         var timeMatch = Regex.Match(text, @"(\d{1,2})[:\.](\d{2})");
-                        string timePart = timeMatch.Success ? $" {int.Parse(timeMatch.Groups[1].Value):D2}:{int.Parse(timeMatch.Groups[2].Value):D2}" : "";
+                        string timePart = timeMatch.Success
+                            ? $" {int.Parse(timeMatch.Groups[1].Value):D2}:{int.Parse(timeMatch.Groups[2].Value):D2}"
+                            : " 00:00";
 
                         return $"{d:D2}/{m:D2}/{y}{timePart}";
                     }
@@ -160,9 +162,11 @@ namespace Backend.Services
 
                     if (m > 0)
                     {
-                        // Try to find time
+                        // Try to find time (always include HH:MM format)
                         var timeMatch = Regex.Match(text, @"(\d{1,2})[:\.](\d{2})");
-                        string timePart = timeMatch.Success ? $" {int.Parse(timeMatch.Groups[1].Value):D2}:{int.Parse(timeMatch.Groups[2].Value):D2}" : "";
+                        string timePart = timeMatch.Success
+                            ? $" {int.Parse(timeMatch.Groups[1].Value):D2}:{int.Parse(timeMatch.Groups[2].Value):D2}"
+                            : " 00:00";
 
                         return $"{d:D2}/{m:D2}/{y}{timePart}";
                     }
@@ -265,7 +269,8 @@ namespace Backend.Services
             // Validate all components were extracted
             if (day > 0 && month > 0 && year > 0)
             {
-                var timeStr = hours > 0 || minutes > 0 ? $" {hours:D2}:{minutes:D2}" : "";
+                // Always include time in HH:MM format
+                var timeStr = $" {hours:D2}:{minutes:D2}";
                 return $"{day:D2}/{month:D2}/{year}{timeStr}";
             }
 
