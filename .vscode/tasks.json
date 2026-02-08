@@ -2,6 +2,37 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "kill-ports",
+            "type": "shell",
+            "command": "lsof -ti:5032 | xargs kill -9 2>/dev/null || true; lsof -ti:4200 | xargs kill -9 2>/dev/null || true",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "silent",
+                "close": true
+            }
+        },
+        {
+            "label": "build-backend",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/Backend/Backend.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary;ForceNoAlign"
+            ],
+            "options": {
+                "env": {
+                    "NUGET_SCRATCH": "${workspaceFolder}/tmp/nuget",
+                    "DOTNET_CLI_HOME": "${workspaceFolder}/tmp/dotnet"
+                }
+            },
+            "problemMatcher": "$msCompile",
+            "dependsOn": [
+                "kill-ports"
+            ]
+        },
+        {
             "label": "build",
             "command": "dotnet",
             "type": "process",
@@ -18,6 +49,31 @@
                 }
             },
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "start-frontend",
+            "type": "shell",
+            "command": "npm start",
+            "options": {
+                "cwd": "${workspaceFolder}/Frontend"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "^$",
+                    "file": 1,
+                    "location": 2,
+                    "message": 3
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".*",
+                    "endsPattern": ".*Compiled successfully.*|.*Application bundle generation complete.*"
+                }
+            },
+            "dependsOn": [
+                "kill-ports"
+            ]
         },
         {
             "label": "publish",
