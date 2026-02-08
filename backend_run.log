@@ -4110,3 +4110,431 @@ DEBUG VERBOSE DATE: 'de emisión: trece horas' -> H:13 M:0 D:0 Mo:0 Y:0
 ✓ Extracted remate: HYUNDAI ACCENT (Expediente: 18-004014-1158-CJ)
 ✓ Successfully extracted 93 remate(s) from Text
 DEBUG JSON (First Remate): {"Id":1,"Tipo":"Propiedad","Titulo":"Propiedad en Remate","Area":"","PrecioBase":36800000,"PrecioBaseDisplay":"\u20A136.800.000","Remates":[{"Label":"1\u00B0 Remate","Precio":0,"PrecioDisplay":"\u20A136.800.000","Fecha":"catorce horas treinta minutos del veinte de julio de dos mil veintis\u00E9is"},{"Label":"2\u00B0 Remate","Precio":0,"PrecioDisplay":"75% Base","Fecha":"tercer remate se se\u00F1alan las catorce horas treinta minutos del cinco de agosto de dos mil veintis\u00E9is"},{"Label":"3\u00B0 Remate","Precio":0,"PrecioDisplay":"25% Base","Fecha":"de emisi\u00F3n: diecis\u00E9is horas"}],"Expediente":"24-010146-1158-","Detalles":{},"TextoOriginal":"En este Despacho , Con una base de TREINTA Y SEIS MILLONES OCHOCIENTOS MIL COLONES EXACTOS, libre de grav\u00E1menes y anotaciones; s\u00E1quese a remate la finca del partido de HEREDIA, matr\u00EDcula 256578. DERECHO: 001 y 002. NATURALEZA: TERRENO PARA CONSTRUIR. SITUADA EN EL DISTRITO 5-SANTA LUC\u00CDA. CANT\u00D3N 2-BARVA DE LA PROVINCIA DE HEREDIA. FINCA SE ENCUENTRA EN ZONA CATASTRADA. LINDEROS: NORTE: CALLE PUBLICA CON UN FRENTE DE VEINTI\u00DAN PUNTO SESENTA Y SEIS METROS. SUR: PRADOS AZULES DEL ORIENTE S.A. ESTE: PRADOS AZULES DEL ORIENTE S.A. OESTE: FRANCISCO ESQUIVEL VILLALOBOS Y RAFAEL ESQUIVEL VILLALOBOS. MIDE: CUATROCIENTOS CINCUENTA METROS CUADRADOS. PLANO: H-2022681-2017. Para tal efecto, se se\u00F1alan las catorce horas treinta minutos del veinte de julio de dos mil veintis\u00E9is. De no haber postores, el segundo remate se efectuar\u00E1 a las catorce horas treinta minutos del veintiocho de julio de dos mil veintis\u00E9is con la base de VEINTISIETE MILLONES SEISCIENTOS MIL COLONES EXACTOS (75% de la base original) y de continuar sin oferentes, para el tercer remate se se\u00F1alan las catorce horas treinta minutos del cinco de agosto de dos mil veintis\u00E9is con la base de NUEVE MILLONES DOSCIENTOS MIL COLONES EXACTOS (25% de la base original). NOTAS: Se le informa a las personas interesadas en participar en la almoneda que en caso de pagar con cheque certificado, el mismo deber\u00E1 ser emitido a favor de este despacho. Publ\u00EDquese este edicto dos veces consecutivas, la primera publicaci\u00F3n con un m\u00EDnimo de cinco d\u00EDas de antelaci\u00F3n a la fecha fijada para la subasta. Se remata por ordenarse as\u00ED en PROCESO EJECUCI\u00D3N HIPOTECARIA de GRUPO MUTUAL ALAJUELA - LA VIVIENDA DE AHORRO Y PRESTAMO contra HENRY ARTURO GOMEZ BOLA\u00D1OS EXP:24-010146-1158- CJ JUZGADO DE COBRO DE HEREDIA. Hora y fecha de emisi\u00F3n: diecis\u00E9is horas con veintis\u00E9is minutos del doce de enero del dos mil veintis\u00E9is. Lic. Pedro Ubau Hern\u00E1ndez, Juez Tramitador. Referencia N\u00B0","Demandado":"","Juzgado":""}
+--- Block Preview: Boletín Judicial N° 014 - 2026 Fecha del documento: 21 de Enero del 2026 Fecha de Publicación: 22 de... ---
+⚠ Skipped incomplete block (no critical fields found)
+--- Block Preview: , Con una base de TREINTA Y SEIS MILLONES OCHOCIENTOS MIL COLONES EXACTOS, libre de gravámenes y ano... ---
+DEBUG VERBOSE DATE: 'catorce horas treinta minutos del veinte de julio de dos mil veintiséis' -> H:14 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las catorce horas treinta minutos del cinco de agosto de dos mil veintiséis' -> H:14 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: dieciséis horas' -> H:16 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 24-010146-1158-)
+--- Block Preview: , Con una base de CINCO MILLONES CIENTO NOVENTA Y NUEVE MIL QUINIENTOS DIECISIETE COLONES CON SETENT... ---
+DEBUG VERBOSE DATE: 'catorce horas treinta minutos del dieciocho de mayo de dos mil veintiséis' -> H:14 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las catorce horas treinta minutos del tres de junio de dos mil veintiséis' -> H:14 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: siete horas' -> H:7 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: CHEVROLET AVALANCHE (Expediente: 23-004364-1158-CJ)
+--- Block Preview: , Con una base de OCHO MILLONES SETECIENTOS DIEZ MIL COLONES EXACTOS, soportando CONDI Y LIMIT REF: ... ---
+DEBUG VERBOSE DATE: 'nueve horas cero minutos del seis de abril de dos mil veintiséis' -> H:9 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas cero minutos del veintidós de abril de dos mil veintiséis' -> H:9 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: nueve horas' -> H:9 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Distrito 06 COLINAS, Cantón 03 BUENOS AIRES (Expediente: 25-002108-1200-CJ)
+--- Block Preview: , Con una base de TREINTA Y CINCO MIL QUINIENTOS OCHO DÓLARES CON SESENTA Y CINCO CENTAVOS, libre de... ---
+DEBUG VERBOSE DATE: 'once horas quince minutos del cuatro de mayo de dos mil veintiséis' -> H:11 M:15 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las once horas quince minutos del veinte de mayo de dos mil veintiséis' -> H:11 M:15 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: diez horas' -> H:10 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: TOYOTA HILUX (Expediente: 25-007389-1158-CJ)
+--- Block Preview: , Con una base de SEIS MILLONES TREINTA Y CUATRO MIL CIENTO SESENTA Y TRES COLONES CON SETENTA Y CUA... ---
+DEBUG VERBOSE DATE: 'diez horas cero minutos del doce de marzo de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas cero minutos del seis de abril de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: CHEVROLET BEAT (Expediente: 21-002347-1765-CJ)
+--- Block Preview: , Con una base de DOS MILLONES CUATROCIENTOS TREINTA Y SIETE MIL SETECIENTOS SETENTA Y TRES COLONES ... ---
+DEBUG VERBOSE DATE: 'once horas cero minutos del diez de marzo del año dos mil veintiséis' -> H:11 M:0 D:0 Mo:0 Y:0
+DEBUG VERBOSE DATE: 'tercer remate se señalan las once horas cero minutos del veintiséis de marzo del año dos mil veinticinco' -> H:11 M:0 D:0 Mo:0 Y:0
+DEBUG VERBOSE DATE: 'de emisión: diez horas' -> H:10 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-007570-1170-CJ)
+--- Block Preview: , Con una base de MIL TRESCIENTOS NOVENTA DÓLARES CON OCHENTA Y CUATRO CENTAVOS, libre de gravámenes... ---
+DEBUG VERBOSE DATE: 'once horas cero minutos del cinco de marzo del año dos mil veintiséis' -> H:11 M:0 D:0 Mo:0 Y:0
+DEBUG VERBOSE DATE: 'tercer remate se señalan las once horas cero minutos del veintitrés de marzo del año dos mil veintiséis' -> H:11 M:0 D:0 Mo:0 Y:0
+DEBUG VERBOSE DATE: 'de emisión: trece horas' -> H:13 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: HYUNDAI GRAND (Expediente: 25-005042-1207-CJ)
+--- Block Preview: , Con una base de DIECISIETE MILLONES OCHOCIENTOS TRES MIL CINCUENTA Y UN COLONES CON CATORCE CÉNTIM... ---
+DEBUG VERBOSE DATE: 'ocho horas cero minutos del veintiuno de abril de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las ocho horas cero minutos del ocho de mayo de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: ocho horas' -> H:8 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: NISSAN FRONTIER (Expediente: 17-001184-1201-CJ)
+--- Block Preview: , Con una base de DIEZ MILLONES SETECIENTOS SESENTA Y SEIS MIL VEINTISÉIS COLONES CON CUARENTA Y SEI... ---
+DEBUG VERBOSE DATE: 'nueve horas treinta minutos del veintiuno de abril de dos mil veintiséis' -> H:9 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas treinta minutos del ocho de mayo de dos mil veintiséis' -> H:9 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: dieciséis horas' -> H:16 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 23-002253-1207-CJ)
+--- Block Preview: , Con una base de VEINTIDÓS MIL SETECIENTOS CUARENTA Y OCHO DÓLARES CON SETENTA Y NUEVE CENTAVOS, li... ---
+DEBUG VERBOSE DATE: 'nueve horas treinta minutos del dos de marzo de dos mil veintiséis' -> H:9 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas treinta minutos del diecinueve de marzo de dos mil veintiséis' -> H:9 M:30 D:0 Mo:0 Y:2026
+✓ Extracted remate: CHERY TIGGO (Expediente: 25-)
+--- Block Preview: , Con una base de VEINTIDÓS MIL SETECIENTOS CUARENTA Y OCHO DÓLARES CON SETENTA Y NUEVE CENTAVOS, li... ---
+DEBUG VERBOSE DATE: 'nueve horas treinta minutos del dos de marzo de dos mil veintiséis' -> H:9 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas treinta minutos del diecinueve de marzo de dos mil veintiséis' -> H:9 M:30 D:0 Mo:0 Y:2026
+✓ Extracted remate: CHERY TIGGO (Expediente: 25-)
+--- Block Preview: , Con una base de ONCE MILLONES QUINIENTOS NOVENTA Y OCHO MIL SETECIENTOS SETENTA Y CINCO COLONES CO... ---
+DEBUG VERBOSE DATE: 'diez horas cincuenta minutos del veintitrés de febrero de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas cincuenta minutos del doce de marzo de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: JAC JS2 (Expediente: 25-012434-1170-CJ)
+--- Block Preview: , Con una base de DIECIOCHO MIL QUINIENTOS DÓLARES EXACTOS, libre de gravámenes y anotaciones; sáque... ---
+DEBUG VERBOSE DATE: 'once horas cero minutos del doce de marzo de dos mil veintiséis' -> H:11 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las once horas cero minutos del seis de abril de dos mil veintiséis' -> H:11 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-012605-1170-CJ)
+--- Block Preview: , Con una base de CINCUENTA MIL CUATROCIENTOS NOVENTA Y SIETE DÓLARES CON CINCUENTA Y DOS CENTAVOS, ... ---
+DEBUG VERBOSE DATE: 'nueve horas cuarenta minutos del diecinueve de marzo de dos mil veintiséis' -> H:9 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas cuarenta minutos del seis de abril de dos mil veintiséis' -> H:9 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: JEEP GLADIATOR (Expediente: 25-011717-1170-CJ)
+--- Block Preview: , Con una base de CATORCE MILLONES SEISCIENTOS SEIS MIL CUATROCIENTOS ONCE COLONES CON SETENTA Y TRE... ---
+DEBUG VERBOSE DATE: 'diez horas veinte minutos del diecinueve de marzo de dos mil veintiséis' -> H:10 M:20 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas veinte minutos del seis de abril de dos mil veintiséis' -> H:10 M:20 D:0 Mo:0 Y:2026
+✓ Extracted remate: DFSK GLORY (Expediente: 25-)
+--- Block Preview: , Con una base de CINCUENTA Y TRES MILLONES QUINIENTOS MIL COLONES EXACTOS, libre de gravámenes y an... ---
+DEBUG VERBOSE DATE: 'nueve horas treinta minutos del veinte de marzo de dos mil veintiséis' -> H:9 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas treinta minutos del catorce de abril de dos mil veintiséis' -> H:9 M:30 D:0 Mo:0 Y:2026
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-011523-)
+--- Block Preview: , Con una base de CUARENTA MIL DÓLARES EXACTOS, libre de gravámenes y anotaciones; sáquese a remate ... ---
+DEBUG VERBOSE DATE: 'diez horas cero minutos del veinticuatro de marzo de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas cero minutos del quince de abril de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: Propiedad en Remate (Expediente: 23-001256-1164-CJ)
+--- Block Preview: , Con una base de DOCE MILLONES DE COLONES EXACTOS, libre de gravámenes y anotaciones; sáquese a rem... ---
+DEBUG VERBOSE DATE: 'quince horas cero minutos del diecinueve de marzo del año dos mil veintiséis' -> H:15 M:0 D:0 Mo:0 Y:0
+DEBUG VERBOSE DATE: 'tercer remate se señalan las quince horas cero minutos del ocho de abril del año dos mil veintiséis' -> H:15 M:0 D:0 Mo:0 Y:0
+DEBUG VERBOSE DATE: 'de emisión: dieciséis horas' -> H:16 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-006228-1207-CJ)
+--- Block Preview: , Con una base de VEINTISÉIS MIL SEISCIENTOS OCHENTA Y UN DÓLARES CON CINCUENTA Y TRES CENTAVOS, lib... ---
+DEBUG VERBOSE DATE: 'nueve horas treinta minutos del veinte de marzo del año dos mil veintiséis' -> H:9 M:30 D:0 Mo:0 Y:0
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas treinta minutos del nueve de abril del año dos mil veintiséis' -> H:9 M:30 D:0 Mo:0 Y:0
+DEBUG VERBOSE DATE: 'de emisión: diecisiete horas' -> H:17 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: MITSUBISHI CANTER (Expediente: 25-005791-1207-)
+--- Block Preview: , Con una base de NUEVE MILLONES SETECIENTOS SESENTA Y TRES MIL DOSCIENTOS NUEVE COLONES CON SESENTA... ---
+DEBUG VERBOSE DATE: 'diez horas treinta minutos del veinte de marzo del año dos mil veintiséis' -> H:10 M:30 D:0 Mo:0 Y:0
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas treinta minutos del nueve de abril del año dos mil veintiséis' -> H:10 M:30 D:0 Mo:0 Y:0
+DEBUG VERBOSE DATE: 'de emisión: siete horas' -> H:7 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-)
+--- Block Preview: , Con una base de VEINTIDÓS MIL SEISCIENTOS DIEZ DÓLARES CON DOCE CENTAVOS, libre de gravámenes y an... ---
+DEBUG VERBOSE DATE: 'nueve horas cero minutos del dos de febrero de dos mil veintiséis' -> H:9 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas cero minutos del dieciocho de febrero de dos mil veintiséis' -> H:9 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: BAIC X3 (Expediente: 25-003283-1763-CJ)
+--- Block Preview: , Con una base de VEINTITRÉS MILLONES DE COLONES EXACTOS, libre de gravámenes y anotaciones; sáquese... ---
+DEBUG VERBOSE DATE: 'quince horas cero minutos del tres de agosto de dos mil veintiséis' -> H:15 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las quince horas cero minutos del diecinueve de agosto de dos mil veintiséis' -> H:15 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: quince horas' -> H:15 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 23-011689-1158-CJ)
+--- Block Preview: , Con una base de DOS MILLONES CUATROCIENTOS TREINTA Y SIETE MIL SETECIENTOS SETENTA Y TRES COLONES ... ---
+DEBUG VERBOSE DATE: 'once horas cero minutos del diez de marzo del año dos mil veintiséis' -> H:11 M:0 D:0 Mo:0 Y:0
+DEBUG VERBOSE DATE: 'tercer remate se señalan las once horas cero minutos del veintiséis de marzo del año dos mil veinticinco' -> H:11 M:0 D:0 Mo:0 Y:0
+DEBUG VERBOSE DATE: 'de emisión: diez horas' -> H:10 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-007570-1170-CJ)
+--- Block Preview: , Con una base de MIL CUATROCIENTOS CINCUENTA Y SEIS DÓLARES CON NOVENTA CENTAVOS, libre de gravámen... ---
+DEBUG VERBOSE DATE: 'nueve horas veinte minutos del diecinueve de marzo de dos mil veintiséis' -> H:9 M:20 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas veinte minutos del seis de abril de dos mil veintiséis' -> H:9 M:20 D:0 Mo:0 Y:2026
+✓ Extracted remate: HYUNDAI GRAND (Expediente: 25-013151-1170-CJ)
+--- Block Preview: , Con una base de VEINTICUATRO MIL NOVECIENTOS TREINTA Y TRES DÓLARES CON VEINTITRÉS CENTAVOS, libre... ---
+DEBUG VERBOSE DATE: 'catorce horas cuarenta minutos del doce de marzo de dos mil veintiséis' -> H:14 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las catorce horas cuarenta minutos del seis de abril de dos mil veintiséis' -> H:14 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: JAC JS2 (Expediente: 25-012321-)
+--- Block Preview: , Con una base de VEINTITRÉS MILLONES DE COLONES EXACTOS, libre de gravámenes y anotaciones; sáquese... ---
+DEBUG VERBOSE DATE: 'quince horas cero minutos del tres de agosto de dos mil veintiséis' -> H:15 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las quince horas cero minutos del diecinueve de agosto de dos mil veintiséis' -> H:15 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: quince horas' -> H:15 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 23-011689-1158-CJ)
+--- Block Preview: , Con una base de DOS MILLONES DE COLONES EXACTOS, soportando colisiones, sáquese a remate el vehícu... ---
+DEBUG VERBOSE DATE: 'ocho horas cero minutos del once de marzo de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las ocho horas cero minutos del veintisiete de marzo de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'ocho horas cero minutos del once de marzo de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: FREIGHTLINER 4700 (Expediente: 25-001936-1209-CJ)
+--- Block Preview: , Con una base de SETECIENTOS OCHO MIL TRESCIENTOS NOVENTA Y DOS COLONES EXACTOS, libre de gravámene... ---
+DEBUG VERBOSE DATE: 'ocho horas treinta minutos del veintisiete de julio de dos mil veintiséis' -> H:8 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las ocho horas treinta minutos del doce de agosto de dos mil veintiséis' -> H:8 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: quince horas' -> H:15 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: HAOJUE DM125 (Expediente: 18-003977-1158-CJ)
+--- Block Preview: , Con una base de QUINCE MIL CUATROCIENTOS SETENTA Y OCHO DÓLARES CON CINCUENTA Y OCHO CENTAVOS, lib... ---
+DEBUG VERBOSE DATE: 'catorce horas veinte minutos del doce de marzo de dos mil veintiséis' -> H:14 M:20 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las catorce horas veinte minutos del seis de abril de dos mil veintiséis' -> H:14 M:20 D:0 Mo:0 Y:2026
+✓ Extracted remate: CHERY TIGGO (Expediente: 25-012085-1170-CJ)
+--- Block Preview: , Con una base de SIETE MILLONES DOSCIENTOS CINCUENTA MIL COLONES EXACTOS, libre de gravámenes hipot... ---
+DEBUG VERBOSE DATE: 'catorce horas cero minutos del dos de febrero de dos mil veintiséis' -> H:14 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las catorce horas cero minutos del dieciocho de febrero de dos mil veintiséis' -> H:14 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: Distrito GUÁPILES, Cantón POCOCÍ (Expediente: 18-008348-1764-CJ)
+--- Block Preview: , Con una base de VEINTISÉIS MILLONES QUINIENTOS NOVENTA Y CUATRO MIL CIENTO SESENTA Y SEIS COLONES ... ---
+DEBUG VERBOSE DATE: 'ocho horas treinta minutos del seis de abril de dos mil veintiséis' -> H:8 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las ocho horas treinta minutos del veintidós de abril de dos mil veintiséis' -> H:8 M:30 D:0 Mo:0 Y:2026
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-006665-1209-CJ)
+--- Block Preview: , Con una base de CATORCE MIL TRESCIENTOS ONCE DÓLARES CON SETENTA Y UN CENTAVOS, libre de gravámene... ---
+DEBUG VERBOSE DATE: 'once horas treinta minutos del nueve de febrero de dos mil veintiséis' -> H:11 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las once horas treinta minutos del veinticinco de febrero de dos mil veintiséis' -> H:11 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: trece horas' -> H:13 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: FORD MUSTANG (Expediente: 25-013187-1157-CJ)
+--- Block Preview: , Con una base de CUATRO MIL TRESCIENTOS NOVENTA Y OCHO DÓLARES CON NOVENTA Y NUEVE CENTAVOS, libre ... ---
+DEBUG VERBOSE DATE: 'diez horas treinta minutos del nueve de febrero de dos mil veintiséis' -> H:10 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas treinta minutos del veinticinco de febrero de dos mil veintiséis' -> H:10 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: dieciséis horas' -> H:16 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: KIA RIO (Expediente: 25-009974-1157-CJ)
+--- Block Preview: , Con una base de VEINTIOCHO MILLONES DOSCIENTOS VEINTIÚN MIL CIEN COLONES EXACTOS, libre de graváme... ---
+DEBUG VERBOSE DATE: 'catorce horas cero minutos del cuatro de marzo de dos mil veintiséis' -> H:14 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las catorce horas cero minutos del veinte de marzo de dos mil veintiséis' -> H:14 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: diecinueve horas' -> H:19 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-004337-1202-CJ)
+--- Block Preview: y con las bases que se dirá se rematara lo siguiente: 1) Finca 2-593475-000: Con una base de TREINTA... ---
+DEBUG VERBOSE DATE: 'diez horas cero minutos del cinco de marzo de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas cero minutos del veintitrés de marzo de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: catorce horas' -> H:14 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-003028-1202-CJ)
+--- Block Preview: , con una base de TREINTA MILLONES SEIS MIL SEISCIENTOS TREINTA COLONES EXACTOS, libre de gravámenes... ---
+DEBUG VERBOSE DATE: 'ocho horas treinta minutos del doce de febrero de dos mil veintiséis' -> H:8 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las ocho horas treinta minutos del dos de marzo de dos mil veintiséis' -> H:8 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'ocho horas treinta minutos del doce de febrero de dos mil veintiséis' -> H:8 M:30 D:0 Mo:0 Y:2026
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-004836-1209-CJ)
+--- Block Preview: , Con una base de DIECISIETE MILLONES QUINIENTOS SETENTA Y SEIS MIL QUINIENTOS TREINTA Y OCHO COLONE... ---
+DEBUG VERBOSE DATE: 'quince horas treinta minutos del dieciocho de febrero de dos mil veintiséis' -> H:15 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las quince horas treinta minutos del seis de marzo de dos mil veintiséis' -> H:15 M:30 D:0 Mo:0 Y:2026
+✓ Extracted remate: M VMG (Expediente: 25-006371-1209-CJ)
+--- Block Preview: , Con una base de DIEZ MILLONES TREINTA Y TRES MIL TRESCIENTOS TREINTA Y TRES COLONES CON TREINTA Y ... ---
+DEBUG VERBOSE DATE: 'siete horas treinta minutos del dos de marzo de dos mil veintiséis' -> H:7 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las siete horas treinta minutos del dieciocho de marzo de dos mil veintiséis' -> H:7 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'siete horas treinta minutos del dos de marzo de dos mil veintiséis' -> H:7 M:30 D:0 Mo:0 Y:2026
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-005467-1209-CJ)
+--- Block Preview: , Con una base de UN MILLÓN SETECIENTOS CUARENTA Y OCHO MIL TRESCIENTOS CUATRO COLONES CON DIECISIET... ---
+DEBUG VERBOSE DATE: 'diez horas cero minutos del seis de julio de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas cero minutos del veintidós de julio de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: dieciséis horas' -> H:16 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: RENAULT MEGANE (Expediente: 23-007461-1158-CJ)
+--- Block Preview: , Con una base de TREINTA Y NUEVE MILLONES DE COLONES EXACTOS, libre de gravámenes hipotecarios, per... ---
+DEBUG VERBOSE DATE: 'ocho horas cero minutos del seis de abril de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las ocho horas cero minutos del veintidós de abril de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-006410-1209-CJ)
+--- Block Preview: , Con una base de DOCE MILLONES CIENTO CUARENTA Y SEIS MIL QUINIENTOS CINCUENTA Y SIETE COLONES CON ... ---
+DEBUG VERBOSE DATE: 'catorce horas treinta minutos del cinco de marzo de dos mil veintiséis' -> H:14 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las catorce horas treinta minutos del veintitrés de marzo de dos mil veintiséis' -> H:14 M:30 D:0 Mo:0 Y:2026
+✓ Extracted remate: DFSK GLORY (Expediente: 23-004548-1209-CJ)
+--- Block Preview: , Con una base de ONCE MILLONES SETECIENTOS SESENTA Y SEIS MIL OCHOCIENTOS SETENTA Y UN COLONES CON ... ---
+DEBUG VERBOSE DATE: 'diez horas cero minutos del trece de julio de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas cero minutos del veintinueve de julio de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: quince horas' -> H:15 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: NISSAN VERSA (Expediente: 20-003367-1158-CJ)
+--- Block Preview: , Con una base de UN MILLÓN SEISCIENTOS SIETE MIL CUATROCIENTOS OCHENTA Y SIETE COLONES EXACTOS, sop... ---
+DEBUG VERBOSE DATE: 'nueve horas cero minutos del trece de julio de dos mil veintiséis' -> H:9 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas cero minutos del veintinueve de julio de dos mil veintiséis' -> H:9 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: once horas' -> H:11 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: MITSUBISHI LANCER (Expediente: 20-014226-1158-CJ)
+--- Block Preview: , Con una base de OCHO MILLONES SEISCIENTOS CINCUENTA Y NUEVE MIL SEISCIENTOS OCHENTA Y UN COLONES C... ---
+DEBUG VERBOSE DATE: 'quince horas treinta minutos del trece de marzo de dos mil veintiséis' -> H:15 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las quince horas treinta minutos del treinta y uno de marzo de dos mil veintiséis' -> H:15 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'DESARROLLO DE' -> H:0 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-003951-1209-CJ)
+--- Block Preview: , Con una base de SEIS MILLONES SETECIENTOS CINCUENTA MIL QUINIENTOS VEINTISÉIS COLONES EXACTOS, lib... ---
+DEBUG VERBOSE DATE: 'quince horas cero minutos del veintinueve de junio de dos mil veintiséis' -> H:15 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las quince horas cero minutos del quince de julio de dos mil veintiséis' -> H:15 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: catorce horas' -> H:14 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: TOYOTA HIACE (Expediente: 20-016809-1158-CJ)
+--- Block Preview: , Con una base de CUARENTA Y CUATRO MIL CUATROCIENTOS CUATRO DÓLARES CON OCHENTA Y TRES CENTAVOS, li... ---
+DEBUG VERBOSE DATE: 'trece horas treinta minutos del diecinueve de marzo de dos mil veintiséis' -> H:13 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las trece horas treinta minutos del seis de abril de dos mil veintiséis' -> H:13 M:30 D:0 Mo:0 Y:2026
+✓ Extracted remate: LEXUS LX570 (Expediente: 24-005102-1209-CJ)
+--- Block Preview: , Con una base de DIECISÉIS MIL CUATROCIENTOS CUARENTA Y SEIS DÓLARES CON VEINTIOCHO CENTAVOS, libre... ---
+DEBUG VERBOSE DATE: 'quince horas cero minutos del trece de julio de dos mil veintiséis' -> H:15 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las quince horas cero minutos del veintinueve de julio de dos mil veintiséis' -> H:15 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: dieciocho horas' -> H:18 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: KIA RIO (Expediente: 21-014116-1158-CJ)
+--- Block Preview: , Con una base de VEINTISIETE MILLONES QUINIENTOS TREINTA Y NUEVE MIL SETECIENTOS CUARENTA Y SIETE C... ---
+DEBUG VERBOSE DATE: 'catorce horas treinta minutos del veintinueve de junio de dos mil veintiséis' -> H:14 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las catorce horas treinta minutos del quince de julio de dos mil veintiséis' -> H:14 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: catorce horas' -> H:14 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-005258-1158-CJ)
+--- Block Preview: , Con una base de ONCE MILLONES TRESCIENTOS TREINTA Y SIETE MIL CIENTO DIECISÉIS COLONES CON SETENTA... ---
+DEBUG VERBOSE DATE: 'ocho horas cero minutos del veintidós de junio de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las ocho horas cero minutos del ocho de julio de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: catorce horas' -> H:14 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 23-010606-1158-CJ)
+--- Block Preview: , Con una base de TRECE MILLONES DOSCIENTOS CINCUENTA Y CUATRO MIL NOVECIENTOS VEINTIÚN COLONES CON ... ---
+DEBUG VERBOSE DATE: 'catorce horas cero minutos del tres de marzo de dos mil veintiséis' -> H:14 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las catorce horas cero minutos del diecinueve de marzo de dos mil veintiséis' -> H:14 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: once horas' -> H:11 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: SWM G01 (Expediente: 25-003768-1202-CJ)
+--- Block Preview: , Con una base de VEINTE MILLONES QUINIENTOS OCHO MIL SEISCIENTOS NUEVE COLONES CON OCHENTA Y SEIS C... ---
+DEBUG VERBOSE DATE: 'catorce horas treinta minutos del veintidós de junio de dos mil veintiséis' -> H:14 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las catorce horas treinta minutos del ocho de julio de dos mil veintiséis' -> H:14 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: quince horas' -> H:15 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 22-002630-1158-CJ)
+--- Block Preview: , Con una base de CUATRO MILLONES NOVECIENTOS MIL COLONES EXACTOS, libre de gravámenes y anotaciones... ---
+DEBUG VERBOSE DATE: 'diez horas cero minutos del cuatro de marzo de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas cero minutos del veinte de marzo de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: once horas' -> H:11 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-004050-1202-CJ)
+--- Block Preview: , Con una base de VEINTICINCO MILLONES DE COLONES EXACTOS, libre de gravámenes hipotecarios, pero so... ---
+DEBUG VERBOSE DATE: 'diez horas cero minutos del tres de marzo de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas cero minutos del diecinueve de marzo de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: diez horas' -> H:10 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-004232-1202-CJ)
+--- Block Preview: , Con una base de TRESCIENTOS SESENTA MIL COLONES (¢360,000) (valor fiscal), libre de gravámenes pre... ---
+DEBUG VERBOSE DATE: 'TERCER REMATE' -> H:0 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Formula Club (Expediente: 21-000009-1418-LA)
+--- Block Preview: , Con una base de OCHO MIL SEISCIENTOS OCHENTA Y SEIS DÓLARES CON SEIS CENTAVOS, libre de gravámenes... ---
+DEBUG VERBOSE DATE: 'catorce horas cero minutos del veinte de marzo de dos mil veintiséis' -> H:14 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las catorce horas cero minutos del catorce de abril de dos mil veintiséis' -> H:14 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: SUZUKI ERTIGA (Expediente: 25-013202-)
+--- Block Preview: , Con una base de VEINTICUATRO MIL NOVECIENTOS VEINTE DÓLARES CON CUARENTA Y OCHO CENTAVOS, libre de... ---
+DEBUG VERBOSE DATE: 'nueve horas cero minutos del veinte de marzo de dos mil veintiséis' -> H:9 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas cero minutos del catorce de abril de dos mil veintiséis' -> H:9 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: CHEVROLET COLORADO (Expediente: 25-011828-1164-CJ)
+--- Block Preview: , Con una base de DIEZ MILLONES SEISCIENTOS CINCUENTA Y CINCO MIL COLONES EXACTOS, libre de gravámen... ---
+DEBUG VERBOSE DATE: 'quince horas cero minutos del trece de febrero de dos mil veintiséis' -> H:15 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las quince horas cero minutos del tres de marzo de dos mil veintiséis' -> H:15 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-011396-1164-CJ)
+--- Block Preview: , Con una base de VEINTIOCHO MILLONES OCHOCIENTOS VEINTE MIL QUINIENTOS CINCO COLONES EXACTOS, libre... ---
+DEBUG VERBOSE DATE: 'catorce horas treinta minutos del trece de febrero de dos mil veintiséis' -> H:14 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las catorce horas treinta minutos del tres de marzo de dos mil veintiséis' -> H:14 M:30 D:0 Mo:0 Y:2026
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-011375-1164-CJ)
+--- Block Preview: , Con una base de SIETE MIL SEISCIENTOS VEINTIOCHO DÓLARES CON VEINTIOCHO CENTAVOS, libre de graváme... ---
+DEBUG VERBOSE DATE: 'ocho horas cero minutos del veinte de marzo del dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:0
+DEBUG VERBOSE DATE: 'tercer remate se señalan las ocho horas cero minutos del catorce de abril del dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: TOYOTA COROLLA (Expediente: 25-)
+--- Block Preview: , Con una base de NOVECIENTOS DOCE MIL TRESCIENTOS UN COLONES CON DIECIOCHO CÉNTIMOS, libre de gravá... ---
+DEBUG VERBOSE DATE: 'quince horas cero minutos del veintiséis de febrero de dos mil veintiséis' -> H:15 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las quince horas cero minutos del dieciséis de marzo de dos mil veintiséis' -> H:15 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-005531-)
+--- Block Preview: , 1) Con una base de CATORCE MILLONES CIENTO SETENTA Y NUEVE MIL CIENTO NOVENTA Y UN COLONES CON VEI... ---
+DEBUG VERBOSE DATE: 'ocho horas treinta minutos del cuatro de marzo de dos mil veintiséis' -> H:8 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las ocho horas treinta minutos del veinte de marzo de dos mil veintiséis' -> H:8 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'ocho horas treinta minutos del cuatro de marzo de dos mil veintiséis' -> H:8 M:30 D:0 Mo:0 Y:2026
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-002407-1164-CJ)
+--- Block Preview: , Con una base de SESENTA Y CUATRO MILLONES OCHOCIENTOS CINCUENTA Y SEIS MIL SEISCIENTOS SETENTA Y C... ---
+DEBUG VERBOSE DATE: 'nueve horas cero minutos del veinticuatro de marzo de dos mil veintiséis' -> H:9 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas cero minutos del quince de abril de dos mil veintiséis' -> H:9 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: Propiedad en Remate (Expediente: 24-012278-1164-CJ)
+--- Block Preview: , Con una base de ONCE MIL NOVECIENTOS CINCO DÓLARES CON TRECE CENTAVOS, libre de gravámenes y anota... ---
+DEBUG VERBOSE DATE: 'nueve horas treinta minutos del diecisiete de marzo de dos mil veintiséis' -> H:9 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas treinta minutos del nueve de abril de dos mil veintiséis' -> H:9 M:30 D:0 Mo:0 Y:2026
+✓ Extracted remate: HYUNDAI ELANTRA (Expediente: 21-013227-1164-CJ)
+--- Block Preview: , Con una base de SIETE MILLONES NOVECIENTOS SETENTA Y OCHO MIL TRESCIENTOS DIECISÉIS COLONES CON VE... ---
+DEBUG VERBOSE DATE: 'diez horas treinta minutos del trece de febrero de dos mil veintiséis' -> H:10 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas treinta minutos del tres de marzo de dos mil veintiséis' -> H:10 M:30 D:0 Mo:0 Y:2026
+✓ Extracted remate: NISSAN SENTRA (Expediente: 20-015792-1164-CJ)
+--- Block Preview: , Con una base de CINCO MILLONES TRESCIENTOS CINCUENTA Y TRES MIL OCHOCIENTOS NOVENTA Y OCHO COLONES... ---
+DEBUG VERBOSE DATE: 'ocho horas cero minutos del cuatro de marzo de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las ocho horas cero minutos del veintidós de julio de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: TOYOTA YARIS (Expediente: 20-007033-1164-CJ)
+--- Block Preview: , Con una base de DOS MILLONES TRESCIENTOS OCHENTA MIL CIENTO TREINTA Y CINCO COLONES EXACTOS, libre... ---
+DEBUG VERBOSE DATE: 'quince horas treinta minutos del veinte de marzo de dos mil veintiséis' -> H:15 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las quince horas treinta minutos del catorce de abril de dos mil veintiséis' -> H:15 M:30 D:0 Mo:0 Y:2026
+✓ Extracted remate: Peugeot Berlina (Expediente: 18-008849-1164-CJ)
+--- Block Preview: , Con una base de SIETE MILLONES DOSCIENTOS SESENTA Y SIETE MIL CIENTO OCHENTA Y CINCO COLONES EXACT... ---
+DEBUG VERBOSE DATE: 'ocho horas cero minutos del veinticuatro de marzo de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las ocho horas cero minutos del quince de marzo de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: Hyundai Accent (Expediente: 18-008817-1164-CJ)
+--- Block Preview: , Con una base de CUATRO MILLONES QUINIENTOS TRES MIL SEISCIENTOS OCHENTA Y SIETE COLONES EXACTOS, l... ---
+DEBUG VERBOSE DATE: 'diez horas treinta minutos del once de marzo de dos mil veintiséis' -> H:10 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas treinta minutos del veintisiete de marzo de dos mil veintiséis' -> H:10 M:30 D:0 Mo:0 Y:2026
+✓ Extracted remate: Toyota Yaris (Expediente: 18-)
+--- Block Preview: , Con una base de CINCO MILLONES DE COLONES EXACTOS, libre de gravámenes y anotaciones; sáquese a re... ---
+DEBUG VERBOSE DATE: 'quince horas cuarenta y cinco minutos del nueve de febrero de dos mil veintiséis' -> H:15 M:5 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las quince horas cuarenta y cinco minutos del veinticinco de febrero de dos mil veintiséis' -> H:15 M:5 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: ocho horas' -> H:8 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-010960-1157-CJ)
+--- Block Preview: , Con una base de SEISCIENTOS SETENTA MIL COLONES EXACTOS, libre de gravámenes prendarios, sáquese a... ---
+DEBUG VERBOSE DATE: 'ocho horas treinta minutos del dos de febrero del año dos mil veinticinco' -> H:8 M:30 D:0 Mo:0 Y:0
+DEBUG VERBOSE DATE: 'tercer remate se señalan las ocho horas treinta minutos del dieciocho de febrero del año dos mil veinticinco' -> H:8 M:30 D:0 Mo:0 Y:0
+DEBUG VERBOSE DATE: 'ocho horas treinta minutos del dos de febrero del año dos mil veinticinco' -> H:8 M:30 D:0 Mo:0 Y:0
+✓ Extracted remate: Rokk (Expediente: 23-000078-1627-CI)
+--- Block Preview: , Con una base de OCHO MILLONES SETECIENTOS OCHENTA Y OCHO MIL COLONES EXACTOS, libre de gravámenes ... ---
+DEBUG VERBOSE DATE: 'nueve horas cero minutos del once de febrero de dos mil veintiséis' -> H:9 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas cero minutos del veintisiete de febrero de dos mil veintiséis' -> H:9 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: nueve horas' -> H:9 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-000625-1205-CJ)
+--- Block Preview: , con una base de CIENTO TREINTA Y OCHO MILLONES OCHO MIL TRESCIENTOS OCHENTA COLONES CON NOVENTA SE... ---
+DEBUG VERBOSE DATE: 'DIEZ HORAS DEL TRES DE FEBRERO DEL DOS MIL VEINTISÉIS (10:00 a' -> H:10 M:0 D:0 Mo:0 Y:0
+DEBUG VERBOSE DATE: 'de emisión: veintitrés horas' -> H:23 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 21-000127-0640-CI)
+--- Block Preview: , Con una base de VEINTICUATRO MILLONES DE COLONES EXACTOS, libre de gravámenes y anotaciones; sáque... ---
+DEBUG VERBOSE DATE: 'ocho horas cero minutos del cinco de marzo de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las ocho horas cero minutos del veintitrés de marzo de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'ocho horas cero minutos del cinco de marzo de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: Distrito 4AGUAS ZARCAS, Cantón 10 (Expediente: 25-003392-)
+--- Block Preview: , Con una base de $11.947,84, libre de gravámenes y anotaciones; sáquese a remate el vehículo placas... ---
+DEBUG VERBOSE DATE: 'quince horas treinta minutos del cinco de marzo de dos mil veintiséis' -> H:15 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las quince horas treinta minutos del veintitrés de marzo de dos mil veintiséis' -> H:15 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: nueve horas' -> H:9 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: ISUZU D (Expediente: 18-)
+--- Block Preview: , Con una base de TRES MILLONES DOSCIENTOS SESENTA Y CINCO MIL CUATROCIENTOS CUATRO COLONES CON VEIN... ---
+DEBUG VERBOSE DATE: 'quince horas cero minutos del cinco de marzo de dos mil veintiséis' -> H:15 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las quince horas cero minutos del veintitrés de marzo de dos mil veintiséis' -> H:15 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: nueve horas' -> H:9 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 18-004575-1202-CJ)
+--- Block Preview: , Con una base de $21382.57, libre de gravámenes y anotaciones; sáquese a remate el vehículo BZY749,... ---
+DEBUG VERBOSE DATE: 'trece horas treinta minutos del cuatro de marzo de dos mil veintiséis' -> H:13 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las trece horas treinta minutos del veinte de marzo de dos mil veintiséis' -> H:13 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: catorce horas' -> H:14 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: HYUNDAI VENUE (Expediente: 25-004434-1202-CJ)
+--- Block Preview: , Con una base de ONCE MIL CUATROCIENTOS SESENTA Y CUATRO DÓLARES CON NOVENTA Y OCHO CENTAVOS, libre... ---
+DEBUG VERBOSE DATE: 'ocho horas cero minutos del cuatro de marzo de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las ocho horas cero minutos del veinte de marzo de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: veinte horas' -> H:20 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: TOYOTA YARIS (Expediente: 25-002727-1202-CJ)
+--- Block Preview: , Con una base de SEIS MILLONES SEISCIENTOS CUARENTA MIL COLONES EXACTOS, libre de gravámenes hipote... ---
+DEBUG VERBOSE DATE: 'nueve horas treinta minutos del cuatro de marzo de dos mil veintiséis' -> H:9 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas treinta minutos del veinte de marzo de dos mil veintiséis' -> H:9 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: diecisiete horas' -> H:17 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 23-003692-1202-CJ)
+--- Block Preview: , Con una base de VEINTISIETE MILLONES DOSCIENTOS CUATRO MIL CUATROCIENTOS CINCUENTA Y DOS COLONES C... ---
+DEBUG VERBOSE DATE: 'diez horas cero minutos del seis de febrero de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas cero minutos del veinticuatro de febrero de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: ocho horas' -> H:8 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Distrito 4AGUAS ZARCAS, Cantón 10 (Expediente: 21-006956-1202-CJ)
+--- Block Preview: , con una base de SEIS MILLONES SEISCIENTOS TREINTA Y TRES MIL CIENTO TREINTA Y SIETE COLONES CON CU... ---
+DEBUG VERBOSE DATE: 'nueve horas treinta minutos del cinco de febrero de dos mil veintiséis' -> H:9 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas treinta minutos del veintitrés de febrero de dos mil veintiséis' -> H:9 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: catorce horas' -> H:14 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Distrito 2 CAÑAS DULCES, Cantón 1 (Expediente: 23-004289-1205-CJ)
+--- Block Preview: , con una base del valor fiscal, sea la suma de UN MILLÓN CUATROCIENTOS CUARENTA MIL COLONES CON CER... ---
+DEBUG VERBOSE DATE: 'CATORCE HORAS DEL CINCO DE FEBRERO DE DOS MIL VEINTISÉIS (02:00 P' -> H:14 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las CATORCE HORAS DEL DIECINUEVE DE FEBRERO DE DOS MIL VEINTISÉIS (02:00 P' -> H:14 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: catorce horas' -> H:14 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Chevrolet Tracker (Expediente: 25-000043-2023-CI)
+--- Block Preview: , Con una base de VEINTIDÓS MIL QUINIENTOS SEIS DÓLARES CON SESENTA CENTAVOS, libre de gravámenes y ... ---
+DEBUG VERBOSE DATE: 'diez horas cero minutos del veintiséis de mayo de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas cero minutos del once de junio de dos mil veintiséis' -> H:10 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: SWM G (Expediente: 25-012699-1338-CJ)
+--- Block Preview: , Con una base de OCHO MIL QUINIENTOS OCHENTA Y CINCO DÓLARES CON CINCUENTA CENTAVOS, libre de gravá... ---
+DEBUG VERBOSE DATE: 'trece horas treinta minutos del catorce de abril de dos mil veintiséis' -> H:13 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las trece horas treinta minutos del treinta de abril de dos mil veintiséis' -> H:13 M:30 D:0 Mo:0 Y:2026
+✓ Extracted remate: GEELY GC6 (Expediente: 24-011372-1338-CJ)
+--- Block Preview: , con una base de SIETE MILLONES OCHOCIENTOS CINCUENTA Y SEIS MIL CIENTO TRECE COLONES CON NUEVE CÉN... ---
+DEBUG VERBOSE DATE: 'catorce horas cero minutos del nueve de junio de dos mil veintiséis' -> H:14 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las catorce horas cero minutos del veinticinco de junio de dos mil veintiséis' -> H:14 M:0 D:0 Mo:0 Y:2026
+✓ Extracted remate: SUZUKI CIAZ (Expediente: 19-012880-1338-)
+--- Block Preview: , Con una base de VEINTISÉIS MIL CUATROCIENTOS VEINTIOCHO DÓLARES CON TREINTA Y SIETE CENTAVOS, libr... ---
+DEBUG VERBOSE DATE: 'nueve horas cuarenta y cinco minutos del cuatro de mayo de dos mil veintiséis' -> H:9 M:5 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas cuarenta y cinco minutos del veinte de mayo de dos mil veintiséis' -> H:9 M:5 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: diez horas' -> H:10 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: HYUNDAI TUCSON (Expediente: 25-007226-1158-CJ)
+--- Block Preview: , Con una base de QUINCE MIL SETECIENTOS CUARENTA DÓLARES CON UN CENTAVOS, libre de gravámenes y ano... ---
+DEBUG VERBOSE DATE: 'diez horas treinta minutos del seis de julio de dos mil veintiséis' -> H:10 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas treinta minutos del veintidós de julio de dos mil veintiséis' -> H:10 M:30 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: catorce horas' -> H:14 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: CHERY TIGGO (Expediente: 25-007548-1158-CJ)
+--- Block Preview: , Con una base de ONCE MILLONES SETECIENTOS CINCUENTA Y UN MIL QUINIENTOS ONCE COLONES CON DOCE CÉNT... ---
+DEBUG VERBOSE DATE: 'nueve horas cuarenta y cinco minutos del tres de agosto de dos mil veintiséis' -> H:9 M:5 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas cuarenta y cinco minutos del diecinueve de agosto de dos mil veintiséis' -> H:9 M:5 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: trece horas' -> H:13 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 25-006378-1158-CJ)
+--- Block Preview: , Con una base de CINCUENTA Y CINCO MIL CUATROCIENTOS TRES DÓLARES EXACTOS, libre de gravámenes y an... ---
+DEBUG VERBOSE DATE: 'diez horas cuarenta y cinco minutos del veintiséis de mayo de dos mil veintiséis' -> H:10 M:5 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las diez horas cuarenta y cinco minutos del once de junio de dos mil veintiséis' -> H:10 M:5 D:0 Mo:0 Y:2026
+✓ Extracted remate: M RX (Expediente: 25-000507-1338-CJ)
+--- Block Preview: , Con una base de SETENTA Y UN MILLONES CIENTO CUARENTA MIL OCHOCIENTOS CINCUENTA Y NUEVE COLONES CO... ---
+DEBUG VERBOSE DATE: 'nueve horas quince minutos del tres de agosto de dos mil veintiséis' -> H:9 M:15 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las nueve horas quince minutos del diecinueve de agosto de dos mil veintiséis' -> H:9 M:15 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: diez horas' -> H:10 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: Propiedad en Remate (Expediente: 24-001989-1158-CJ)
+--- Block Preview: , Con una base de CUATRO MILLONES SEISCIENTOS VEINTICUATRO MIL COLONES EXACTOS, libre de gravámenes ... ---
+DEBUG VERBOSE DATE: 'trece horas cuarenta y cinco minutos del diecinueve de mayo de dos mil veintiséis' -> H:13 M:5 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las trece horas cuarenta y cinco minutos del cuatro de junio de dos mil veintiséis' -> H:13 M:5 D:0 Mo:0 Y:2026
+✓ Extracted remate: HYUNDAI SANTA (Expediente: 25-012859-1338-CJ)
+--- Block Preview: , Con una base de SETECIENTOS DIEZ MIL SEISCIENTOS CUARENTA Y SIETE COLONES EXACTOS, libre de gravám... ---
+DEBUG VERBOSE DATE: 'ocho horas cuarenta y cinco minutos del tres de agosto de dos mil veintiséis' -> H:8 M:5 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las ocho horas cuarenta y cinco minutos del diecinueve de agosto de dos mil veintiséis' -> H:8 M:5 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: ocho horas' -> H:8 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: FORMULA NANO (Expediente: 19-018649-1158-CJ)
+--- Block Preview: , Con una base de OCHO MILLONES CIENTO SETENTA MIL NOVECIENTOS NOVENTA Y DOS COLONES EXACTOS, libre ... ---
+DEBUG VERBOSE DATE: 'trece horas cuarenta y cinco minutos del veintiséis de mayo de dos mil veintiséis' -> H:13 M:5 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las trece horas cuarenta y cinco minutos del once de junio de dos mil veintiséis' -> H:13 M:5 D:0 Mo:0 Y:2026
+✓ Extracted remate: Distrito HOSPITAL, Cantón SAN JOSÉ (Expediente: 25-011643-1338-CJ)
+--- Block Preview: , Con una base de TRES MILLONES QUINIENTOS DIECIOCHO MIL DOSCIENTOS CINCUENTA Y CUATRO COLONES EXACT... ---
+DEBUG VERBOSE DATE: 'ocho horas cero minutos del tres de agosto de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'tercer remate se señalan las ocho horas cero minutos del diecinueve de agosto de dos mil veintiséis' -> H:8 M:0 D:0 Mo:0 Y:2026
+DEBUG VERBOSE DATE: 'de emisión: trece horas' -> H:13 M:0 D:0 Mo:0 Y:0
+✓ Extracted remate: HYUNDAI ACCENT (Expediente: 18-004014-1158-CJ)
+✓ Successfully extracted 93 remate(s) from Text
+DEBUG JSON (First Remate): {"Id":1,"Tipo":"Propiedad","Titulo":"Propiedad en Remate","Area":"","PrecioBase":36800000,"PrecioBaseDisplay":"\u20A136.800.000","Remates":[{"Label":"1\u00B0 Remate","Precio":0,"PrecioDisplay":"\u20A136.800.000","Fecha":"catorce horas treinta minutos del veinte de julio de dos mil veintis\u00E9is"},{"Label":"2\u00B0 Remate","Precio":0,"PrecioDisplay":"75% Base","Fecha":"tercer remate se se\u00F1alan las catorce horas treinta minutos del cinco de agosto de dos mil veintis\u00E9is"},{"Label":"3\u00B0 Remate","Precio":0,"PrecioDisplay":"25% Base","Fecha":"de emisi\u00F3n: diecis\u00E9is horas"}],"Expediente":"24-010146-1158-","Detalles":{},"TextoOriginal":"En este Despacho , Con una base de TREINTA Y SEIS MILLONES OCHOCIENTOS MIL COLONES EXACTOS, libre de grav\u00E1menes y anotaciones; s\u00E1quese a remate la finca del partido de HEREDIA, matr\u00EDcula 256578. DERECHO: 001 y 002. NATURALEZA: TERRENO PARA CONSTRUIR. SITUADA EN EL DISTRITO 5-SANTA LUC\u00CDA. CANT\u00D3N 2-BARVA DE LA PROVINCIA DE HEREDIA. FINCA SE ENCUENTRA EN ZONA CATASTRADA. LINDEROS: NORTE: CALLE PUBLICA CON UN FRENTE DE VEINTI\u00DAN PUNTO SESENTA Y SEIS METROS. SUR: PRADOS AZULES DEL ORIENTE S.A. ESTE: PRADOS AZULES DEL ORIENTE S.A. OESTE: FRANCISCO ESQUIVEL VILLALOBOS Y RAFAEL ESQUIVEL VILLALOBOS. MIDE: CUATROCIENTOS CINCUENTA METROS CUADRADOS. PLANO: H-2022681-2017. Para tal efecto, se se\u00F1alan las catorce horas treinta minutos del veinte de julio de dos mil veintis\u00E9is. De no haber postores, el segundo remate se efectuar\u00E1 a las catorce horas treinta minutos del veintiocho de julio de dos mil veintis\u00E9is con la base de VEINTISIETE MILLONES SEISCIENTOS MIL COLONES EXACTOS (75% de la base original) y de continuar sin oferentes, para el tercer remate se se\u00F1alan las catorce horas treinta minutos del cinco de agosto de dos mil veintis\u00E9is con la base de NUEVE MILLONES DOSCIENTOS MIL COLONES EXACTOS (25% de la base original). NOTAS: Se le informa a las personas interesadas en participar en la almoneda que en caso de pagar con cheque certificado, el mismo deber\u00E1 ser emitido a favor de este despacho. Publ\u00EDquese este edicto dos veces consecutivas, la primera publicaci\u00F3n con un m\u00EDnimo de cinco d\u00EDas de antelaci\u00F3n a la fecha fijada para la subasta. Se remata por ordenarse as\u00ED en PROCESO EJECUCI\u00D3N HIPOTECARIA de GRUPO MUTUAL ALAJUELA - LA VIVIENDA DE AHORRO Y PRESTAMO contra HENRY ARTURO GOMEZ BOLA\u00D1OS EXP:24-010146-1158- CJ JUZGADO DE COBRO DE HEREDIA. Hora y fecha de emisi\u00F3n: diecis\u00E9is horas con veintis\u00E9is minutos del doce de enero del dos mil veintis\u00E9is. Lic. Pedro Ubau Hern\u00E1ndez, Juez Tramitador. Referencia N\u00B0","Demandado":"","Juzgado":""}

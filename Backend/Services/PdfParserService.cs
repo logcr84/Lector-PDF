@@ -223,10 +223,20 @@ namespace Backend.Services
 
             // Extract day (e.g., "tres de febrero" -> 3)
             int day = 0;
-            var dayMatch = Regex.Match(text, @"del?\s+([\wáéíóúñ\s]+?)\s+de\s+([\wáéíóú]+?)(?:de|del?\s)", RegexOptions.IgnoreCase);
+            // Mejorado: regex más específico que acepta "del" o "el" al inicio
+            // y captura correctamente día (con espacios para "treinta y tres") y mes
+            var dayMatch = Regex.Match(text, @"(?:del?|el)\s+([a-záéíóúñ\s]+?)\s+de\s+([a-záéíóúñ]+)\s+de", RegexOptions.IgnoreCase);
             if (dayMatch.Success)
             {
                 var dayText = dayMatch.Groups[1].Value.Trim();
+                var monthText = dayMatch.Groups[2].Value.Trim();
+
+                // Debug mejorado para ver qué capturó el regex
+                Console.WriteLine($"DEBUG DAY_MONTH CAPTURE: dayText='{dayText}' monthText='{monthText}'");
+
+                // Limpiar texto del día (normalizar espacios múltiples)
+                dayText = Regex.Replace(dayText, @"\s+", " ");
+
                 day = ParseSpanishNumber(dayText);
             }
 
@@ -242,6 +252,7 @@ namespace Backend.Services
                     if (monthText.StartsWith(monthName))
                     {
                         month = SpanishMonths[monthName];
+                        Console.WriteLine($"DEBUG MONTH MATCHED: '{monthText}' -> {month}");
                         break;
                     }
                 }
