@@ -17,8 +17,8 @@
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
-                "NUGET_SCRATCH": "${workspaceFolder}/tmp/nuget",
-                "DOTNET_CLI_HOME": "${workspaceFolder}/tmp/dotnet"
+                "NUGET_PACKAGES": "${workspaceFolder}/Backend/local_nuget",
+                "NUGET_SCRATCH": "${workspaceFolder}/Backend/nuget_scratch"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
@@ -28,7 +28,6 @@
             "name": "Frontend (Angular)",
             "type": "node",
             "request": "launch",
-            "preLaunchTask": "start-frontend",
             "runtimeExecutable": "npm",
             "runtimeArgs": [
                 "start"

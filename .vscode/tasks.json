@@ -19,12 +19,13 @@
                 "build",
                 "${workspaceFolder}/Backend/Backend.csproj",
                 "/property:GenerateFullPaths=true",
+                "/property:UseAppHost=false",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
             "options": {
                 "env": {
-                    "NUGET_SCRATCH": "${workspaceFolder}/tmp/nuget",
-                    "DOTNET_CLI_HOME": "${workspaceFolder}/tmp/dotnet"
+                    "NUGET_PACKAGES": "${workspaceFolder}/Backend/local_nuget",
+                    "NUGET_SCRATCH": "${workspaceFolder}/Backend/nuget_scratch"
                 }
             },
             "problemMatcher": "$msCompile",
@@ -40,12 +41,13 @@
                 "build",
                 "${workspaceFolder}/PdfReader.sln",
                 "/property:GenerateFullPaths=true",
+                "/property:UseAppHost=false",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
             "options": {
                 "env": {
-                    "NUGET_SCRATCH": "${workspaceFolder}/tmp/nuget",
-                    "DOTNET_CLI_HOME": "${workspaceFolder}/tmp/dotnet"
+                    "NUGET_PACKAGES": "${workspaceFolder}/Backend/local_nuget",
+                    "NUGET_SCRATCH": "${workspaceFolder}/Backend/nuget_scratch"
                 }
             },
             "problemMatcher": "$msCompile"
@@ -95,12 +97,13 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/Backend/Backend.csproj"
+                "${workspaceFolder}/Backend/Backend.csproj",
+                "-p:UseAppHost=false"
             ],
             "options": {
                 "env": {
-                    "NUGET_SCRATCH": "${workspaceFolder}/tmp/nuget",
-                    "DOTNET_CLI_HOME": "${workspaceFolder}/tmp/dotnet"
+                    "NUGET_PACKAGES": "${workspaceFolder}/Backend/local_nuget",
+                    "NUGET_SCRATCH": "${workspaceFolder}/Backend/nuget_scratch"
                 }
             },
             "problemMatcher": "$msCompile"
