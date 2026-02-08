@@ -1,76 +1,79 @@
-import json
 import re
-import os
-from bs4 import BeautifulSoup
+import json
+import sys
+from pypdf import PdfReader
 
-def procesar_boletin_html(html_path, json_output_path):
-    print(f"Leyendo archivo HTML: {html_path}...")
+def extraer_parrafos_despacho(pdf_path, json_output_path):
+    """
+    Extrae los párrafos que inician con 'En este Despacho' de un Boletín Judicial
+    y los guarda en un archivo JSON.
     
-    with open(html_path, 'r', encoding='utf-8') as f:
-        # Creamos la "sopa" (el objeto estructurado)
-        soup = BeautifulSoup(f, 'html.parser')
+    Mejoras:
+    - Extracción de texto con mejor separación de palabras
+    - Patrón regex flexible para manejar variaciones de formato y OCR
+    """
+    print(f"Leyendo archivo: {pdf_path}...")
     
-    edictos = []
-    
-    # Estrategia: Buscar todos los párrafos <p>
-    # En el HTML del boletín, cada párrafo de texto suele ser un elemento <p>
-    parrafos = soup.find_all('p')
-    
-    buffer_texto = ""
-    capturando = False
-    
-    for i, p in enumerate(parrafos):
-        texto = p.get_text(" ", strip=True) # Obtiene el texto limpio
+    try:
+        reader = PdfReader(pdf_path)
+        full_text = ""
         
-        # 1. Detectar INICIO del edicto
-        if "En este Despacho" in texto:
-            capturando = True
-            buffer_texto = texto # Iniciamos el bloque con este párrafo
+        # 1. Extraer texto de todas las páginas con mejor separación
+        # Similar a como lo hace PdfParserService.cs con GetWords()
+        for page in reader.pages:
+            # Extraer con modo layout para mejor preservación de espacios
+            text = page.extract_text(extraction_mode="layout")
+            if text:
+                # Asegurar que hay espacios entre palabras
+                # Normalizar múltiples espacios a uno solo
+                text = re.sub(r' +', ' ', text)
+                full_text += text + "\n"
+        
+        # 2. Normalizar espacios (eliminar cortes de línea arbitrarios del PDF)
+        # Esto convierte el texto en una sola línea continua para facilitar la búsqueda
+        clean_text = re.sub(r'\s+', ' ', full_text)
+        
+        # 3. Definir el patrón de búsqueda - MÁS FLEXIBLE
+        # Mejoras en el patrón:
+        # - Coma opcional después de "Despacho"
+        # - Acepta variaciones de acentos (ó/o, ú/u) comunes en OCR
+        # - Dos puntos opcionales después de "número"
+        # - Espacios flexibles
+        patron = r"En este Despacho[,\s]+.*?publicaci[óo]n n[úu]mero\s*:?\s*\d+\s+de\s+\d+"
+        
+        matches = re.findall(patron, clean_text, re.IGNORECASE)
+        
+        print(f"Se encontraron {len(matches)} párrafos.")
+        
+        # 4. Estructurar datos para JSON
+        data = [{"id": i+1, "contenido": match.strip()} for i, match in enumerate(matches)]
+        
+        # 5. Guardar en JSON
+        with open(json_output_path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
             
-            # Caso especial: Si el edicto es muy corto y tiene el cierre en la misma línea
-            if "publicación número:" in texto:
-                edictos.append(buffer_texto)
-                buffer_texto = ""
-                capturando = False
-            continue
+        print(f"Datos guardados exitosamente en: {json_output_path}")
 
-        # 2. Si estamos dentro de un edicto, seguimos acumulando
-        if capturando:
-            # Verificamos si este párrafo es el CIERRE (la metadata)
-            # El HTML suele poner la referencia en un <p> aparte justo después
-            if "publicación número:" in texto or "Referencia N°" in texto:
-                # Agregamos la metadata al texto principal para mantener el formato que tenías
-                buffer_texto += " " + texto 
-                edictos.append(buffer_texto)
-                
-                # Reseteamos
-                buffer_texto = ""
-                capturando = False
-            else:
-                # Si no es el cierre, es parte del contenido (un edicto de varios párrafos)
-                buffer_texto += " " + texto
+    except Exception as e:
+        print(f"Error al procesar el archivo: {e}")
 
-    print(f"Se encontraron {len(edictos)} edictos.")
-    
-    # Guardar en JSON
-    data = [{"id": i+1, "contenido": edicto} for i, edicto in enumerate(edictos)]
-    
-    with open(json_output_path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
-        
-    print(f"Guardado en: {json_output_path}")
-
-# --- Bloque principal ---
 if __name__ == "__main__":
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    # Busca archivos .html ahora
-    archivos = [f for f in os.listdir(script_dir) if f.lower().endswith('.html')]
+    import os
     
-    if archivos:
-        archivo_html = os.path.join(script_dir, archivos[0])
-        nombre_json = os.path.splitext(archivos[0])[0] + ".json"
-        json_path = os.path.join(script_dir, nombre_json)
+    # Obtener el directorio donde se encuentra el script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Buscar archivos PDF en el directorio
+    pdf_files = [f for f in os.listdir(script_dir) if f.lower().endswith('.pdf')]
+    
+    if pdf_files:
+        # Tomar el primer PDF encontrado
+        archivo_pdf = os.path.join(script_dir, pdf_files[0])
+        # Use simple string replacement or splitext to swap extension
+        nombre_base = os.path.splitext(pdf_files[0])[0]
+        archivo_json = os.path.join(script_dir, f"{nombre_base}.json")
         
-        procesar_boletin_html(archivo_html, json_path)
+        print(f"Archivo PDF detectado: {pdf_files[0]}")
+        extraer_parrafos_despacho(archivo_pdf, archivo_json)
     else:
-        print("No se encontraron archivos .html en la carpeta.")
+        print("No se encontraron archivos PDF en la carpeta del script.")

@@ -1,0 +1,23 @@
+Texto de prueba: tercer remate se señalan las once horas cero minutos del seis de abril de dos mil veintiséis
+
+Análisis del patrón:
+1. Horas: "once horas" → debería capturar "once" → 11 ✓
+2. Minutos: "cero minutos" → debería capturar "cero" → 0 ✓
+3. Día: "del seis de" → debería capturar "seis" con el patrón "del\s+([\wáéíóúñ\s]+?)\s+de"
+4. Mes: "de abril de" → debería capturar "abril" → 4 ✓
+5. Año: "de dos mil veintiséis" → debería capturar "dos mil veintiséis" → 2026 ✓
+
+Patrón de día actual: @"del?\s+([\wáéíóúñ\s]+?)\s+de\s+([\wáéíóú]+?)(?:de|del?\s)"
+Este patrón busca: del/de + NÚMERO + de + MES + (de|del)
+
+Para el texto "del seis de abril de dos mil":
+- "del " → coincide con "del?\s+"
+- "seis" → debería capturarse en el grupo 1
+- " de " → coincide con "\s+de\s+"
+- "abril" → debería capturarse en el grupo 2
+- " de" → coincide con "(?:de|del?\s)"
+
+El patrón DEBERÍA funcionar. El problema podría estar en:
+1. El texto no llega limpio a ParseVerboseSpanishDate
+2. El regex tiene un problema sutil
+3. ParseSpanishNumber no reconoce "seis"

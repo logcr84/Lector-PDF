@@ -192,9 +192,9 @@ namespace Backend.Services
                 }
             }
 
-            // Extract year (e.g., "del dos mil veintiséis" -> 2026, "del año dos mil" -> 2026)
+            // Extract year (e.g., "del dos mil veintiséis" → 2026, "de dos mil veintiséis" → 2026, "del año dos mil" → 2026)
             int year = 0;
-            var yearMatch = Regex.Match(text, @"del?\s+(?:año\s+)?(dos\s?mil[\wáéíóúñ\s]*)", RegexOptions.IgnoreCase);
+            var yearMatch = Regex.Match(text, @"de\s+(?:año\s+)?(dos\s?mil[\wáéíóúñ\s]*)", RegexOptions.IgnoreCase);
             if (yearMatch.Success)
             {
                 var yearText = yearMatch.Groups[1].Value.Trim();
@@ -379,7 +379,12 @@ namespace Backend.Services
                 using var document = PdfDocument.Open(pdfStream);
                 foreach (var page in document.GetPages())
                 {
-                    fullTextBuilder.AppendLine(page.Text);
+                    // Similar a parrafo.py que usa get_text(" ", strip=True)
+                    // Extraemos palabras individuales y las unimos con espacios
+                    // Esto asegura mejor separación que page.Text
+                    var words = page.GetWords();
+                    var pageText = string.Join(" ", words.Select(w => w.Text.Trim()));
+                    fullTextBuilder.AppendLine(pageText);
                 }
             }
             catch (Exception ex)
