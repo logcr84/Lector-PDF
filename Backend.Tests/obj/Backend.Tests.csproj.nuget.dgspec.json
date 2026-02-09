@@ -10,7 +10,7 @@
         "projectUniqueName": "/Users/jalfaro/Lector PDF/Backend.Tests/Backend.Tests.csproj",
         "projectName": "Backend.Tests",
         "projectPath": "/Users/jalfaro/Lector PDF/Backend.Tests/Backend.Tests.csproj",
-        "packagesPath": "/Users/jalfaro/Lector PDF/Backend/local_nuget",
+        "packagesPath": "/Users/jalfaro/.nuget/packages/",
         "outputPath": "/Users/jalfaro/Lector PDF/Backend.Tests/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -366,7 +366,7 @@
         "projectUniqueName": "/Users/jalfaro/Lector PDF/Backend/Backend.csproj",
         "projectName": "Backend",
         "projectPath": "/Users/jalfaro/Lector PDF/Backend/Backend.csproj",
-        "packagesPath": "/Users/jalfaro/Lector PDF/Backend/local_nuget",
+        "packagesPath": "/Users/jalfaro/.nuget/packages/",
         "outputPath": "/Users/jalfaro/Lector PDF/Backend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -409,9 +409,9 @@
               "target": "Package",
               "version": "[0.1.9, )"
             },
-            "Scalar.AspNetCore": {
+            "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[1.2.68, )"
+              "version": "[7.2.0, )"
             }
           },
           "imports": [

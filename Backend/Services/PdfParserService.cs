@@ -540,8 +540,10 @@ namespace Backend.Services
                 // Let's normalize spaces first
                 fullText = Regex.Replace(fullText, @"\s+", " ");
 
-                // We split by "En este Despacho" to get candidate blocks
-                var rawBlocks = fullText.Split(new[] { "En este Despacho" }, StringSplitOptions.RemoveEmptyEntries);
+                // We split by "En este Despacho" (case insensitive, ignoring punctuation/extra spaces) to get candidate blocks
+                var rawBlocks = Regex.Split(fullText, @"En\s+este\s+Despacho[,\.\s]*", RegexOptions.IgnoreCase)
+                                     .Where(x => !string.IsNullOrWhiteSpace(x))
+                                     .ToArray();
 
                 foreach (var rawBlock in rawBlocks)
                 {
