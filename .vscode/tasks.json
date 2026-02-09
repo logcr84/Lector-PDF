@@ -118,9 +118,7 @@
             },
             "isBackground": true,
             "problemMatcher": {
-                "pattern": {
-                    "regexp": "^.*$"
-                },
+                "base": "$msCompile",
                 "background": {
                     "activeOnStart": true,
                     "beginsPattern": "Determining projects to restore...",
