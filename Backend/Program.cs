@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen(); // Agregar SwaggerGen
 builder.Services.AddScoped<IPdfParserService, PdfParserService>();
 
 // Configure form options to handle file uploads in memory (avoid temp file permission issues)
@@ -34,6 +35,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger(); // Generar JSON v2/v3 para Swashbuckle
+    app.UseSwaggerUI(); // Habilitar UI en /swagger
     // app.MapScalarApiReference(); // Temporarily disabled due to restore lock
 }
 
