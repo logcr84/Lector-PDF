@@ -604,6 +604,14 @@ namespace Backend.Services
                         remate.TextoOriginal = "En este Despacho " + blockText;
                     }
 
+                    // --- Validation ---
+                    // Skip blocks that don't look like valid edicts (e.g., headers like "Boletín Judicial...")
+                    // A valid edict should at least mention "Expediente", "Remate", "Subasta", "Finca", or "Vehículo"
+                    if (!Regex.IsMatch(blockText, @"(Expediente|EXP|autos?|remate|subasta|finca|veh[íi]culo|placa)", RegexOptions.IgnoreCase))
+                    {
+                        continue;
+                    }
+
                     // --- Extraction Logic ---
 
                     // --- Extraction Logic ---
