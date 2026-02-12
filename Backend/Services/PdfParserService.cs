@@ -637,7 +637,9 @@ namespace Backend.Services
                         remate.Tipo = "Propiedad";
 
                         // Extract Property Details
-                        ExtractRegexGroup(blockText, @"Finca[:\s]+(\d+)", "Matricula", remate.Detalles);
+                        // Updated to handle "matrícula número", "folio real", "finca"
+                        ExtractRegexGroup(blockText, @"(?:Finca|matrícula|folio real|matricula)\s*(?:número|N°|#)?\s*[:\s]*(\d+)", "Matricula", remate.Detalles);
+                        ExtractRegexGroup(blockText, @"derecho\s*(\d+)", "Derecho", remate.Detalles);
                         ExtractRegexGroup(blockText, @"MIDE[:\s]+(.*?)(\.|PLANO|COLINDA)", "Medida", remate.Detalles);
                         ExtractRegexGroup(blockText, @"Naturaleza[:\s]+(.*?)(?:Si|situada)", "Naturaleza", remate.Detalles);
                         ExtractRegexGroup(blockText, @"Situada en (.*?)(?:,|;|\.|$)", "Ubicacion", remate.Detalles);
@@ -650,9 +652,21 @@ namespace Backend.Services
                         }
 
                         // Construct Title
-                        if (remate.Detalles.ContainsKey("Ubicacion"))
+                        if (remate.Detalles.ContainsKey("Matricula"))
+                        {
+                            var derecho = remate.Detalles.ContainsKey("Derecho") ? $" - Der {remate.Detalles["Derecho"]}" : "";
+                            remate.Titulo = $"Finca {remate.Detalles["Matricula"]}{derecho}";
+                            if (remate.Detalles.ContainsKey("Ubicacion"))
+                            {
+                                // Optionally append location if short enough? 
+                                // For now, Finca ID is the most important identifier.
+                            }
+                        }
+                        else if (remate.Detalles.ContainsKey("Ubicacion"))
                         {
                             remate.Titulo = remate.Detalles["Ubicacion"].Trim();
+                            // Truncate if too long
+                            if (remate.Titulo.Length > 50) remate.Titulo = remate.Titulo.Substring(0, 47) + "...";
                         }
                         else
                         {
