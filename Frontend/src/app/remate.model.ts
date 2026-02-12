@@ -44,4 +44,7 @@ export interface Remate {
     
     /** Estado de expansión en la interfaz de usuario (solo para visualización) */
     expanded?: boolean;
+
+    /** Estado de expansión del texto original */
+    textExpanded?: boolean;
 }

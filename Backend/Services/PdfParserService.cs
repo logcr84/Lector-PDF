@@ -580,116 +580,176 @@ namespace Backend.Services
 
                     // --- Extraction Logic ---
 
-                    // 1. Tipo (Vehículo / Propiedad)
-                    // Simple heuristic keywords
-                    if (Regex.IsMatch(blockText, @"\b(veh[íi]culo|carro|moto|bus|camion|placa)\b", RegexOptions.IgnoreCase))
+                    // --- Extraction Logic ---
+
+                    // 1. Tipo (Vehículo / Propiedad) & Detalles Específicos
+                    remate.Tipo = "Propiedad"; // Default
+
+                    // Vehicle detection keywords
+                    if (Regex.IsMatch(blockText, @"\b(veh[íi]culo|carro|moto|bus|camion|placa|marca|estilo)\b", RegexOptions.IgnoreCase) &&
+                        !Regex.IsMatch(blockText, @"\b(finca|lote|terreno)\b", RegexOptions.IgnoreCase))
                     {
                         remate.Tipo = "Vehiculo";
-                    }
-                    else if (Regex.IsMatch(blockText, @"\b(finca|lote|terreno|propiedad|inmueble)\b", RegexOptions.IgnoreCase))
-                    {
-                        remate.Tipo = "Propiedad";
+
+                        // Extract Vehicle Details
+                        ExtractRegexGroup(blockText, @"Marca[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Marca", remate.Detalles);
+                        ExtractRegexGroup(blockText, @"Estilo[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Estilo", remate.Detalles);
+                        ExtractRegexGroup(blockText, @"Modelo[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Modelo", remate.Detalles);
+                        ExtractRegexGroup(blockText, @"Color[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Color", remate.Detalles);
+                        ExtractRegexGroup(blockText, @"Placa[:\s]+(\w+)", "Placa", remate.Detalles);
+                        ExtractRegexGroup(blockText, @"Motor[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Motor", remate.Detalles);
+                        ExtractRegexGroup(blockText, @"(Serie|VIN)[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Serie", remate.Detalles);
+
+                        // Construct Title
+                        var marca = remate.Detalles.ContainsKey("Marca") ? remate.Detalles["Marca"] : "Vehículo";
+                        var estilo = remate.Detalles.ContainsKey("Estilo") ? remate.Detalles["Estilo"] : "";
+                        var modelo = remate.Detalles.ContainsKey("Modelo") ? remate.Detalles["Modelo"] : "";
+                        remate.Titulo = $"{marca} {estilo} {modelo}".Trim();
                     }
                     else
                     {
-                        // Heuristic: default to Propiedad if unsure, or check if it mentions 'Area'
                         remate.Tipo = "Propiedad";
-                    }
 
-                    // 2. Expediente
-                    // Scan for pattern like 25-006327- or similar
-                    var expedienteMatch = Regex.Match(blockText, @"(?:Expediente|EXP|autos?)\s*[:Nn°]*\s*(\d+[\d\-]+[\w]*)", RegexOptions.IgnoreCase);
-                    if (expedienteMatch.Success)
-                    {
-                        remate.Expediente = expedienteMatch.Groups[1].Value;
-                    }
+                        // Extract Property Details
+                        ExtractRegexGroup(blockText, @"Finca[:\s]+(\d+)", "Matricula", remate.Detalles);
+                        ExtractRegexGroup(blockText, @"MIDE[:\s]+(.*?)(\.|PLANO|COLINDA)", "Medida", remate.Detalles);
+                        ExtractRegexGroup(blockText, @"Naturaleza[:\s]+(.*?)(?:Si|situada)", "Naturaleza", remate.Detalles);
+                        ExtractRegexGroup(blockText, @"Situada en (.*?)(?:,|;|\.|$)", "Ubicacion", remate.Detalles);
+                        ExtractRegexGroup(blockText, @"COLINDA[:\s]+(.*?)(?:MIDE|\.|$)", "Colindantes", remate.Detalles);
 
-                    // 3. Precio Base
-                    // Priority 1: Text amount (e.g., "base de CINCO MILLONES...")
-                    // Often cleaner in OCR than symbols.
-                    decimal precioBase = 0;
-
-                    var textPriceMatch = Regex.Match(blockText, @"(?:base|suma)\s+(?:de\s+)?([a-zA-ZáéíóúñÁÉÍÓÚÑ\s]+?)(?:\s+(?:colones|d[óo]lares|exactos)|\s*(?:,|\.|$))", RegexOptions.IgnoreCase);
-                    if (textPriceMatch.Success)
-                    {
-                        var textAmount = textPriceMatch.Groups[1].Value;
-                        // Filters out short noise, ensures it looks like a number text
-                        if (textAmount.Length > 3 && (textAmount.ToLower().Contains("mil") || textAmount.ToLower().Contains("ciento") || textAmount.ToLower().Contains("millon") || textAmount.ToLower().Contains("un") || textAmount.ToLower().Contains("dos")))
+                        // If "Medida" contains a number, use it for Area
+                        if (remate.Detalles.ContainsKey("Medida"))
                         {
-                            precioBase = ConvertSpanishTextToDecimal(textAmount);
+                            remate.Area = remate.Detalles["Medida"].Trim();
                         }
-                    }
 
-                    if (precioBase > 0)
-                    {
-                        remate.PrecioBase = precioBase;
-                        remate.PrecioBaseDisplay = $"₡{precioBase:N0}"; // Assuming colones mostly
-                    }
-                    else
-                    {
-                        // Priority 2: Numeric digits (e.g., "₡5,000,000")
-                        var precioMatch = Regex.Match(blockText, @"(?:base|valor|precio)[^0-9]*([₡$¢]?\s?[\d,.]+)");
-                        if (precioMatch.Success)
+                        // Construct Title
+                        if (remate.Detalles.ContainsKey("Ubicacion"))
                         {
-                            remate.PrecioBaseDisplay = precioMatch.Groups[1].Value;
-                            // Attempt to parse explicit number for sorting/logic if needed
-                            // Clean up punctuation: 5.000.000,00 vs 5,000,000.00
-                            // For now just storing display string as requested usually
+                            remate.Titulo = remate.Detalles["Ubicacion"].Trim();
                         }
                         else
                         {
-                            // Fallback: look for just currency symbol + digits
-                            var simplePrice = Regex.Match(blockText, @"[₡$¢]\s?[\d,.]+");
-                            if (simplePrice.Success) remate.PrecioBaseDisplay = simplePrice.Value;
-                        }
-                    }
-
-                    // 4. Titulo (Resumen)
-                    if (remate.Tipo == "Vehiculo")
-                    {
-                        // Try to find Make/Model: "Marca: ... Estilo: ..."
-                        var marcaMatch = Regex.Match(blockText, @"Marca[:\s]+(\w+)", RegexOptions.IgnoreCase);
-                        var estiloMatch = Regex.Match(blockText, @"Estilo[:\s]+(\w+)", RegexOptions.IgnoreCase);
-                        var marca = marcaMatch.Success ? marcaMatch.Groups[1].Value : "Vehículo";
-                        var estilo = estiloMatch.Success ? estiloMatch.Groups[1].Value : "";
-                        remate.Titulo = $"{marca} {estilo}".Trim();
-                    }
-                    else
-                    {
-                        // Propiedad: Try to find location "Distrito ... Cantón ..."
-                        var locMatch = Regex.Match(blockText, @"Distrito\s+([\w\s]+?)[,.]\s*Cant[óo]n\s+([\w\s]+)", RegexOptions.IgnoreCase);
-                        if (locMatch.Success)
-                        {
-                            remate.Titulo = $"Distrito {locMatch.Groups[1].Value.Trim()}, Cantón {locMatch.Groups[2].Value.Trim()}";
-                        }
-                        else
-                        {
-                            // Fallback title to something from text
                             remate.Titulo = "Propiedad en Remate";
                         }
                     }
 
+                    // 2. Expediente, Demandado, Juzgado
+                    var expedienteMatch = Regex.Match(blockText, @"(?:Expediente|EXP|autos?)\s*[:Nn°]*\s*(\d+[\d\-]+[\w]*)", RegexOptions.IgnoreCase);
+                    if (expedienteMatch.Success) remate.Expediente = expedienteMatch.Groups[1].Value;
 
-                    // 5. Dates (Remates)
-                    // Look for "señalan las...", "señala fecha... etc.
-                    // Ignore ordinal prefixes like "primer", "segundo", "tercer" before the keywords
-                    // The (?:...){0,1} makes the ordinal prefix optional and non-capturing
-                    var dateMatches = Regex.Matches(blockText, @"(?:primer[oa]?|segund[oa]?|tercer[oa]?|cuart[oa]?|[\d]+[°º]?)?\s*(?:remate|subasta)?\s*(?:se\s+)?(?:señalan las|señala fecha|señalan|señala|fijan las|fija fecha|fijan|fija|hora y fecha|para el)\s+([^\.]+?)(?:\.|;|,|\s(?:con|base|suma|en|por)\b)", RegexOptions.IgnoreCase);
-                    int count = 1;
-                    foreach (Match dm in dateMatches)
+                    ExtractRegexGroup(blockText, @"contra\s+(.*?)(?:\s+EXP|\.|$)", "Demandado", remate.Detalles);
+                    if (remate.Detalles.ContainsKey("Demandado")) remate.Demandado = remate.Detalles["Demandado"];
+
+                    ExtractRegexGroup(blockText, @"JUZGADO\s+(.*?)(?:\.|:|$)", "Juzgado", remate.Detalles);
+                    if (remate.Detalles.ContainsKey("Juzgado")) remate.Juzgado = remate.Detalles["Juzgado"];
+
+
+                    // 3. Precios y Fechas (1°, 2°, 3° Remate)
+                    // Logic to extract specific blocks for each auction
+
+                    // 1st Auction (Base Price)
+                    decimal price1 = 0;
+                    var baseMatch = Regex.Match(blockText, @"(?:base|suma|servirá)\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-ZáéíóúñÁÉÍÓÚÑ\s]+?)(?:\s+(?:colones|d[óo]lares|exactos)|\s*(?:,|\.|$))", RegexOptions.IgnoreCase);
+                    if (baseMatch.Success && baseMatch.Groups[1].Value.Length > 5)
                     {
-                        if (count > 3) break;
+                        price1 = ConvertSpanishTextToDecimal(baseMatch.Groups[1].Value);
+                    }
 
-                        var rawDate = dm.Groups[1].Value.Trim();
-                        var formattedDate = ParseSpanishDate(rawDate);
+                    if (price1 == 0) // Try digits
+                    {
+                        var digitMatch = Regex.Match(blockText, @"base\s+(?:de\s+)?[¢$]?\s?([\d,.]+)");
+                        if (digitMatch.Success)
+                        {
+                            decimal.TryParse(digitMatch.Groups[1].Value.Replace(",", "").Replace(".", ""), out price1); // very rough
+                                                                                                                        // Better to let a helper handle robust digit parsing if needed, sticking to text for now as primary manual fallback
+                        }
+                    }
 
+                    remate.PrecioBase = price1;
+                    remate.PrecioBaseDisplay = price1 > 0 ? $"₡{price1:N2}" : "Ver Texto"; // Default currency assumption
+
+                    // Extract Dates and specific prices for subsequent auctions
+                    var dateMatches = Regex.Matches(blockText, @"(?:(primer|segundo|tercer)[oa]?\s+)?(?:remate|subasta)\s+(?:se\s+)?(?:señalan|fijan)\s+(?:las|para el)\s+(.*?)(?:\.|;|,|\scon\b)", RegexOptions.IgnoreCase);
+
+                    // This simple regex loop is okay, but often 2nd/3rd auctions are separate sentences with their own prices.
+                    // Let's look for specific sentences.
+
+                    // 1st
+                    string date1 = "";
+                    var match1 = Regex.Match(blockText, @"(?:primer)?\s*remate.*?señalan\s+(?:las|para)\s+(.*?)(?:\.|;|,)", RegexOptions.IgnoreCase);
+                    if (match1.Success) date1 = ParseSpanishDate(match1.Groups[1].Value);
+
+                    if (!string.IsNullOrEmpty(date1))
+                    {
                         remate.Remates.Add(new RemateFecha
                         {
-                            Label = $"{count}° Remate",
-                            Fecha = formattedDate,
-                            PrecioDisplay = count == 1 ? remate.PrecioBaseDisplay : (count == 2 ? "75% Base" : "25% Base")
+                            Label = "1° Remate",
+                            Fecha = date1,
+                            Precio = price1,
+                            PrecioDisplay = remate.PrecioBaseDisplay
                         });
-                        count++;
+                    }
+
+                    // 2nd (Base 75%)
+                    string date2 = "";
+                    decimal price2 = price1 > 0 ? price1 * 0.75m : 0;
+                    // Look for "segundo remate... base de X"
+                    var match2Block = Regex.Match(blockText, @"segundo\s+remate.*?(?:\.|;|$)", RegexOptions.IgnoreCase);
+                    if (match2Block.Success)
+                    {
+                        var segText = match2Block.Value;
+                        // Extract date
+                        var d2 = Regex.Match(segText, @"señalan\s+(?:las|para)\s+(.*?)(?:\.|;|,|con|base)");
+                        if (d2.Success) date2 = ParseSpanishDate(d2.Groups[1].Value);
+
+                        // Extract specific price if mentioned
+                        var p2Match = Regex.Match(segText, @"base\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-Z\s]+)");
+                        if (p2Match.Success)
+                        {
+                            var p2Val = ConvertSpanishTextToDecimal(p2Match.Groups[1].Value);
+                            if (p2Val > 0) price2 = p2Val;
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(date2))
+                    {
+                        remate.Remates.Add(new RemateFecha
+                        {
+                            Label = "2° Remate",
+                            Fecha = date2,
+                            Precio = price2,
+                            PrecioDisplay = price2 > 0 ? $"₡{price2:N2}" : "75% Base"
+                        });
+                    }
+
+                    // 3rd (Base 25%)
+                    string date3 = "";
+                    decimal price3 = price1 > 0 ? price1 * 0.25m : 0;
+                    var match3Block = Regex.Match(blockText, @"tercer\s+remate.*?(?:\.|;|$)", RegexOptions.IgnoreCase);
+                    if (match3Block.Success)
+                    {
+                        var terText = match3Block.Value;
+                        var d3 = Regex.Match(terText, @"señalan\s+(?:las|para)\s+(.*?)(?:\.|;|,|con|base)");
+                        if (d3.Success) date3 = ParseSpanishDate(d3.Groups[1].Value);
+
+                        var p3Match = Regex.Match(terText, @"base\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-Z\s]+)");
+                        if (p3Match.Success)
+                        {
+                            var p3Val = ConvertSpanishTextToDecimal(p3Match.Groups[1].Value);
+                            if (p3Val > 0) price3 = p3Val;
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(date3))
+                    {
+                        remate.Remates.Add(new RemateFecha
+                        {
+                            Label = "3° Remate",
+                            Fecha = date3,
+                            Precio = price3,
+                            PrecioDisplay = price3 > 0 ? $"₡{price3:N2}" : "25% Base"
+                        });
                     }
 
                     // Only add if we have at least some meaningful data
@@ -726,6 +786,19 @@ namespace Backend.Services
             }
 
             return remates;
+        }
+
+        private void ExtractRegexGroup(string input, string pattern, string key, Dictionary<string, string> targetDict)
+        {
+            var match = Regex.Match(input, pattern, RegexOptions.IgnoreCase);
+            if (match.Success && match.Groups.Count > 1)
+            {
+                string value = match.Groups[1].Value.Trim();
+                if (!string.IsNullOrEmpty(value))
+                {
+                    targetDict[key] = value;
+                }
+            }
         }
     }
 }

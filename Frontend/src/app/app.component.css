@@ -1,1 +1,116 @@
-/* Los estilos están definidos en el archivo global styles.css con documentación en español */
+/* --- Variables Locales --- */
+:host {
+    --card-border-radius: 12px;
+    --primary-vehicle: #6610f2; /* Índigo */
+    --primary-property: #198754; /* Verde */
+    --text-muted: #6c757d;
+}
+
+/* --- Estilos de Tarjeta Principal --- */
+.auction-card {
+    background: white;
+    border: none;
+    border-radius: var(--card-border-radius);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+/* --- Encabezado de la Tarjeta --- */
+.auction-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    cursor: pointer;
+    position: relative;
+}
+
+/* Barra lateral de color según tipo */
+.auction-header::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 6px;
+}
+.type-vehicle .auction-header::before { background-color: var(--primary-vehicle); }
+.type-property .auction-header::before { background-color: var(--primary-property); }
+
+.price-display {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.price-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+/* --- Badges Personalizados --- */
+.badge-custom {
+    padding: 0.5em 1em;
+    font-weight: 600;
+    border-radius: 50rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+}
+.bg-soft-vehicle { background-color: rgba(102, 16, 242, 0.1); color: var(--primary-vehicle); }
+.bg-soft-property { background-color: rgba(25, 135, 84, 0.1); color: var(--primary-property); }
+
+/* --- Sección de Fechas (Timeline) --- */
+.dates-container {
+    background-color: #fcfcfc;
+    border-radius: 8px;
+    border: 1px solid #f1f1f1;
+}
+
+.date-box {
+    position: relative;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.date-box.active {
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.05);
+    transform: scale(1.02);
+    z-index: 2;
+}
+
+.date-box.passed { opacity: 0.5; }
+
+.discount-badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* --- Tablas y Listas --- */
+.info-table th { width: 35%; color: var(--text-muted); font-weight: 500; }
+.info-table td { font-weight: 600; }
+
+.section-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* --- Utilidades --- */
+.text-price-opportunity { color: #d63384; } /* Rosa fuerte para destacar oportunidad */

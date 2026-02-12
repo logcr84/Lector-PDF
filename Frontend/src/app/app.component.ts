@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Remate } from './remate.model';
 import { ApiService } from './api.service';
+import { CustomDatePipe } from './custom-date.pipe';
 
 /**
  * Componente principal de la aplicación Lector PDF Boletines.
@@ -10,7 +11,7 @@ import { ApiService } from './api.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CustomDatePipe],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'] // Note: angular.json points to styles.css globally, but component might look for css
 })
@@ -65,7 +66,7 @@ export class AppComponent {
       this.error = '';
       this.apiService.uploadPdf(file).subscribe({
         next: (data) => {
-          this.remates = data.map(r => ({...r, expanded: false})); // Initialize expanded state
+          this.remates = data.map(r => ({...r, expanded: false, textExpanded: false})); // Initialize expanded state
           this.applyFilters();
           this.isLoading = false;
         },
@@ -140,5 +141,75 @@ export class AppComponent {
                           
       return typeMatch && searchMatch;
     });
+  }
+
+  /**
+   * Helper to parse "dd/MM/yyyy HH:mm" string to Date object
+   */
+  private parseDate(dateStr: string): Date | null {
+    if (!dateStr) return null;
+    try {
+      // Expected format: "dd/MM/yyyy HH:mm" or "dd/MM/yyyy"
+      const parts = dateStr.split(' ');
+      const dateParts = parts[0].split('/');
+      const timeParts = parts[1] ? parts[1].split(':') : ['00', '00'];
+      
+      if (dateParts.length !== 3) return null;
+
+      return new Date(
+        parseInt(dateParts[2]), 
+        parseInt(dateParts[1]) - 1, 
+        parseInt(dateParts[0]),
+        parseInt(timeParts[0]),
+        parseInt(timeParts[1])
+      );
+    } catch (e) {
+      console.error('Date parse error', e);
+      return null;
+    }
+  }
+
+  /**
+   * Determines the status of a specific auction date (passed, active, future).
+   * @param remate The specific date entry
+   * @param allRemates List of all dates for this item (to determine order)
+   */
+  getDateStatus(remate: any, allRemates: any[]): 'passed' | 'active' | 'future' {
+    const date = this.parseDate(remate.fecha);
+    if (!date) return 'future';
+    
+    const now = new Date();
+    
+    // If date is in the past
+    if (date < now) {
+      return 'passed';
+    }
+
+    // It is in the future. Check if it's the *first* future date.
+    // If any *previous* date (by index) is also future, then this one is just 'future' (not active yet).
+    // Note: This assumes allRemates is sorted by date. If not, we might need to sort or finding min future date.
+    // Assuming backend sends them chronological: 1st, 2nd, 3rd.
+    
+    const index = allRemates.indexOf(remate);
+    if (index > 0) {
+      // Check if previous one is future
+      const prevDate = this.parseDate(allRemates[index - 1].fecha);
+      if (prevDate && prevDate >= now) {
+        return 'future';
+      }
+    }
+    
+    return 'active';
+  }
+
+  // Wrapper for template strictly for "isNext" check
+  isNextDate(remate: any, allRemates: any[]): boolean {
+    return this.getDateStatus(remate, allRemates) === 'active';
+  }
+
+  // Wrapper for template strictly for "isPassed" check
+  isDatePassed(remate: any): boolean {
+    const date = this.parseDate(remate.fecha);
+    return date ? date < new Date() : false;
   }
 }

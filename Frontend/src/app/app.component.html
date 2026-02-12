@@ -1,91 +1,173 @@
-<div class="container">
-  <h1>Listado Oficial de Remates</h1>
+<div class="container py-5">
+  <h3 class="mb-4 fw-light text-secondary">Tablero de Oportunidades</h3>
   
-  <div class="controls">
-      <div>
-          <button class="filter-btn" [class.active]="filterType === 'all'" (click)="setFilter('all')">Todos</button>
-          <button class="filter-btn" [class.active]="filterType === 'propiedad'" (click)="setFilter('propiedad')">Propiedades</button>
-          <button class="filter-btn" [class.active]="filterType === 'vehiculo'" (click)="setFilter('vehiculo')">Vehículos</button>
-      </div>
-      <div>
-           <input type="file" (change)="onFileSelected($event)" accept=".pdf" style="display: none;" #fileInput>
-           <button class="filter-btn" (click)="fileInput.click()" style="background: #3498db; color: white;">📂 Subir PDF</button>
-      </div>
-      <div>
-           <button class="filter-btn" (click)="toggleModal()" style="background: #27ae60; color: white; margin-left: 10px;">📊 Ver Tabla</button>
-           <input type="text" class="search-box" placeholder="Buscar expediente, título..." (keyup)="onSearch($event)">
+  <!-- Controls Section (Adapted to Bootstrap) -->
+  <div class="card mb-4 shadow-sm border-0">
+      <div class="card-body d-flex flex-wrap gap-3 align-items-center justify-content-between">
+          <div class="btn-group" role="group">
+              <button type="button" class="btn btn-outline-secondary" [class.active]="filterType === 'all'" (click)="setFilter('all')">Todos</button>
+              <button type="button" class="btn btn-outline-success" [class.active]="filterType === 'propiedad'" (click)="setFilter('propiedad')">Propiedades</button>
+              <button type="button" class="btn btn-outline-primary" [class.active]="filterType === 'vehiculo'" (click)="setFilter('vehiculo')">Vehículos</button>
+          </div>
+          
+          <div class="d-flex gap-2">
+               <input type="file" (change)="onFileSelected($event)" accept=".pdf" class="d-none" #fileInput>
+               <button class="btn btn-primary" (click)="fileInput.click()"><i class="bi bi-upload"></i> Subir PDF</button>
+               <button class="btn btn-success" (click)="toggleModal()"><i class="bi bi-table"></i> Ver Tabla</button>
+          </div>
+
+          <div class="input-group" style="max-width: 300px;">
+              <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+              <input type="text" class="form-control border-start-0" placeholder="Buscar expediente..." (keyup)="onSearch($event)">
+          </div>
       </div>
   </div>
 
-  <div *ngIf="isLoading" style="text-align: center; padding: 20px;">
-    Loading... <span style="display:inline-block; animation: spin 1s linear infinite;">↻</span>
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2 text-muted">Procesando boletín...</p>
   </div>
   
-  <div *ngIf="error" style="color: red; text-align: center;">{{ error }}</div>
+  <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
 
   <div id="itemsContainer">
-      <div *ngFor="let item of filteredRemates">
+      <div *ngFor="let item of filteredRemates" 
+           class="auction-card" 
+           [ngClass]="{'type-vehicle': item.tipo === 'Vehiculo', 'type-property': item.tipo === 'Propiedad'}">
         
-        <!-- Accordion Header -->
-        <button class="accordion" 
-                [ngClass]="{'prop-item': item.tipo === 'Propiedad', 'car-item': item.tipo === 'Vehiculo', 'active': item.expanded}" 
-                (click)="toggleExpand(item)">
-            <div class="header-grid">
-                <span class="h-id">#{{ item.id }}</span>
-                <span class="h-title">{{ item.titulo }}</span>
-                <span class="h-area">{{ item.area || '--' }}</span>
-                <span class="h-price">{{ item.precioBaseDisplay }}</span>
-            </div>
-        </button>
-
-        <!-- Panel Content -->
-        <div class="panel" [style.display]="item.expanded ? 'block' : 'none'">
-            <div class="panel-content">
-                <span class="badge" [ngClass]="{'bg-prop': item.tipo === 'Propiedad', 'bg-car': item.tipo === 'Vehiculo'}">{{ item.tipo }}</span>
-                
-                <div class="remates-grid">
-                    <div class="remate-card" *ngFor="let remate of item.remates">
-                        <span class="remate-label">{{ remate.label }}</span>
-                        <span class="remate-price">{{ remate.precioDisplay }}</span>
-                        <span class="remate-date">{{ remate.fecha }}</span>
-                    </div>
-                    <div *ngIf="item.remates.length === 0" class="remate-card" style="grid-column: 1/-1;">
-                        <span class="remate-price">{{ item.precioBaseDisplay }}</span>
-                        <span class="remate-date">Verificar fechas en texto original</span>
-                    </div>
+        <div class="auction-header d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3" 
+             (click)="toggleExpand(item)">
+            
+            <div class="d-flex align-items-center gap-3">
+                <div class="badge-custom" [ngClass]="{'bg-soft-vehicle': item.tipo === 'Vehiculo', 'bg-soft-property': item.tipo === 'Propiedad'}">
+                    <i class="bi" [ngClass]="{'bi-car-front-fill': item.tipo === 'Vehiculo', 'bi-house-door-fill': item.tipo === 'Propiedad'}"></i> 
+                    {{ item.tipo }}
                 </div>
+                <div>
+                    <h5 class="mb-0 fw-bold">{{ item.titulo || 'Sin Título' }}</h5>
+                    <small class="text-muted">{{ item.juzgado }} • Exp: {{ item.expediente }}</small>
+                </div>
+            </div>
 
-                <div class="expediente-info"><strong>EXP:</strong> {{ item.expediente }}</div>
-                
-                <div class="details-box">
-                    <div class="section-title">Detalles &amp; Legal</div>
-                    <div class="detail-row"><span class="detail-key">ID Interno:</span> <span class="detail-value">{{ item.id }}</span></div>
-                    <!-- Vehicle-specific fields -->
-                    <div class="detail-row" *ngIf="item.detalles?.['Motor']"><span class="detail-key">Motor:</span> <span class="detail-value">{{ item.detalles['Motor'] }}</span></div>
-                    <div class="detail-row" *ngIf="item.detalles?.['Placa']"><span class="detail-key">Placa:</span> <span class="detail-value">{{ item.detalles['Placa'] }}</span></div>
-                    <!-- Property-specific fields -->
-                    <div class="detail-row" *ngIf="item.detalles?.['Naturaleza']"><span class="detail-key">Naturaleza:</span> <span class="detail-value">{{ item.detalles['Naturaleza'] }}</span></div>
-                    <div class="detail-row" *ngIf="item.detalles?.['Colindantes']"><span class="detail-key">Colindantes:</span> <span class="detail-value">{{ item.detalles['Colindantes'] }}</span></div>
-                    <!-- Common fields in order -->
-                    <div class="detail-row" *ngIf="item.expediente"><span class="detail-key">Expediente:</span> <span class="detail-value">{{ item.expediente }}</span></div>
-                    <div class="detail-row" *ngIf="item.juzgado"><span class="detail-key">Juzgado:</span> <span class="detail-value">{{ item.juzgado }}</span></div>
-                    <div class="detail-row" *ngIf="item.demandado"><span class="detail-key">Demandado:</span> <span class="detail-value">{{ item.demandado }}</span></div>
+            <div class="text-md-end">
+                <div class="price-label">Precio Base (1er Remate)</div>
+                <div class="price-display" [ngClass]="{'text-success': item.tipo === 'Propiedad', 'text-primary': item.tipo === 'Vehiculo'}">
+                    {{ item.precioBaseDisplay }}
+                </div>
+            </div>
+            
+            <i class="bi bi-chevron-down text-muted d-none d-md-block" [style.transform]="item.expanded ? 'rotate(180deg)' : 'rotate(0deg)'" style="transition: transform 0.2s"></i>
+        </div>
+
+        <div class="collapse" [class.show]="item.expanded">
+            <div class="p-4">
+                <div class="row g-4">
                     
-                    <div style="margin-top:10px; font-size: 0.8em; color: #999;">
-                        <em>Texto original extraído: {{ item.textoOriginal | slice:0:8000 }}...</em>
+                    <div class="col-lg-5 border-end-lg">
+                        <div class="section-title"><i class="bi bi-card-list"></i> Ficha Técnica</div>
+                        <table class="table table-sm table-borderless info-table">
+                            <tbody>
+                                <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Placa']"><th>Placa:</th><td>{{ item.detalles['Placa'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Vehiculo' && (item.detalles['Serie'] || item.detalles['VIN'])"><th>Serie/VIN:</th><td>{{ item.detalles['Serie'] || item.detalles['VIN'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Motor']"><th>Motor:</th><td>{{ item.detalles['Motor'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Estilo']"><th>Estilo:</th><td>{{ item.detalles['Estilo'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Color']"><th>Color:</th><td>{{ item.detalles['Color'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Marca']"><th>Marca:</th><td>{{ item.detalles['Marca'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Modelo']"><th>Modelo:</th><td>{{ item.detalles['Modelo'] }}</td></tr>
+
+                                <tr *ngIf="item.tipo === 'Propiedad' && item.detalles['Naturaleza']"><th>Naturaleza:</th><td>{{ item.detalles['Naturaleza'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Propiedad' && item.area"><th>Medida:</th><td>{{ item.area }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Propiedad' && item.detalles['Ubicacion']"><th>Ubicación:</th><td>{{ item.detalles['Ubicacion'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Propiedad' && item.detalles['Matricula']"><th>Matrícula:</th><td>{{ item.detalles['Matricula'] }}</td></tr>
+                                
+                                <tr><th>Demandado:</th><td>{{ item.demandado }}</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div class="mt-4" *ngIf="item.detalles['Colindantes'] || item.detalles['Gravamenes']">
+                            <div class="section-title text-secondary"><i class="bi bi-info-circle"></i> Detalles Adicionales</div>
+                            
+                            <div *ngIf="item.detalles['Colindantes']" class="mb-3 small text-muted">
+                                <strong>Colindantes:</strong> {{ item.detalles['Colindantes'] }}
+                            </div>
+
+                            <div *ngIf="item.detalles['Gravamenes']" class="alert alert-light border-warning d-flex gap-3 align-items-start">
+                                <i class="bi bi-exclamation-triangle text-warning fs-5"></i>
+                                <div>
+                                    <small class="fw-bold d-block text-warning">Gravámenes / Anotaciones</small>
+                                    <small class="text-muted">{{ item.detalles['Gravamenes'] }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-7">
+                        <div class="section-title"><i class="bi bi-calendar3"></i> Cronograma de Subasta</div>
+                        
+                        <div class="dates-container p-3 mb-4">
+                            <div class="row g-2">
+                                <div class="col-4" *ngFor="let remate of item.remates; let i = index">
+                                    <div class="date-box" 
+                                         [ngClass]="{
+                                            'active': isNextDate(remate, item.remates), 
+                                            'passed': isDatePassed(remate),
+                                            'border-success': item.tipo === 'Propiedad' && isNextDate(remate, item.remates),
+                                            'border-primary': item.tipo === 'Vehiculo' && isNextDate(remate, item.remates)
+                                         }">
+                                        <small class="d-block text-muted mb-1">{{ remate.label }}</small>
+                                        <div class="fw-bold" 
+                                             [ngClass]="{'text-success': item.tipo === 'Propiedad' && isNextDate(remate, item.remates), 'text-primary': item.tipo === 'Vehiculo' && isNextDate(remate, item.remates)}">
+                                            {{ remate.fecha | customDate:'dd MMM' }}
+                                        </div>
+                                        <small class="text-muted d-block text-truncate">{{ remate.precioDisplay }}</small>
+                                        <span *ngIf="isNextDate(remate, item.remates)" 
+                                              class="badge discount-badge" 
+                                              [ngClass]="{'bg-success': item.tipo === 'Propiedad', 'bg-primary': item.tipo === 'Vehiculo'}">
+                                            Activo
+                                        </span>
+                                    </div>
+                                </div>
+                                <div *ngIf="!item.remates || item.remates.length === 0" class="col-12 text-center text-muted p-3">
+                                    No hay fechas extraídas. Ver texto original.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-light p-3 rounded-3">
+                            <div class="row" style="font-size: 0.85rem;">
+                                <div class="col-12">
+                                    <strong class="d-block text-dark mb-2">Texto Original (Extracto):</strong>
+                                    <div class="text-muted mb-0" style="white-space: pre-wrap;">
+                                        <ng-container *ngIf="!item.textExpanded">
+                                            {{ item.textoOriginal | slice:0:300 }}...
+                                        </ng-container>
+                                        <ng-container *ngIf="item.textExpanded">
+                                            {{ item.textoOriginal }}
+                                        </ng-container>
+                                        
+                                        <a href="javascript:void(0)" 
+                                           (click)="$event.stopPropagation(); item.textExpanded = !item.textExpanded" 
+                                           class="text-primary text-decoration-none fw-bold ms-1"
+                                           style="font-size: 0.9em;">
+                                            {{ item.textExpanded ? 'Leer menos' : 'Leer más' }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
-
       </div>
 
-      <div *ngIf="filteredRemates.length === 0 && !isLoading && !error" style="text-align: center; color: #777; padding: 40px 20px;">
-        <div style="font-size: 1.2em; margin-bottom: 10px;">📄 No hay elementos para mostrar</div>
-        <div style="font-size: 0.9em;">
-          Sube un <strong>boletín oficial de remates del Poder Judicial</strong> en formato PDF.<br>
-          El archivo debe contener información como expedientes, precios base, y fechas de remate.
-        </div>
+      <div *ngIf="filteredRemates.length === 0 && !isLoading && !error" class="text-center py-5 text-muted">
+        <i class="bi bi-file-earmark-pdf display-1 mb-3 d-block"></i>
+        <h4>No hay elementos para mostrar</h4>
+        <p>Sube un boletín oficial de remates del Poder Judicial en formato PDF.</p>
       </div>
   </div>
 
