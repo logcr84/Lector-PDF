@@ -414,64 +414,90 @@ namespace Backend.Services
             {
                 // Normalize text: lowercase, remove " y ", remove punctuation
                 var cleanText = text.ToLower()
-                    .Replace(" y ", " ")
                     .Replace(",", "")
                     .Replace(".", "");
 
-                var words = cleanText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                // Split into integer and decimal parts if "con" is present followed by cents keywords
+                string integerPartText = cleanText;
+                string decimalPartText = "";
 
-                decimal totalValue = 0;
-                decimal currentChunk = 0;
-
-                foreach (var word in words)
+                if (Regex.IsMatch(cleanText, @"\s+con\s+.*?(c[ée]ntimos|centavos)"))
                 {
-                    if (SpanishAmountValues.TryGetValue(word, out decimal val))
+                    var parts = Regex.Split(cleanText, @"\s+con\s+");
+                    integerPartText = parts[0];
+                    if (parts.Length > 1)
                     {
-                        if (val == 1000) // mil
-                        {
-                            // "cinco mil" -> 5 * 1000
-                            // "mil" -> 1 * 1000
-                            if (currentChunk == 0) currentChunk = 1;
-                            currentChunk *= 1000;
-                            totalValue += currentChunk;
-                            currentChunk = 0;
-                        }
-                        else if (val == 1000000) // millón/millones
-                        {
-                            // "cinco millones" -> 5 * 1000000
-                            // "un millón" -> 1 * 1000000
-                            if (currentChunk == 0) currentChunk = 1;
-                            currentChunk *= 1000000;
-                            totalValue += currentChunk;
-                            currentChunk = 0;
-                        }
-                        else if (val >= 100) // Hundreds (cien, doscientos...)
-                        {
-                            currentChunk += val;
-                        }
-                        else // 0-99
-                        {
-                            currentChunk += val;
-                        }
-                    }
-                    else
-                    {
-                        // Stop parsing if we hit a word that isn't a number (e.g., "señala", "fecha")
-                        // This prevents merging "diez mil" with "quince" from a date following it.
-                        break;
+                        // Remove "céntimos/centavos" from the second part to parse the number
+                        decimalPartText = Regex.Replace(parts[1], @"\s*(c[ée]ntimos|centavos).*", "").Trim();
                     }
                 }
 
-                // Add remaining chunk (e.g., "... quinientos")
-                totalValue += currentChunk;
+                decimal integerValue = ParseSpanishNumberText(integerPartText);
+                decimal decimalValue = 0;
 
-                return totalValue;
+                if (!string.IsNullOrEmpty(decimalPartText))
+                {
+                    decimalValue = ParseSpanishNumberText(decimalPartText);
+                    // Assume cents are always out of 100
+                    if (decimalValue > 0) decimalValue /= 100m;
+                }
+
+                return integerValue + decimalValue;
             }
             catch
             {
                 return 0;
             }
         }
+
+        /// <summary>
+        /// Helper param to parse pure number text without splitting by 'con' again
+        /// </summary>
+        private decimal ParseSpanishNumberText(string text)
+        {
+            // Remove currency words that might be in the text
+            text = Regex.Replace(text, @"\b(colones|d[óo]lares|exactos)\b", "", RegexOptions.IgnoreCase);
+            text = text.Replace(" y ", " ");
+
+            var words = text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            decimal totalValue = 0;
+            decimal currentChunk = 0;
+
+            foreach (var word in words)
+            {
+                if (SpanishAmountValues.TryGetValue(word, out decimal val))
+                {
+                    if (val == 1000) // mil
+                    {
+                        if (currentChunk == 0) currentChunk = 1;
+                        currentChunk *= 1000;
+                        totalValue += currentChunk;
+                        currentChunk = 0;
+                    }
+                    else if (val == 1000000) // millón
+                    {
+                        if (currentChunk == 0) currentChunk = 1;
+                        currentChunk *= 1000000;
+                        totalValue += currentChunk;
+                        currentChunk = 0;
+                    }
+                    else if (val >= 100) // Hundreds
+                    {
+                        currentChunk += val;
+                    }
+                    else // 0-99
+                    {
+                        currentChunk += val;
+                    }
+                }
+                // Ignore unknown words
+            }
+
+            totalValue += currentChunk;
+            return totalValue;
+        }
+
 
         /// <summary>
         /// Analiza un archivo PDF para extraer información de remates judiciales.
@@ -635,8 +661,13 @@ namespace Backend.Services
                     }
 
                     // 2. Expediente, Demandado, Juzgado
-                    var expedienteMatch = Regex.Match(blockText, @"(?:Expediente|EXP|autos?)\s*[:Nn°]*\s*(\d+[\d\-]+[\w]*)", RegexOptions.IgnoreCase);
-                    if (expedienteMatch.Success) remate.Expediente = expedienteMatch.Groups[1].Value;
+                    // Updated regex to handle optional space before suffix (e.g., "- CJ")
+                    var expedienteMatch = Regex.Match(blockText, @"(?:Expediente|EXP|autos?)\s*[:Nn°]*\s*(\d+[\d\-]+\s*[\w]*)", RegexOptions.IgnoreCase);
+                    if (expedienteMatch.Success)
+                    {
+                        // Normalize by removing spaces in the captured group
+                        remate.Expediente = expedienteMatch.Groups[1].Value.Replace(" ", "");
+                    }
 
                     ExtractRegexGroup(blockText, @"contra\s+(.*?)(?:\s+EXP|\.|$)", "Demandado", remate.Detalles);
                     if (remate.Detalles.ContainsKey("Demandado")) remate.Demandado = remate.Detalles["Demandado"];
@@ -650,10 +681,35 @@ namespace Backend.Services
 
                     // 1st Auction (Base Price)
                     decimal price1 = 0;
-                    var baseMatch = Regex.Match(blockText, @"(?:base|suma|servirá)\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-ZáéíóúñÁÉÍÓÚÑ\s]+?)(?:\s+(?:colones|d[óo]lares|exactos)|\s*(?:,|\.|$))", RegexOptions.IgnoreCase);
-                    if (baseMatch.Success && baseMatch.Groups[1].Value.Length > 5)
+                    string currencySymbol = "₡"; // Default
+
+                    // Regex updated to capture currency words and cents part
+                    // Matches: "base de [TEXTO NUMERO] [MONEDA] [CON CENTAVOS]?"
+                    var baseMatch = Regex.Match(blockText, @"(?:base|suma|servirá)\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-ZáéíóúñÁÉÍÓÚÑ\s]+?)(?:\s+(colones|d[óo]lares)(?:\s+con\s+[a-zA-ZáéíóúñÁÉÍÓÚÑ\s]+(?:c[ée]ntimos|centavos))?|\s*(?:,|\.|$))", RegexOptions.IgnoreCase);
+
+                    if (baseMatch.Success)
                     {
-                        price1 = ConvertSpanishTextToDecimal(baseMatch.Groups[1].Value);
+                        var amountText = baseMatch.Groups[1].Value;
+                        // Parsing robusto que incluye moneda y centavos
+                        var robustMatch = Regex.Match(blockText, @"(?:base|suma)\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-ZáéíóúñÁÉÍÓÚÑ\s]+(?:colones|d[óo]lares)(?:\s+con\s+[a-zA-ZáéíóúñÁÉÍÓÚÑ\s]+(?:c[ée]ntimos|centavos))?)", RegexOptions.IgnoreCase);
+
+                        if (robustMatch.Success)
+                        {
+                            var fullAmountString = robustMatch.Groups[1].Value;
+
+                            // Detect currency formatting
+                            if (Regex.IsMatch(fullAmountString, "d[óo]lares", RegexOptions.IgnoreCase))
+                            {
+                                currencySymbol = "$";
+                            }
+
+                            price1 = ConvertSpanishTextToDecimal(fullAmountString);
+                        }
+                        else if (baseMatch.Groups[1].Value.Length > 5) // Fallback to old restricted match
+                        {
+                            price1 = ConvertSpanishTextToDecimal(baseMatch.Groups[1].Value);
+                            if (Regex.IsMatch(baseMatch.Value, "d[óo]lares", RegexOptions.IgnoreCase)) currencySymbol = "$";
+                        }
                     }
 
                     if (price1 == 0) // Try digits
@@ -662,12 +718,12 @@ namespace Backend.Services
                         if (digitMatch.Success)
                         {
                             decimal.TryParse(digitMatch.Groups[1].Value.Replace(",", "").Replace(".", ""), out price1); // very rough
-                                                                                                                        // Better to let a helper handle robust digit parsing if needed, sticking to text for now as primary manual fallback
+                            if (blockText.Contains("dólares") || blockText.Contains("USD")) currencySymbol = "$";
                         }
                     }
 
                     remate.PrecioBase = price1;
-                    remate.PrecioBaseDisplay = price1 > 0 ? $"₡{price1:N2}" : "Ver Texto"; // Default currency assumption
+                    remate.PrecioBaseDisplay = price1 > 0 ? $"{currencySymbol}{price1:N2}" : "Ver Texto";
 
                     // Extract Dates and specific prices for subsequent auctions
                     var dateMatches = Regex.Matches(blockText, @"(?:(primer|segundo|tercer)[oa]?\s+)?(?:remate|subasta)\s+(?:se\s+)?(?:señalan|fijan)\s+(?:las|para el)\s+(.*?)(?:\.|;|,|\scon\b)", RegexOptions.IgnoreCase);
