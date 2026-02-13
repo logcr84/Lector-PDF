@@ -723,34 +723,31 @@ namespace Backend.Services
 
                     // Regex updated to capture currency words and cents part
                     // Matches: "base de [TEXTO NUMERO] [MONEDA] [CON CENTAVOS]?"
-                    var baseMatch = Regex.Match(blockText, @"(?:base|suma|servirá)\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-ZáéíóúñÁÉÍÓÚÑ\s]+?)(?:\s+(colones|d[óo]lares)(?:\s+con\s+[a-zA-ZáéíóúñÁÉÍÓÚÑ\s]+(?:c[ée]ntimos|centavos))?|\s*(?:,|\.|$))", RegexOptions.IgnoreCase);
+                    var baseMatch = Regex.Match(blockText, @"(?:base|suma|servirá)\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-ZáéíóúñÁÉÍÓÚÑ\s,\.]+(?:colones|d[óo]lares)(?:\s+con\s+[a-zA-ZáéíóúñÁÉÍÓÚÑ\s]+(?:c[ée]ntimos|centavos))?|(?:\s*(?:,|\.|$)))", RegexOptions.IgnoreCase);
+                    // Updated logic: The simplified match above might still be tricky. Let's rely on robustMatch priority.
 
-                    if (baseMatch.Success)
+                    // Priority 1: Robust match looking for 'colones' or 'dólares' explicitly, allowing punctuation inside
+                    var robustMatch = Regex.Match(blockText, @"(?:base|suma)\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-ZáéíóúñÁÉÍÓÚÑ\s,\.]+(?:colones|d[óo]lares)(?:\s+con\s+[a-zA-ZáéíóúñÁÉÍÓÚÑ\s]+(?:c[ée]ntimos|centavos))?)", RegexOptions.IgnoreCase);
+
+                    if (robustMatch.Success)
                     {
-                        var amountText = baseMatch.Groups[1].Value;
-                        // Parsing robusto que incluye moneda y centavos
-                        var robustMatch = Regex.Match(blockText, @"(?:base|suma)\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-ZáéíóúñÁÉÍÓÚÑ\s]+(?:colones|d[óo]lares)(?:\s+con\s+[a-zA-ZáéíóúñÁÉÍÓÚÑ\s]+(?:c[ée]ntimos|centavos))?)", RegexOptions.IgnoreCase);
+                        var fullAmountString = robustMatch.Groups[1].Value;
 
-                        if (robustMatch.Success)
+                        // Detect currency formatting
+                        if (Regex.IsMatch(fullAmountString, "d[óo]lares", RegexOptions.IgnoreCase))
                         {
-                            var fullAmountString = robustMatch.Groups[1].Value;
-
-                            // Detect currency formatting
-                            if (Regex.IsMatch(fullAmountString, "d[óo]lares", RegexOptions.IgnoreCase))
-                            {
-                                currencySymbol = "$";
-                            }
-
-                            price1 = ConvertSpanishTextToDecimal(fullAmountString);
+                            currencySymbol = "$";
                         }
-                        else if (baseMatch.Groups[1].Value.Length > 5) // Fallback to old restricted match
-                        {
-                            price1 = ConvertSpanishTextToDecimal(baseMatch.Groups[1].Value);
-                            if (Regex.IsMatch(baseMatch.Value, "d[óo]lares", RegexOptions.IgnoreCase)) currencySymbol = "$";
-                        }
-                        // Guard: if the parsed price is suspiciously low (<100), it's likely a false match
-                        if (price1 > 0 && price1 < 100) { Console.WriteLine($"⚠ Suspiciously low price {price1}, resetting"); price1 = 0; }
+
+                        price1 = ConvertSpanishTextToDecimal(fullAmountString);
                     }
+                    else if (baseMatch.Groups[1].Value.Length > 5) // Fallback to old restricted match
+                    {
+                        price1 = ConvertSpanishTextToDecimal(baseMatch.Groups[1].Value);
+                        if (Regex.IsMatch(baseMatch.Value, "d[óo]lares", RegexOptions.IgnoreCase)) currencySymbol = "$";
+                    }
+                    // Guard: if the parsed price is suspiciously low (<100), it's likely a false match
+                    if (price1 > 0 && price1 < 100) { Console.WriteLine($"⚠ Suspiciously low price {price1}, resetting"); price1 = 0; }
 
                     if (price1 == 0) // Try digits
                     {
