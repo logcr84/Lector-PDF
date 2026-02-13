@@ -585,7 +585,7 @@ namespace Backend.Services
                     // Normalize whitespace for regex matching: replace parsing artifacts like newlines within sentences
                     var blockText = Regex.Replace(rawBlock, @"\s+", " ").Trim();
 
-                    Console.WriteLine($"--- Block Preview: {blockText.Substring(0, Math.Min(100, blockText.Length))}... ---");
+                    Console.WriteLine($"\n--- Block {remates.Count + 1} (len={blockText.Length}) Preview: {blockText.Substring(0, Math.Min(150, blockText.Length))}... ---");
 
 
                     // Note: parrafo.py accumulates text until "publicación número" or "Referencia N°".
@@ -609,6 +609,14 @@ namespace Backend.Services
                     // A valid edict should at least mention "Expediente", "Remate", "Subasta", "Finca", or "Vehículo"
                     if (!Regex.IsMatch(blockText, @"(Expediente|EXP|autos?|remate|subasta|finca|veh[íi]culo|placa)", RegexOptions.IgnoreCase))
                     {
+                        Console.WriteLine("  >> SKIPPED: no key terms found");
+                        continue;
+                    }
+
+                    // Skip extremely long blocks (likely preamble/header text)
+                    if (blockText.Length > 10000)
+                    {
+                        Console.WriteLine($"  >> SKIPPED: block too long ({blockText.Length} chars, likely header/preamble)");
                         continue;
                     }
 
@@ -619,9 +627,10 @@ namespace Backend.Services
                     // 1. Tipo (Vehículo / Propiedad) & Detalles Específicos
                     remate.Tipo = "Propiedad"; // Default
 
-                    // Vehicle detection keywords
-                    if (Regex.IsMatch(blockText, @"\b(veh[íi]culo|carro|moto|bus|camion|placa|marca|estilo)\b", RegexOptions.IgnoreCase) &&
-                        !Regex.IsMatch(blockText, @"\b(finca|lote|terreno)\b", RegexOptions.IgnoreCase))
+                    // Vehicle detection keywords — removed \b boundaries since they fail on accented chars
+                    if ((Regex.IsMatch(blockText, @"(veh[íi]culo|placa|marca[:\s]|estilo[:\s])", RegexOptions.IgnoreCase) ||
+                         Regex.IsMatch(blockText, @"remate\s+el\s+veh[íi]culo", RegexOptions.IgnoreCase)) &&
+                        !Regex.IsMatch(blockText, @"(finca|lote|terreno|matrícula|matricula)", RegexOptions.IgnoreCase))
                     {
                         remate.Tipo = "Vehiculo";
 
@@ -682,6 +691,8 @@ namespace Backend.Services
                         }
                     }
 
+                    Console.WriteLine($"  >> Tipo={remate.Tipo}, Titulo={remate.Titulo}, Matricula={remate.Detalles.GetValueOrDefault("Matricula", "N/A")}, Derecho={remate.Detalles.GetValueOrDefault("Derecho", "N/A")}");
+
                     // 2. Expediente, Demandado, Juzgado
                     // Updated regex to handle optional space before suffix (e.g., "- CJ")
                     var expedienteMatch = Regex.Match(blockText, @"(?:Expediente|EXP|autos?)\s*[:Nn°]*\s*(\d+[\d\-]+\s*[\w]*)", RegexOptions.IgnoreCase);
@@ -732,6 +743,8 @@ namespace Backend.Services
                             price1 = ConvertSpanishTextToDecimal(baseMatch.Groups[1].Value);
                             if (Regex.IsMatch(baseMatch.Value, "d[óo]lares", RegexOptions.IgnoreCase)) currencySymbol = "$";
                         }
+                        // Guard: if the parsed price is suspiciously low (<100), it's likely a false match
+                        if (price1 > 0 && price1 < 100) { Console.WriteLine($"⚠ Suspiciously low price {price1}, resetting"); price1 = 0; }
                     }
 
                     if (price1 == 0) // Try digits
@@ -746,6 +759,7 @@ namespace Backend.Services
 
                     remate.PrecioBase = price1;
                     remate.PrecioBaseDisplay = price1 > 0 ? $"{currencySymbol}{price1:N2}" : "Ver Texto";
+                    Console.WriteLine($"  >> Price={price1}, Currency={currencySymbol}, Display={remate.PrecioBaseDisplay}, Exp={remate.Expediente ?? "N/A"}");
 
                     // Extract Dates and specific prices for subsequent auctions
                     var dateMatches = Regex.Matches(blockText, @"(?:(primer|segundo|tercer)[oa]?\s+)?(?:remate|subasta)\s+(?:se\s+)?(?:señalan|fijan)\s+(?:las|para el)\s+(.*?)(?:\.|;|,|\scon\b)", RegexOptions.IgnoreCase);
@@ -753,12 +767,27 @@ namespace Backend.Services
                     // This simple regex loop is okay, but often 2nd/3rd auctions are separate sentences with their own prices.
                     // Let's look for specific sentences.
 
-                    // 1st
+                    // 1st - Try multiple patterns for date extraction
                     string date1 = "";
-                    var match1 = Regex.Match(blockText, @"(?:primer)?\s*remate.*?señalan\s+(?:las|para)\s+(.*?)(?:\.|;|,)", RegexOptions.IgnoreCase);
+                    // Pattern 1: "se señalan las X HORAS DEL..." (without "remate" prefix)
+                    var match1 = Regex.Match(blockText, @"se\s+señalan?\s+(?:las\s+)?(.*?)(?:\)|\.|;)", RegexOptions.IgnoreCase);
                     if (match1.Success) date1 = ParseSpanishDate(match1.Groups[1].Value);
 
-                    if (!string.IsNullOrEmpty(date1))
+                    // Pattern 2: Parenthetical date like "(9:00 AM DEL 12-02-2026)"
+                    if (string.IsNullOrEmpty(date1) || date1.Length > 30)
+                    {
+                        var parenDate = Regex.Match(blockText, @"\((\d{1,2}:\d{2}\s*(?:AM|PM)?\s+DEL?\s+\d{1,2}[\-/]\d{1,2}[\-/]\d{2,4})\)", RegexOptions.IgnoreCase);
+                        if (parenDate.Success) date1 = ParseSpanishDate(parenDate.Groups[1].Value);
+                    }
+
+                    // Pattern 3: Direct numeric date near "señal" keyword
+                    if (string.IsNullOrEmpty(date1) || date1.Length > 30)
+                    {
+                        var numDate = Regex.Match(blockText, @"señal\w*.*?(\d{1,2}[\-/]\d{1,2}[\-/]\d{2,4})", RegexOptions.IgnoreCase);
+                        if (numDate.Success) date1 = ParseSpanishDate(numDate.Groups[1].Value);
+                    }
+
+                    if (!string.IsNullOrEmpty(date1) && date1.Length < 30)
                     {
                         remate.Remates.Add(new RemateFecha
                         {
@@ -797,7 +826,7 @@ namespace Backend.Services
                             Label = "2° Remate",
                             Fecha = date2,
                             Precio = price2,
-                            PrecioDisplay = price2 > 0 ? $"₡{price2:N2}" : "75% Base"
+                            PrecioDisplay = price2 > 0 ? $"{currencySymbol}{price2:N2}" : "75% Base"
                         });
                     }
 
@@ -826,7 +855,7 @@ namespace Backend.Services
                             Label = "3° Remate",
                             Fecha = date3,
                             Precio = price3,
-                            PrecioDisplay = price3 > 0 ? $"₡{price3:N2}" : "25% Base"
+                            PrecioDisplay = price3 > 0 ? $"{currencySymbol}{price3:N2}" : "25% Base"
                         });
                     }
 
