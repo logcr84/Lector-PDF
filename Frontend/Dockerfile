@@ -12,7 +12,7 @@ RUN npx ng build --configuration=production
 
 # Stage 2: Serve with nginx
 FROM nginx:alpine AS final
-COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
+COPY --from=build /app/dist/Frontend/browser /usr/share/nginx/html
 
 # Nginx config for Angular SPA routing
 RUN echo 'server { \
