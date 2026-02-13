@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://lector-pdf-c5mf.onrender.com/api/remates'
+  apiUrl: 'https://lector-pdf-backend.onrender.com/api/remates'
 };
