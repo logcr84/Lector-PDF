@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAngular",
         builder =>
         {
-            builder.WithOrigins("http://localhost:4200")
+            builder.WithOrigins("http://localhost:4200", "https://lector-pdf-frontend.onrender.com")
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
