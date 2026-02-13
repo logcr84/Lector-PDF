@@ -813,7 +813,7 @@ namespace Backend.Services
                         if (d2.Success) date2 = ParseSpanishDate(d2.Groups[1].Value);
 
                         // Extract specific price if mentioned
-                        var p2Match = Regex.Match(segText, @"base\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-Z\s]+)");
+                        var p2Match = Regex.Match(segText, @"base\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-ZáéíóúñÁÉÍÓÚÑ\s,\.]+)");
                         if (p2Match.Success)
                         {
                             var p2Val = ConvertSpanishTextToDecimal(p2Match.Groups[1].Value);
@@ -842,7 +842,7 @@ namespace Backend.Services
                         var d3 = Regex.Match(terText, @"señalan\s+(?:las|para)\s+(.*?)(?:\.|;|,|con|base)");
                         if (d3.Success) date3 = ParseSpanishDate(d3.Groups[1].Value);
 
-                        var p3Match = Regex.Match(terText, @"base\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-Z\s]+)");
+                        var p3Match = Regex.Match(terText, @"base\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-ZáéíóúñÁÉÍÓÚÑ\s,\.]+)");
                         if (p3Match.Success)
                         {
                             var p3Val = ConvertSpanishTextToDecimal(p3Match.Groups[1].Value);
