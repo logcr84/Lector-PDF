@@ -1,0 +1,12 @@
+/Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/Backend.csproj.AssemblyReference.cache
+/Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/rpswa.dswa.cache.json
+/Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/Backend.GeneratedMSBuildEditorConfig.editorconfig
+/Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/Backend.AssemblyInfoInputs.cache
+/Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/Backend.AssemblyInfo.cs
+/Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/Backend.csproj.CoreCompileInputs.cache
+/Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/Backend.MvcApplicationPartsAssemblyInfo.cs
+/Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/Backend.MvcApplicationPartsAssemblyInfo.cache
+/Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/Backend.sourcelink.json
+/Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/Backend.dll
+/Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/refint/Backend.dll
+/Users/jalfaro/Lector PDF/Backend/obj/Debug/net10.0/Backend.pdb

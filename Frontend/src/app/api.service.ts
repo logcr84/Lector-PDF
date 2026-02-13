@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Remate } from './remate.model';
+import { environment } from '../environments/environment';
 
 /**
  * Servicio de comunicación con la API del backend.
@@ -12,7 +13,7 @@ import { Remate } from './remate.model';
 })
 export class ApiService {
   /** URL base del endpoint de la API de remates en el backend */
-  private apiUrl = 'http://localhost:5033/api/remates'; 
+  private apiUrl = environment.apiUrl; 
 
   /**
    * Constructor del servicio.
