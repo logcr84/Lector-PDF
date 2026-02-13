@@ -3,6 +3,7 @@ using UglyToad.PdfPig;
 using UglyToad.PdfPig.Content;
 using System.Text.RegularExpressions;
 using System.Text;
+using System.Collections.Generic;
 
 namespace Backend.Services
 {
@@ -587,6 +588,13 @@ namespace Backend.Services
 
                     Console.WriteLine($"\n--- Block {remates.Count + 1} (len={blockText.Length}) Preview: {blockText.Substring(0, Math.Min(150, blockText.Length))}... ---");
 
+                    // Skip extremely long blocks BEFORE truncation (likely preamble/header text)
+                    if (blockText.Length > 10000)
+                    {
+                        Console.WriteLine($"  >> SKIPPED: block too long ({blockText.Length} chars, likely header/preamble)");
+                        continue;
+                    }
+
 
                     // Note: parrafo.py accumulates text until "publicación número" or "Referencia N°".
                     // The Split approach implicitly grabs everything until the next "En este Despacho". 
@@ -613,12 +621,7 @@ namespace Backend.Services
                         continue;
                     }
 
-                    // Skip extremely long blocks (likely preamble/header text)
-                    if (blockText.Length > 10000)
-                    {
-                        Console.WriteLine($"  >> SKIPPED: block too long ({blockText.Length} chars, likely header/preamble)");
-                        continue;
-                    }
+                    // (block length filter already applied above, before truncation)
 
                     // --- Extraction Logic ---
 
@@ -627,10 +630,12 @@ namespace Backend.Services
                     // 1. Tipo (Vehículo / Propiedad) & Detalles Específicos
                     remate.Tipo = "Propiedad"; // Default
 
-                    // Vehicle detection keywords — removed \b boundaries since they fail on accented chars
-                    if ((Regex.IsMatch(blockText, @"(veh[íi]culo|placa|marca[:\s]|estilo[:\s])", RegexOptions.IgnoreCase) ||
-                         Regex.IsMatch(blockText, @"remate\s+el\s+veh[íi]culo", RegexOptions.IgnoreCase)) &&
-                        !Regex.IsMatch(blockText, @"(finca|lote|terreno|matrícula|matricula)", RegexOptions.IgnoreCase))
+                    // Vehicle detection: "remate el vehículo" is definitive, overrides any finca mentions
+                    bool isExplicitVehicle = Regex.IsMatch(blockText, @"remate\s+el\s+veh[íi]culo", RegexOptions.IgnoreCase);
+                    bool hasVehicleKeywords = Regex.IsMatch(blockText, @"(veh[íi]culo|placa|marca[:\s]|estilo[:\s])", RegexOptions.IgnoreCase);
+                    bool hasFincaKeywords = Regex.IsMatch(blockText, @"(finca|lote|terreno|matrícula|matricula)", RegexOptions.IgnoreCase);
+
+                    if (isExplicitVehicle || (hasVehicleKeywords && !hasFincaKeywords))
                     {
                         remate.Tipo = "Vehiculo";
 
