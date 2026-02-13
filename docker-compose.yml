@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5033:5000"
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+      - ASPNETCORE_ENVIRONMENT=Production
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
