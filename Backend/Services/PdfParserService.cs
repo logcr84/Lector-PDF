@@ -629,11 +629,12 @@ namespace Backend.Services
                     {
                         // Keep text only up to the marker + the number captured
                         // parrafo.py includes the marker line.
-                        // We capture the marker and the potential number following it
-                        int lengthToKeep = endMarkerMatch.Index + endMarkerMatch.Length;
+                        // We capture the marker and the potential number following it, PLUS some context
+                        // because sometimes dates appear AFTER the publication number in badly formatted PDFs
+                        int lengthToKeep = endMarkerMatch.Index + endMarkerMatch.Length + 300;
                         blockText = blockText.Substring(0, Math.Min(lengthToKeep, blockText.Length));
 
-                        // Update TextoOriginal to reflect the clean cut
+                        // Update TextoOriginal to reflect the clean cut (plus buffer)
                         remate.TextoOriginal = "En este Despacho " + blockText;
                     }
 
