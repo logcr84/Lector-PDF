@@ -44,10 +44,12 @@ namespace Backend.Services
             - Demandado: Defendant name(s). REQUIRED.
             - Juzgado: Court name. REQUIRED.
             - Area: Property size in sqm/hectares (e.g. ""154 m2"") or ""N/A"" for vehicles. REQUIRED.
-            - Fechas: Array of auction dates (1st, 2nd, 3rd). Extract Date, Time, and Base Price for each. REQUIRED.
+            - Fechas: Array of auction dates (1st, 2nd, 3rd). Extract Date, Time, and Base Price for each. REQUIRED. 
+              *IMPORTANT*: If the text says ""base: avalúo"" or similar, search for the monetary value mentioned as ""avaluo"" or ""principal"". 
+              ALWAYS try to find a numeric Base Price.
             - Detalles: A simple key-value object with specific details found. REQUIRED.
-                For Vehicles: Placa, Marca, Modelo, Estilo, Color, Motor, Serie, VIN
-                For Properties: Matricula (Finca ID), Naturaleza, Ubicacion, Colindantes, Gravamenes, Plano
+                For Vehicles: Placa (e.g. CL-123456), Marca, Modelo, Estilo, Color, Motor, Serie, VIN
+                For Properties: Matricula (Finca ID, e.g. 4-12345-000), Naturaleza, Ubicacion, Colindantes, Gravamenes, Plano
 
             Return ONLY valid JSON in this format:
             {

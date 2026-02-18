@@ -670,7 +670,8 @@ namespace Backend.Services
                         ExtractRegexGroup(blockText, @"Estilo[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Estilo", remate.Detalles);
                         ExtractRegexGroup(blockText, @"Modelo[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Modelo", remate.Detalles);
                         ExtractRegexGroup(blockText, @"Color[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Color", remate.Detalles);
-                        ExtractRegexGroup(blockText, @"Placa[:\s]+(\w+)", "Placa", remate.Detalles);
+                        // Updated Placa regex to capture alphanumeric with dashes (e.g., CL-123456)
+                        ExtractRegexGroup(blockText, @"Placa[:\s]+([\w\-]+)", "Placa", remate.Detalles);
                         ExtractRegexGroup(blockText, @"Motor[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Motor", remate.Detalles);
                         ExtractRegexGroup(blockText, @"(Serie|VIN)[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Serie", remate.Detalles);
 
@@ -685,8 +686,8 @@ namespace Backend.Services
                         remate.Tipo = "Propiedad";
 
                         // Extract Property Details
-                        // Updated to handle "matrícula número", "folio real", "finca"
-                        ExtractRegexGroup(blockText, @"(?:Finca|matrícula|folio real|matricula)\s*(?:número|N°|#)?\s*[:\s]*(\d+)", "Matricula", remate.Detalles);
+                        // Updated to handle "matrícula número", "folio real", "finca" AND allow dashes/spaces in ID (e.g. 1-12345-000)
+                        ExtractRegexGroup(blockText, @"(?:Finca|matrícula|folio real|matricula)\s*(?:número|N°|#|del Partido de \w+)?\s*[:\s]*([\d\-]+)", "Matricula", remate.Detalles);
                         ExtractRegexGroup(blockText, @"derecho\s*(\d+)", "Derecho", remate.Detalles);
                         ExtractRegexGroup(blockText, @"MIDE[:\s]+(.*?)(\.|PLANO|COLINDA)", "Medida", remate.Detalles);
                         ExtractRegexGroup(blockText, @"Naturaleza[:\s]+(.*?)(?:Si|situada)", "Naturaleza", remate.Detalles);
@@ -772,16 +773,62 @@ namespace Backend.Services
                         price1 = ConvertSpanishTextToDecimal(baseMatch.Groups[1].Value);
                         if (Regex.IsMatch(baseMatch.Value, "d[óo]lares", RegexOptions.IgnoreCase)) currencySymbol = "$";
                     }
+
+                    // Priority 2: Text without explicit currency but following "base" or "avaluo"
+                    if (price1 == 0)
+                    {
+                        var textAmountMatch = Regex.Match(blockText, @"(?:base|suma|avaluo)\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-ZáéíóúñÁÉÍÓÚÑ\s,\.]+)");
+                        if (textAmountMatch.Success)
+                        {
+                            var candidate = textAmountMatch.Groups[1].Value;
+                            // Check if it looks like a number in text
+                            if (candidate.Contains("millon") || candidate.Contains("mil") || candidate.Contains("colones"))
+                            {
+                                price1 = ConvertSpanishTextToDecimal(candidate);
+                                if (blockText.Contains("dólares") || blockText.Contains("USD")) currencySymbol = "$";
+                            }
+                        }
+                    }
+
                     // Guard: if the parsed price is suspiciously low (<100), it's likely a false match
                     if (price1 > 0 && price1 < 100) { Console.WriteLine($"⚠ Suspiciously low price {price1}, resetting"); price1 = 0; }
 
-                    if (price1 == 0) // Try digits
+                    if (price1 == 0) // Try digits with more flexible patterns
                     {
-                        var digitMatch = Regex.Match(blockText, @"base\s+(?:de\s+)?[¢$]?\s?([\d,.]+)");
+                        // Matches: "base: 123.456", "base de 123,456.00", "base la suma de ¢123.456"
+                        var digitMatch = Regex.Match(blockText, @"(?:base|suma|avaluo)\s*(?::|de|es|la suma de)?\s*(?:del\s+remate)?\s*[¢$]?\s*([\d,.]+\d{2})", RegexOptions.IgnoreCase);
                         if (digitMatch.Success)
                         {
-                            decimal.TryParse(digitMatch.Groups[1].Value.Replace(",", "").Replace(".", ""), out price1); // very rough
-                            if (blockText.Contains("dólares") || blockText.Contains("USD")) currencySymbol = "$";
+                            string rawNum = digitMatch.Groups[1].Value.Replace(" ", "");
+
+                            // Heuristic: valid price usually has at least 4 digits/chars and isn't a date
+                            if (rawNum.Length > 3 && !rawNum.Contains("/"))
+                            {
+                                // Remove thousands separators (assuming dots or commas depending on context, but C# culture is tricky)
+                                // Standard CR format: 1.000,00 -> Replace . with nothing, Replace , with .
+                                // OR 1,000.00 -> Replace , with nothing
+
+                                string cleanNum = rawNum;
+                                if (cleanNum.Contains(",") && cleanNum.Contains("."))
+                                {
+                                    if (cleanNum.LastIndexOf(",") > cleanNum.LastIndexOf(".")) // 1.000,00
+                                        cleanNum = cleanNum.Replace(".", "").Replace(",", ".");
+                                    else // 1,000.00
+                                        cleanNum = cleanNum.Replace(",", "");
+                                }
+                                else if (cleanNum.Contains(",")) // 1000,00 or 1,000
+                                {
+                                    // Ambiguous. If 2 decimals at end, likely decimal separator.
+                                    if (cleanNum.Length > 3 && cleanNum[cleanNum.Length - 3] == ',')
+                                        cleanNum = cleanNum.Replace(",", ".");
+                                    else
+                                        cleanNum = cleanNum.Replace(",", "");
+                                }
+
+                                decimal.TryParse(cleanNum, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out price1);
+                            }
+
+                            if (blockText.Contains("dólares") || blockText.Contains("USD") || blockText.Contains("moneda de los Estados Unidos")) currencySymbol = "$";
                         }
                     }
 
