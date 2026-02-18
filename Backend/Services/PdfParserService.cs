@@ -521,20 +521,21 @@ namespace Backend.Services
         /// </remarks>
         public async Task<List<Remate>> ParsePdf(Stream pdfStream)
         {
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
             var fullTextBuilder = new StringBuilder();
 
             try
             {
                 using var document = PdfDocument.Open(pdfStream);
+                Console.WriteLine($"⏱️ PDF Load Time: {stopwatch.ElapsedMilliseconds}ms");
+
                 foreach (var page in document.GetPages())
                 {
-                    // Similar a parrafo.py que usa get_text(" ", strip=True)
-                    // Extraemos palabras individuales y las unimos con espacios
-                    // Esto asegura mejor separación que page.Text
                     var words = page.GetWords();
                     var pageText = string.Join(" ", words.Select(w => w.Text.Trim()));
                     fullTextBuilder.AppendLine(pageText);
                 }
+                Console.WriteLine($"⏱️ Text Extraction Time: {stopwatch.ElapsedMilliseconds}ms (Total)");
             }
             catch (Exception ex)
             {
@@ -542,7 +543,10 @@ namespace Backend.Services
                 return new List<Remate>();
             }
 
-            return await ParseText(fullTextBuilder.ToString());
+            var result = await ParseText(fullTextBuilder.ToString());
+            stopwatch.Stop();
+            Console.WriteLine($"⏱️ Total ParsePdf Time: {stopwatch.ElapsedMilliseconds}ms");
+            return result;
         }
         /// <summary>
         /// Procesa texto completo extraído de un PDF para identificar y extraer información de remates judiciales.
@@ -563,6 +567,7 @@ namespace Backend.Services
         /// </remarks>
         public async Task<List<Remate>> ParseText(string fullText)
         {
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
             var remates = new List<Remate>();
 
             try
@@ -578,6 +583,8 @@ namespace Backend.Services
                 var rawBlocks = Regex.Split(fullText, @"En\s+este\s+Despacho[,\.\s]*", RegexOptions.IgnoreCase)
                                      .Where(x => !string.IsNullOrWhiteSpace(x))
                                      .ToArray();
+
+                Console.WriteLine($"⏱️ Regex Split Time: {stopwatch.ElapsedMilliseconds}ms (found {rawBlocks.Length} blocks)");
 
                 foreach (var rawBlock in rawBlocks)
                 {
