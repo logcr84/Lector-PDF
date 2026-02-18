@@ -18,7 +18,7 @@ namespace Backend.Services
         /// </summary>
         /// <param name="pdfStream">Flujo de datos del archivo PDF a analizar.</param>
         /// <returns>Lista de objetos <see cref="Remate"/> con la información extraída de cada remate.</returns>
-        List<Remate> ParsePdf(Stream pdfStream);
+        Task<List<Remate>> ParsePdf(Stream pdfStream);
     }
 
     /// <summary>
@@ -28,6 +28,13 @@ namespace Backend.Services
     /// </summary>
     public class PdfParserService : IPdfParserService
     {
+        private readonly IAiExtractionService _aiExtractionService;
+
+        public PdfParserService(IAiExtractionService aiExtractionService)
+        {
+            _aiExtractionService = aiExtractionService;
+        }
+
         /// <summary>
         /// Mapeo de números en español (palabras) a sus valores numéricos.
         /// Utilizado para analizar fechas y horas expresadas en formato textual.
@@ -512,7 +519,7 @@ namespace Backend.Services
         /// asegurando mejor separación que usar page.Text directamente.
         /// Luego delega el análisis del texto completo al método <see cref="ParseText"/>.
         /// </remarks>
-        public List<Remate> ParsePdf(Stream pdfStream)
+        public async Task<List<Remate>> ParsePdf(Stream pdfStream)
         {
             var fullTextBuilder = new StringBuilder();
 
@@ -535,7 +542,7 @@ namespace Backend.Services
                 return new List<Remate>();
             }
 
-            return ParseText(fullTextBuilder.ToString());
+            return await ParseText(fullTextBuilder.ToString());
         }
         /// <summary>
         /// Procesa texto completo extraído de un PDF para identificar y extraer información de remates judiciales.
@@ -554,7 +561,7 @@ namespace Backend.Services
         /// Solo se agregan remates que tengan al menos uno de estos campos: expediente, precio, título válido o fechas.
         /// La estrategia está adaptada del script Python parrafo.py para coherencia en el análisis.
         /// </remarks>
-        public List<Remate> ParseText(string fullText)
+        public async Task<List<Remate>> ParseText(string fullText)
         {
             var remates = new List<Remate>();
 
@@ -892,6 +899,61 @@ namespace Backend.Services
             else
             {
                 Console.WriteLine($"✓ Successfully extracted {remates.Count} remate(s) from Text");
+            }
+
+            // --- AI Extraction for Incomplete Records ---
+            // Identify records that are missing critical fields
+            var incompleteRemates = remates.Where(r =>
+                r.PrecioBase == 0 ||
+                string.IsNullOrEmpty(r.Expediente) ||
+                (!r.Tipo.Equals("Vehiculo", StringComparison.OrdinalIgnoreCase) && !r.Detalles.ContainsKey("Matricula"))
+            ).ToList();
+
+            if (incompleteRemates.Any())
+            {
+                Console.WriteLine($"\n🤖 AI Repairing: Found {incompleteRemates.Count} incomplete records. Querying OpenAI...");
+
+                var tasks = incompleteRemates.Select(async r =>
+                {
+                    try
+                    {
+                        var aiResult = await _aiExtractionService.ExtractMissingFieldsAsync(r.TextoOriginal);
+                        if (aiResult != null)
+                        {
+                            // Merge fields if missing in original
+                            if (string.IsNullOrEmpty(r.Expediente) && !string.IsNullOrEmpty(aiResult.Expediente))
+                                r.Expediente = aiResult.Expediente;
+
+                            if (r.PrecioBase == 0 && aiResult.PrecioBase > 0)
+                            {
+                                r.PrecioBase = aiResult.PrecioBase;
+                                r.PrecioBaseDisplay = $"⚡ {aiResult.PrecioBase:N2}"; // Mark as AI extracted
+                            }
+
+                            if (string.IsNullOrEmpty(r.Titulo) || r.Titulo == "Propiedad en Remate" || r.Titulo == "Remate AI")
+                            {
+                                if (!string.IsNullOrEmpty(aiResult.Titulo)) r.Titulo = aiResult.Titulo;
+                            }
+
+                            if (!r.Detalles.ContainsKey("Matricula") && aiResult.Detalles.ContainsKey("Matricula") && !string.IsNullOrEmpty(aiResult.Detalles["Matricula"]))
+                            {
+                                r.Detalles["Matricula"] = aiResult.Detalles["Matricula"];
+                                // Update title if it was generic
+                                if (r.Titulo.StartsWith("Propiedad en Remate") || r.Titulo.Contains("Finca N/A"))
+                                {
+                                    r.Titulo = $"Finca {aiResult.Detalles["Matricula"]}";
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error in AI extraction for Remate {r.Id}: {ex.Message}");
+                    }
+                });
+
+                await Task.WhenAll(tasks);
+                Console.WriteLine("✓ AI Repair completed.");
             }
 
             return remates;

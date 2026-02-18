@@ -9,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<IPdfParserService, PdfParserService>();
+builder.Services.AddHttpClient<IAiExtractionService, AiExtractionService>();
 
 // Configure form options to handle file uploads in memory (avoid temp file permission issues)
 builder.Services.Configure<FormOptions>(options =>

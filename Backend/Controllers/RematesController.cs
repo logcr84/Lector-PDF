@@ -16,7 +16,7 @@ namespace Backend.Controllers
         }
 
         [HttpPost("upload")]
-        public IActionResult UploadPdf(IFormFile file)
+        public async Task<IActionResult> UploadPdf(IFormFile file)
         {
             if (file == null || file.Length == 0)
                 return BadRequest("No file uploaded.");
@@ -27,7 +27,7 @@ namespace Backend.Controllers
             try
             {
                 using var stream = file.OpenReadStream();
-                var remates = _pdfParserService.ParsePdf(stream);
+                var remates = await _pdfParserService.ParsePdf(stream);
 
                 if (remates.Count == 0)
                 {
