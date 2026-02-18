@@ -179,28 +179,43 @@
         <button class="close-btn" (click)="toggleModal()">×</button>
       </div>
       <div class="table-responsive">
-        <table class="data-table">
-          <thead>
+        <table class="data-table table table-hover">
+          <thead class="table-light">
             <tr>
               <th style="width: 50px;">ID</th>
-              <th style="width: 150px;">Expediente</th>
+              <th style="width: 120px;">Expediente</th>
               <th style="width: 100px;">Tipo</th>
-              <th style="width: 120px;">Precio Base</th>
-              <th style="width: 180px;">1° Fecha</th>
-              <th>Detalles Clave</th>
+              <th style="width: 120px;">ID (Placa/Finca)</th>
+              <th style="width: 150px;">Demandado</th>
+              <th style="width: 150px;">Juzgado</th>
+              <th style="width: 120px; text-align: right;">Precio Base</th>
+              <th style="width: 120px;">1° Fecha</th>
+              <th>Detalles</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of filteredRemates" [class.row-prop]="item.tipo === 'Propiedad'" [class.row-car]="item.tipo === 'Vehiculo'">
               <td><strong>{{ item.id }}</strong></td>
-              <td>{{ item.expediente || 'N/A' }}</td>
-              <td><span class="badge-mini" [class]="item.tipo">{{ item.tipo }}</span></td>
-              <td style="font-weight: bold; color: #27ae60;">{{ item.precioBaseDisplay }}</td>
-              <td>{{ item.remates[0]?.fecha || 'N/A' }}</td>
-              <td class="small-text">{{ item.titulo }}</td>
+              <td class="text-nowrap">{{ item.expediente || 'N/A' }}</td>
+              <td><span class="badge" [ngClass]="{'bg-success': item.tipo === 'Propiedad', 'bg-primary': item.tipo === 'Vehiculo'}">{{ item.tipo }}</span></td>
+              
+              <!-- ID Column: Placa or Matricula -->
+              <td class="fw-bold">
+                <ng-container *ngIf="item.tipo === 'Vehiculo'">{{ item.detalles['Placa'] || 'N/A' }}</ng-container>
+                <ng-container *ngIf="item.tipo === 'Propiedad'">{{ item.detalles['Matricula'] || 'N/A' }}</ng-container>
+              </td>
+
+              <td class="small text-muted text-truncate" style="max-width: 150px;" [title]="item.demandado">{{ item.demandado || '-' }}</td>
+              <td class="small text-muted text-truncate" style="max-width: 150px;" [title]="item.juzgado">{{ item.juzgado || '-' }}</td>
+
+              <td style="font-weight: bold; text-align: right;" [ngClass]="{'text-success': item.tipo === 'Propiedad', 'text-primary': item.tipo === 'Vehiculo'}">
+                {{ item.precioBaseDisplay }}
+              </td>
+              <td class="text-nowrap">{{ item.remates[0]?.fecha | customDate:'dd/MM/yyyy' }}</td>
+              <td class="small-text text-truncate" style="max-width: 200px;" [title]="item.titulo">{{ item.titulo }}</td>
             </tr>
             <tr *ngIf="filteredRemates.length === 0">
-              <td colspan="6" style="text-align: center; padding: 20px; color: #777;">No hay datos para mostrar</td>
+              <td colspan="9" class="text-center py-4 text-muted">No hay datos para mostrar</td>
             </tr>
           </tbody>
         </table>
