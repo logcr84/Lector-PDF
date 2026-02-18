@@ -188,8 +188,13 @@
               <th style="width: 120px;">ID (Placa/Finca)</th>
               <th style="width: 150px;">Demandado</th>
               <th style="width: 150px;">Juzgado</th>
+              <th style="width: 80px;">Área</th>
+              <th style="width: 150px;">Descripción</th>
+              <th style="width: 150px;">Ubicación / Color</th>
               <th style="width: 120px; text-align: right;">Precio Base</th>
-              <th style="width: 120px;">1° Fecha</th>
+              <th style="width: 100px;">1° Fecha</th>
+              <th style="width: 100px;">2° Fecha</th>
+              <th style="width: 100px;">3° Fecha</th>
               <th>Detalles</th>
             </tr>
           </thead>
@@ -208,10 +213,25 @@
               <td class="small text-muted text-truncate" style="max-width: 150px;" [title]="item.demandado">{{ item.demandado || '-' }}</td>
               <td class="small text-muted text-truncate" style="max-width: 150px;" [title]="item.juzgado">{{ item.juzgado || '-' }}</td>
 
-              <td style="font-weight: bold; text-align: right;" [ngClass]="{'text-success': item.tipo === 'Propiedad', 'text-primary': item.tipo === 'Vehiculo'}">
+              <!-- NEW COLUMNS -->
+              <td class="text-nowrap">{{ item.area || '-' }}</td>
+              
+              <td class="small text-truncate" style="max-width: 150px;">
+                  <ng-container *ngIf="item.tipo === 'Propiedad'">{{ item.detalles['Naturaleza'] || '-' }}</ng-container>
+                  <ng-container *ngIf="item.tipo === 'Vehiculo'">{{ item.detalles['Marca'] }} {{ item.detalles['Modelo'] }}</ng-container>
+              </td>
+
+              <td class="small text-truncate" style="max-width: 150px;">
+                  <ng-container *ngIf="item.tipo === 'Propiedad'">{{ item.detalles['Ubicacion'] || '-' }}</ng-container>
+                  <ng-container *ngIf="item.tipo === 'Vehiculo'">{{ item.detalles['Color'] || '-' }}</ng-container>
+              </td>
+
+              <td style="font-weight: bold; text-align: right; font-family: monospace; font-size: 1.1em;" [ngClass]="{'text-success': item.tipo === 'Propiedad', 'text-primary': item.tipo === 'Vehiculo'}">
                 {{ item.precioBaseDisplay }}
               </td>
-              <td class="text-nowrap">{{ item.remates[0]?.fecha | customDate:'dd/MM/yyyy' }}</td>
+              <td class="text-nowrap small">{{ item.remates[0]?.fecha | customDate:'dd/MM/yyyy' }}</td>
+              <td class="text-nowrap small">{{ item.remates[1]?.fecha | customDate:'dd/MM/yyyy' }}</td>
+              <td class="text-nowrap small">{{ item.remates[2]?.fecha | customDate:'dd/MM/yyyy' }}</td>
               <td class="small-text text-truncate" style="max-width: 200px;" [title]="item.titulo">{{ item.titulo }}</td>
             </tr>
             <tr *ngIf="filteredRemates.length === 0">

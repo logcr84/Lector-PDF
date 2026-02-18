@@ -600,7 +600,18 @@ namespace Backend.Services
                     // Normalize whitespace for regex matching: replace parsing artifacts like newlines within sentences
                     var blockText = Regex.Replace(rawBlock, @"\s+", " ").Trim();
 
-                    Console.WriteLine($"\n--- Block {remates.Count + 1} (len={blockText.Length}) Preview: {blockText.Substring(0, Math.Min(150, blockText.Length))}... ---");
+                    // CRITICAL FILTER: Ignore blocks that are not about auctions (e.g. "diligencias no contenciosas", invalidations, etc.)
+                    // Valid auctions usually mention "base", "avaluo", or "postores".
+                    if (!blockText.Contains("base", StringComparison.OrdinalIgnoreCase) &&
+                        !blockText.Contains("avaluo", StringComparison.OrdinalIgnoreCase) &&
+                        !blockText.Contains("postores", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine($"⚠️ Skipping non-auction block (starts with: {blockText.Substring(0, Math.Min(50, blockText.Length))}...)");
+                        continue;
+                    }
+
+                    Console.WriteLine($"\n--- Block {remates.Count + 1} (Original Len={remate.TextoOriginal.Length}) ---");
+                    Console.WriteLine($"Preview End: ...{remate.TextoOriginal.Substring(Math.Max(0, remate.TextoOriginal.Length - 100))}");
 
                     // Skip extremely long blocks BEFORE truncation (likely preamble/header text)
                     if (blockText.Length > 10000)
@@ -931,10 +942,35 @@ namespace Backend.Services
                             if (string.IsNullOrEmpty(r.Expediente) && !string.IsNullOrEmpty(aiResult.Expediente))
                                 r.Expediente = aiResult.Expediente;
 
-                            if (r.PrecioBase == 0 && aiResult.PrecioBase > 0)
+                            if (string.IsNullOrEmpty(r.Demandado) && !string.IsNullOrEmpty(aiResult.Demandado))
+                                r.Demandado = aiResult.Demandado;
+
+                            if (string.IsNullOrEmpty(r.Juzgado) && !string.IsNullOrEmpty(aiResult.Juzgado))
+                                r.Juzgado = aiResult.Juzgado;
+
+                            if (string.IsNullOrEmpty(r.Area) && !string.IsNullOrEmpty(aiResult.Area))
+                                r.Area = aiResult.Area;
+
+                            // Merge Auction Dates and Price
+                            if (aiResult.Remates != null && aiResult.Remates.Count > 0)
                             {
+                                if (r.Remates.Count == 0 || r.Remates.All(x => x.Precio == 0))
+                                {
+                                    r.Remates = aiResult.Remates;
+                                    // Update main price from the first auction in the list
+                                    var firstDate = r.Remates.FirstOrDefault(x => x.Label.Contains("1") || x.Label.Contains("Primer"));
+                                    if (firstDate != null && firstDate.Precio > 0)
+                                    {
+                                        r.PrecioBase = firstDate.Precio;
+                                        r.PrecioBaseDisplay = firstDate.PrecioDisplay;
+                                    }
+                                }
+                            }
+                            else if (r.PrecioBase == 0 && aiResult.PrecioBase > 0)
+                            {
+                                // Fallback if no detailed dates but base price exists (legacy path)
                                 r.PrecioBase = aiResult.PrecioBase;
-                                r.PrecioBaseDisplay = $"⚡ {aiResult.PrecioBase:N2}"; // Mark as AI extracted
+                                r.PrecioBaseDisplay = $"⚡ {aiResult.PrecioBase:N2}";
                             }
 
                             if (string.IsNullOrEmpty(r.Titulo) || r.Titulo == "Propiedad en Remate" || r.Titulo == "Remate AI")
@@ -942,14 +978,20 @@ namespace Backend.Services
                                 if (!string.IsNullOrEmpty(aiResult.Titulo)) r.Titulo = aiResult.Titulo;
                             }
 
-                            if (!r.Detalles.ContainsKey("Matricula") && aiResult.Detalles.ContainsKey("Matricula") && !string.IsNullOrEmpty(aiResult.Detalles["Matricula"]))
+                            // Merge detailed attributes
+                            foreach (var key in aiResult.Detalles.Keys)
                             {
-                                r.Detalles["Matricula"] = aiResult.Detalles["Matricula"];
-                                // Update title if it was generic
-                                if (r.Titulo.StartsWith("Propiedad en Remate") || r.Titulo.Contains("Finca N/A"))
+                                if (!r.Detalles.ContainsKey(key) && !string.IsNullOrEmpty(aiResult.Detalles[key]))
                                 {
-                                    r.Titulo = $"Finca {aiResult.Detalles["Matricula"]}";
+                                    r.Detalles[key] = aiResult.Detalles[key];
                                 }
+                            }
+
+                            // Ensure generic title is updated if we found a Matricula/Placa
+                            if (r.Titulo.StartsWith("Propiedad en Remate") || r.Titulo.Contains("Finca N/A"))
+                            {
+                                if (r.Detalles.ContainsKey("Matricula")) r.Titulo = $"Finca {r.Detalles["Matricula"]}";
+                                else if (r.Detalles.ContainsKey("Placa")) r.Titulo = $"Placa {r.Detalles["Placa"]}";
                             }
                         }
                     }
