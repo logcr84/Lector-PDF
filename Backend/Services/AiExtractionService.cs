@@ -170,8 +170,23 @@ namespace Backend.Services
                     }
 
                     // Specific fix for UI keys
+                    // Specific fix for UI keys
                     if (extracted.Detalles.ContainsKey("matricula")) remate.Detalles["Matricula"] = extracted.Detalles["matricula"];
                     if (extracted.Detalles.ContainsKey("placa")) remate.Detalles["Placa"] = extracted.Detalles["placa"];
+
+                    // Normalize VIN/Serie
+                    if (extracted.Detalles.ContainsKey("serie")) remate.Detalles["Serie"] = extracted.Detalles["serie"];
+
+                    // Normalize Motor
+                    if (extracted.Detalles.ContainsKey("numero de motor")) remate.Detalles["Motor"] = extracted.Detalles["numero de motor"];
+                    if (extracted.Detalles.ContainsKey("num motor")) remate.Detalles["Motor"] = extracted.Detalles["num motor"];
+                    if (extracted.Detalles.ContainsKey("motor")) remate.Detalles["Motor"] = extracted.Detalles["motor"];
+
+                    // Normalize other common keys just in case
+                    if (extracted.Detalles.ContainsKey("color")) remate.Detalles["Color"] = extracted.Detalles["color"];
+                    if (extracted.Detalles.ContainsKey("estilo")) remate.Detalles["Estilo"] = extracted.Detalles["estilo"];
+                    if (extracted.Detalles.ContainsKey("modelo")) remate.Detalles["Modelo"] = extracted.Detalles["modelo"];
+                    if (extracted.Detalles.ContainsKey("marca")) remate.Detalles["Marca"] = extracted.Detalles["marca"];
                 }
 
                 // If type is unknown but we have data
