@@ -689,6 +689,23 @@ namespace Backend.Services
                         ExtractRegexGroup(blockText, $@"Chasis[:\s]+([\w\d][\w\d\-]{{4,}})", "Chasis", remate.Detalles);
                         ExtractRegexGroup(blockText, $@"Cilindrada[:\s]+([\w\-\s\.]+?){fieldLookahead}", "Cilindrada", remate.Detalles);
                         ExtractRegexGroup(blockText, $@"Combustible[:\s]+([\w\-\s]+?){fieldLookahead}", "Combustible", remate.Detalles);
+                        // Fallback: detect fuel type keywords directly in text
+                        if (!remate.Detalles.ContainsKey("Combustible"))
+                        {
+                            var fuelMatch = Regex.Match(blockText,
+                                @"\b(diesel|di[ée]sel|gasolina|el[ée]ctrico|gas\s*licuado|GLP|h[íi]brido|gas\s*natural|GNV|biocombustible)\b",
+                                RegexOptions.IgnoreCase);
+                            if (fuelMatch.Success)
+                            {
+                                var fuel = fuelMatch.Groups[1].Value.Trim();
+                                // Normalize common variations
+                                fuel = Regex.Replace(fuel, @"di[ée]sel", "Diesel", RegexOptions.IgnoreCase);
+                                fuel = Regex.Replace(fuel, @"el[ée]ctrico", "Eléctrico", RegexOptions.IgnoreCase);
+                                fuel = Regex.Replace(fuel, @"h[íi]brido", "Híbrido", RegexOptions.IgnoreCase);
+                                fuel = char.ToUpper(fuel[0]) + fuel[1..]; // Capitalize
+                                remate.Detalles["Combustible"] = fuel;
+                            }
+                        }
 
                         // Year (Anio): handle "Año: 2015", "Año Fabricación: 2025", "Año fab 2022"
                         ExtractRegexGroup(blockText, @"A[ñn]o(?:\s+(?:de\s+)?[Ff]abricaci[óo]n)?[:\s]+(\d{4})", "Anio", remate.Detalles);
