@@ -76,6 +76,14 @@
                                 <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Color']"><th>Color:</th><td>{{ item.detalles['Color'] }}</td></tr>
                                 <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Marca']"><th>Marca:</th><td>{{ item.detalles['Marca'] }}</td></tr>
                                 <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Modelo']"><th>Modelo:</th><td>{{ item.detalles['Modelo'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Traccion']"><th>Tracción:</th><td>{{ item.detalles['Traccion'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Carroceria']"><th>Carrocería:</th><td>{{ item.detalles['Carroceria'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Capacidad']"><th>Capacidad:</th><td>{{ item.detalles['Capacidad'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Peso']"><th>Peso:</th><td>{{ item.detalles['Peso'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Categoria']"><th>Categoría:</th><td>{{ item.detalles['Categoria'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Anio']"><th>Año:</th><td>{{ item.detalles['Anio'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Chasis']"><th>Chasis:</th><td>{{ item.detalles['Chasis'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Cilindrada']"><th>Cilindrada:</th><td>{{ item.detalles['Cilindrada'] }}</td></tr>
 
                                 <tr *ngIf="item.tipo === 'Propiedad' && item.detalles['Naturaleza']"><th>Naturaleza:</th><td>{{ item.detalles['Naturaleza'] }}</td></tr>
                                 <tr *ngIf="item.tipo === 'Propiedad' && item.area"><th>Medida:</th><td>{{ item.area }}</td></tr>

@@ -48,8 +48,8 @@ namespace Backend.Services
               *IMPORTANT*: If the text says ""base: avalúo"" or similar, search for the monetary value mentioned as ""avaluo"" or ""principal"". 
               ALWAYS try to find a numeric Base Price.
             - Detalles: A simple key-value object with specific details found. REQUIRED.
-                For Vehicles: Placa (e.g. CL-123456), Marca, Modelo, Estilo, Color, Motor, Serie, VIN
-                For Properties: Matricula (Finca ID, e.g. 4-12345-000), Naturaleza, Ubicacion, Colindantes, Gravamenes, Plano
+                For Vehicles: Placa, Marca, Modelo, Estilo, Color, Motor, Serie, VIN, Traccion, Carroceria, Capacidad, Peso, Categoria, Anio, Chasis, Cilindrada
+                For Properties: Matricula (Finca ID), Naturaleza, Ubicacion, Colindantes, Gravamenes, Plano
 
             Return ONLY valid JSON in this format:
             {
@@ -71,12 +71,20 @@ namespace Backend.Services
                     ""modelo"": ""string"",
                     ""color"": ""string"",
                     ""ubicacion"": ""string"",
-                    ""naturaleza"": ""string""
+                    ""naturaleza"": ""string"",
+                    ""traccion"": ""string"",
+                    ""carroceria"": ""string"",
+                    ""capacidad"": ""string"",
+                    ""peso"": ""string"",
+                    ""categoria"": ""string"",
+                    ""anio"": ""string"",
+                    ""chasis"": ""string"",
+                    ""cilindrada"": ""string""
                 }
             }
-
+            
             Text:
-            " + text;
+             " + text;
 
             Console.WriteLine($"\n--- GEMINI INPUT TEXT ({text.Length} chars) ---");
             Console.WriteLine(text.Substring(Math.Max(0, text.Length - 200))); // Show last 200 chars to check for cutoff
@@ -170,12 +178,12 @@ namespace Backend.Services
                     }
 
                     // Specific fix for UI keys
-                    // Specific fix for UI keys
                     if (extracted.Detalles.ContainsKey("matricula")) remate.Detalles["Matricula"] = extracted.Detalles["matricula"];
                     if (extracted.Detalles.ContainsKey("placa")) remate.Detalles["Placa"] = extracted.Detalles["placa"];
 
                     // Normalize VIN/Serie
                     if (extracted.Detalles.ContainsKey("serie")) remate.Detalles["Serie"] = extracted.Detalles["serie"];
+                    if (extracted.Detalles.ContainsKey("vin")) remate.Detalles["Serie"] = extracted.Detalles["vin"];
 
                     // Normalize Motor
                     if (extracted.Detalles.ContainsKey("numero de motor")) remate.Detalles["Motor"] = extracted.Detalles["numero de motor"];
@@ -187,6 +195,18 @@ namespace Backend.Services
                     if (extracted.Detalles.ContainsKey("estilo")) remate.Detalles["Estilo"] = extracted.Detalles["estilo"];
                     if (extracted.Detalles.ContainsKey("modelo")) remate.Detalles["Modelo"] = extracted.Detalles["modelo"];
                     if (extracted.Detalles.ContainsKey("marca")) remate.Detalles["Marca"] = extracted.Detalles["marca"];
+
+                    // Normalize extended vehicle details
+                    if (extracted.Detalles.ContainsKey("traccion")) remate.Detalles["Traccion"] = extracted.Detalles["traccion"];
+                    if (extracted.Detalles.ContainsKey("carroceria")) remate.Detalles["Carroceria"] = extracted.Detalles["carroceria"];
+                    if (extracted.Detalles.ContainsKey("capacidad")) remate.Detalles["Capacidad"] = extracted.Detalles["capacidad"];
+                    if (extracted.Detalles.ContainsKey("peso")) remate.Detalles["Peso"] = extracted.Detalles["peso"];
+
+                    // Normalize new fields (Category, Year, Chasis, Cilindrada)
+                    if (extracted.Detalles.ContainsKey("categoria")) remate.Detalles["Categoria"] = extracted.Detalles["categoria"];
+                    if (extracted.Detalles.ContainsKey("anio")) remate.Detalles["Anio"] = extracted.Detalles["anio"];
+                    if (extracted.Detalles.ContainsKey("chasis")) remate.Detalles["Chasis"] = extracted.Detalles["chasis"];
+                    if (extracted.Detalles.ContainsKey("cilindrada")) remate.Detalles["Cilindrada"] = extracted.Detalles["cilindrada"];
                 }
 
                 // If type is unknown but we have data
