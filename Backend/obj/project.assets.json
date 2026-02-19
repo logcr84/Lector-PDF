@@ -251,7 +251,7 @@
     ]
   },
   "packageFolders": {
-    "/Users/jalfaro/Lector PDF/Backend/local_nuget": {}
+    "/Users/jalfaro/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
@@ -259,7 +259,7 @@
       "projectUniqueName": "/Users/jalfaro/Lector PDF/Backend/Backend.csproj",
       "projectName": "Backend",
       "projectPath": "/Users/jalfaro/Lector PDF/Backend/Backend.csproj",
-      "packagesPath": "/Users/jalfaro/Lector PDF/Backend/local_nuget",
+      "packagesPath": "/Users/jalfaro/.nuget/packages/",
       "outputPath": "/Users/jalfaro/Lector PDF/Backend/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [

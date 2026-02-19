@@ -881,8 +881,8 @@ namespace Backend.Services
                     if (match2Block.Success)
                     {
                         var segText = match2Block.Value;
-                        // Extract date
-                        var d2 = Regex.Match(segText, @"señalan\s+(?:las|para)\s+(.*?)(?:\.|;|,|con|base)");
+                        // Extract date - Broadened keywords
+                        var d2 = Regex.Match(segText, @"(?:señalan|efectuará|realizará|celebrará|fijaron)\s+(?:las|para|a\s+las)\s+(.*?)(?:\.|;|,|con|base|\bbaja\b)", RegexOptions.IgnoreCase);
                         if (d2.Success) date2 = ParseSpanishDate(d2.Groups[1].Value);
 
                         // Extract specific price if mentioned
@@ -912,7 +912,7 @@ namespace Backend.Services
                     if (match3Block.Success)
                     {
                         var terText = match3Block.Value;
-                        var d3 = Regex.Match(terText, @"señalan\s+(?:las|para)\s+(.*?)(?:\.|;|,|con|base)");
+                        var d3 = Regex.Match(terText, @"(?:señalan|efectuará|realizará|celebrará|fijaron)\s+(?:las|para|a\s+las)\s+(.*?)(?:\.|;|,|con|base|\bbaja\b)", RegexOptions.IgnoreCase);
                         if (d3.Success) date3 = ParseSpanishDate(d3.Groups[1].Value);
 
                         var p3Match = Regex.Match(terText, @"base\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-ZáéíóúñÁÉÍÓÚÑ\s,\.]+)");
@@ -972,7 +972,10 @@ namespace Backend.Services
             var incompleteRemates = remates.Where(r =>
                 r.PrecioBase == 0 ||
                 string.IsNullOrEmpty(r.Expediente) ||
-                (!r.Tipo.Equals("Vehiculo", StringComparison.OrdinalIgnoreCase) && !r.Detalles.ContainsKey("Matricula"))
+                (!r.Tipo.Equals("Vehiculo", StringComparison.OrdinalIgnoreCase) && !r.Detalles.ContainsKey("Matricula")) ||
+                // Safety net: Trigger AI if text mentions 2nd/3rd auction but we missed them
+                (r.TextoOriginal.Contains("segundo remate", StringComparison.OrdinalIgnoreCase) && r.Remates.Count < 2) ||
+                (r.TextoOriginal.Contains("tercer remate", StringComparison.OrdinalIgnoreCase) && r.Remates.Count < 3)
             ).ToList();
 
             if (incompleteRemates.Any())
