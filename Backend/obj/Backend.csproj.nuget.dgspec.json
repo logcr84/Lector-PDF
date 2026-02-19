@@ -10,7 +10,7 @@
         "projectUniqueName": "/Users/jalfaro/Lector PDF/Backend/Backend.csproj",
         "projectName": "Backend",
         "projectPath": "/Users/jalfaro/Lector PDF/Backend/Backend.csproj",
-        "packagesPath": "/Users/jalfaro/.nuget/packages/",
+        "packagesPath": "/Users/jalfaro/Lector PDF/Backend/local_nuget",
         "outputPath": "/Users/jalfaro/Lector PDF/Backend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
