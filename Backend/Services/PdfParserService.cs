@@ -973,6 +973,8 @@ namespace Backend.Services
                 r.PrecioBase == 0 ||
                 string.IsNullOrEmpty(r.Expediente) ||
                 (!r.Tipo.Equals("Vehiculo", StringComparison.OrdinalIgnoreCase) && !r.Detalles.ContainsKey("Matricula")) ||
+                // Force AI if Vehicle details (technical sheet) are missing
+                (r.Tipo.Equals("Vehiculo", StringComparison.OrdinalIgnoreCase) && !r.Detalles.ContainsKey("Anio")) ||
                 // Safety net: Trigger AI if text mentions 2nd/3rd auction but we missed them
                 (r.TextoOriginal.Contains("segundo remate", StringComparison.OrdinalIgnoreCase) && r.Remates.Count < 2) ||
                 (r.TextoOriginal.Contains("tercer remate", StringComparison.OrdinalIgnoreCase) && r.Remates.Count < 3)

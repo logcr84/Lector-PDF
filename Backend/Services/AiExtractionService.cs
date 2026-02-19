@@ -31,30 +31,35 @@ namespace Backend.Services
                 return null;
             }
 
-            var prompt = @"
+            string prompt = @"
             You are a legal data extraction assistant. Analyze the following judicial auction edict text and extract structured data.
             
-            CRITICAL: ALL FIELDS ARE REQUIRED. DO NOT OMIT ANY FIELD.
-            If a value is not explicit, INFER IT from the context. Only use 'N/A' if absolutely impossible to determine.
+            Instructions:
+            1. Identify the TYPE of asset (Vehiculo vs Propiedad).
+            2. Extract all relevant details for that type.
+            3. If a value is not explicit, INFER IT from the context.
+            4. Return 'N/A' only if the field is applicable but the value is missing.
+            5. OMIT fields that are NOT applicable to the specific type (e.g. do not include 'Placa' for a Property).
 
-            Fields to extract:
+            Fields to focus on:
             - Expediente: File number (e.g. 21-000123-1207-CJ). REQUIRED.
             - Tipo: ""Vehiculo"" or ""Propiedad"". REQUIRED.
             - Titulo: Short title (e.g. ""Casa en San José"" or ""Toyota Corolla 2015""). REQUIRED.
             - Demandado: Defendant name(s). REQUIRED.
             - Juzgado: Court name. REQUIRED.
-            - Area: Property size in sqm/hectares (e.g. ""154 m2"") or ""N/A"" for vehicles. REQUIRED.
-            - Fechas: Array of auction dates (1st, 2nd, 3rd). Extract Date, Time, and Base Price for each. REQUIRED. 
-              *IMPORTANT*: If the text says ""base: avalúo"" or similar, search for the monetary value mentioned as ""avaluo"" or ""principal"". 
+            - Area: Property size (e.g. ""154 m2""); for vehicles, omit or use ""N/A"".
+            - Fechas: Array of auction dates (1st, 2nd, 3rd). Extract Date, Time, and Base Price.
+              *IMPORTANT*: If text says ""base: avalúo"", search for the monetary value. 
               ALWAYS try to find a numeric Base Price.
-            - Detalles: A simple key-value object with specific details found. REQUIRED.
+
+            - Detalles: Key-value object with specific details found. 
                 For Vehicles: Placa, Marca, Modelo, Estilo, Color, Motor, Serie, VIN, Traccion, Carroceria, Capacidad, Peso, Categoria, Anio, Chasis, Cilindrada
                 For Properties: Matricula (Finca ID), Naturaleza, Ubicacion, Colindantes, Gravamenes, Plano
 
             Return ONLY valid JSON in this format:
             {
                 ""expediente"": ""string"",
-                ""tipo"": ""Vehiculo"" or ""Propiedad"",
+                ""tipo"": ""Vehiculo"", 
                 ""titulo"": ""string"",
                 ""demandado"": ""string"",
                 ""juzgado"": ""string"",
@@ -87,7 +92,7 @@ namespace Backend.Services
              " + text;
 
             Console.WriteLine($"\n--- GEMINI INPUT TEXT ({text.Length} chars) ---");
-            Console.WriteLine(text.Substring(Math.Max(0, text.Length - 200))); // Show last 200 chars to check for cutoff
+            Console.WriteLine(text.AsSpan(Math.Max(0, text.Length - 200))); // Show last 200 chars to check for cutoff
             Console.WriteLine("---------------------------------\n");
 
             var requestBody = new
