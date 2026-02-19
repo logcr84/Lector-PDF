@@ -84,11 +84,13 @@
                                 <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Anio']"><th>Año:</th><td>{{ item.detalles['Anio'] }}</td></tr>
                                 <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Chasis']"><th>Chasis:</th><td>{{ item.detalles['Chasis'] }}</td></tr>
                                 <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Cilindrada']"><th>Cilindrada:</th><td>{{ item.detalles['Cilindrada'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Vehiculo' && item.detalles['Combustible']"><th>⛽ Combustible:</th><td>{{ item.detalles['Combustible'] }}</td></tr>
 
                                 <tr *ngIf="item.tipo === 'Propiedad' && item.detalles['Naturaleza']"><th>Naturaleza:</th><td>{{ item.detalles['Naturaleza'] }}</td></tr>
                                 <tr *ngIf="item.tipo === 'Propiedad' && item.area"><th>Medida:</th><td>{{ item.area }}</td></tr>
                                 <tr *ngIf="item.tipo === 'Propiedad' && item.detalles['Ubicacion']"><th>Ubicación:</th><td>{{ item.detalles['Ubicacion'] }}</td></tr>
                                 <tr *ngIf="item.tipo === 'Propiedad' && item.detalles['Matricula']"><th>Matrícula:</th><td>{{ item.detalles['Matricula'] }}</td></tr>
+                                <tr *ngIf="item.tipo === 'Propiedad' && item.detalles['Demandante']"><th>Acreedor:</th><td>{{ item.detalles['Demandante'] }}</td></tr>
                                 
                                 <tr><th>Demandado:</th><td>{{ item.demandado }}</td></tr>
                             </tbody>

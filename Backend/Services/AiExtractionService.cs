@@ -14,8 +14,8 @@ namespace Backend.Services
     {
         private readonly HttpClient _httpClient;
         private readonly string? _apiKey;
-        // Gemini 1.5 Flash endpoint
-        private const string GeminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+        // Gemini 2.0 Flash endpoint (updated from deprecated 1.5-flash)
+        private const string GeminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
         public AiExtractionService(HttpClient httpClient, IConfiguration configuration)
         {
@@ -53,7 +53,7 @@ namespace Backend.Services
               ALWAYS try to find a numeric Base Price.
 
             - Detalles: Key-value object with specific details found. 
-                For Vehicles: Placa, Marca, Modelo, Estilo, Color, Motor, Serie, VIN, Traccion, Carroceria, Capacidad, Peso, Categoria, Anio, Chasis, Cilindrada
+                For Vehicles: Placa, Marca, Modelo, Estilo, Color, Motor, Serie, VIN, Traccion, Carroceria, Capacidad, Peso, Categoria, Anio, Chasis, Cilindrada, Combustible
                 For Properties: Matricula (Finca ID), Naturaleza, Ubicacion, Colindantes, Gravamenes, Plano
 
             Return ONLY valid JSON in this format:
@@ -77,6 +77,10 @@ namespace Backend.Services
                     ""color"": ""string"",
                     ""ubicacion"": ""string"",
                     ""naturaleza"": ""string"",
+                    ""gravamenes"": ""string"",
+                    ""colindantes"": ""string"",
+                    ""demandante"": ""string"",
+                    ""medida"": ""string"",
                     ""traccion"": ""string"",
                     ""carroceria"": ""string"",
                     ""capacidad"": ""string"",
@@ -84,7 +88,8 @@ namespace Backend.Services
                     ""categoria"": ""string"",
                     ""anio"": ""string"",
                     ""chasis"": ""string"",
-                    ""cilindrada"": ""string""
+                    ""cilindrada"": ""string"",
+                    ""combustible"": ""string""
                 }
             }
             
@@ -212,6 +217,21 @@ namespace Backend.Services
                     if (extracted.Detalles.ContainsKey("anio")) remate.Detalles["Anio"] = extracted.Detalles["anio"];
                     if (extracted.Detalles.ContainsKey("chasis")) remate.Detalles["Chasis"] = extracted.Detalles["chasis"];
                     if (extracted.Detalles.ContainsKey("cilindrada")) remate.Detalles["Cilindrada"] = extracted.Detalles["cilindrada"];
+                    if (extracted.Detalles.ContainsKey("combustible")) remate.Detalles["Combustible"] = extracted.Detalles["combustible"];
+
+                    // Normalize property-specific fields
+                    if (extracted.Detalles.ContainsKey("gravamenes") && !string.IsNullOrEmpty(extracted.Detalles["gravamenes"]))
+                        remate.Detalles["Gravamenes"] = extracted.Detalles["gravamenes"];
+                    if (extracted.Detalles.ContainsKey("colindantes") && !string.IsNullOrEmpty(extracted.Detalles["colindantes"]))
+                        remate.Detalles["Colindantes"] = extracted.Detalles["colindantes"];
+                    if (extracted.Detalles.ContainsKey("demandante") && !string.IsNullOrEmpty(extracted.Detalles["demandante"]))
+                        remate.Detalles["Demandante"] = extracted.Detalles["demandante"];
+                    if (extracted.Detalles.ContainsKey("medida") && !string.IsNullOrEmpty(extracted.Detalles["medida"]))
+                        remate.Detalles["Medida"] = extracted.Detalles["medida"];
+                    if (extracted.Detalles.ContainsKey("ubicacion") && !string.IsNullOrEmpty(extracted.Detalles["ubicacion"]))
+                        remate.Detalles["Ubicacion"] = extracted.Detalles["ubicacion"];
+                    if (extracted.Detalles.ContainsKey("naturaleza") && !string.IsNullOrEmpty(extracted.Detalles["naturaleza"]))
+                        remate.Detalles["Naturaleza"] = extracted.Detalles["naturaleza"];
                 }
 
                 // If type is unknown but we have data

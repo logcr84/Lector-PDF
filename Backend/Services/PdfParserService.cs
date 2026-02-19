@@ -665,36 +665,36 @@ namespace Backend.Services
                     {
                         remate.Tipo = "Vehiculo";
 
-                        // Extract Vehicle Details
-                        ExtractRegexGroup(blockText, @"Marca[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Marca", remate.Detalles);
-                        ExtractRegexGroup(blockText, @"Estilo[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Estilo", remate.Detalles);
-                        ExtractRegexGroup(blockText, @"Modelo[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Modelo", remate.Detalles);
-                        ExtractRegexGroup(blockText, @"Color[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Color", remate.Detalles);
-                        // Updated Placa regex to capture alphanumeric with dashes (e.g., CL-123456)
-                        ExtractRegexGroup(blockText, @"Placa[:\s]+([\w\-]+)", "Placa", remate.Detalles);
-                        ExtractRegexGroup(blockText, @"Motor[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Motor", remate.Detalles);
-                        // Updated Serie regex to handle '# de Serie'
-                        ExtractRegexGroup(blockText, @"(?:#\s*de\s*)?(?:Serie|VIN)[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Serie", remate.Detalles);
+                        // Shared lookahead: stop capturing when we hit the next known field label or punctuation
+                        var fieldLookahead = @"(?=\s*(?:Marca|Estilo|Modelo|Color|Placa|Motor|Serie|VIN|N[úu]mero|Categor[íi]a|Capacidad|Peso|Tracci[óo]n|Carrocer[íi]a|A[ñn]o|Chasis|Cilindrada|#\s*de\s*Serie)[:\s]|\.|;|,\s*[A-Z])";
 
-                        // New Technical Fields with Robust Lookaheads (Stop at next field label or punctuation)
-                        // Note: We use \s* in lookahead to catch "Capacidad:" immediately following value
-                        var techLookahead = @"(?=\s+(?:Capacidad|Peso|Tracci[óo]n|Carrocer[íi]a|#|Serie|VIN|Placa|Motor|Color|Estilo|Modelo|Marca|A[ñn]o)|$|;|\.|,|:)";
+                        // Extract Vehicle Details using shared lookahead
+                        ExtractRegexGroup(blockText, $@"Marca[:\s]+([\w\-\s]+?){fieldLookahead}", "Marca", remate.Detalles);
+                        ExtractRegexGroup(blockText, $@"Estilo[:\s]+([\w\-\s]+?){fieldLookahead}", "Estilo", remate.Detalles);
+                        ExtractRegexGroup(blockText, $@"Modelo[:\s]+([\w\-\s]+?){fieldLookahead}", "Modelo", remate.Detalles);
+                        ExtractRegexGroup(blockText, $@"Color[:\s]+([\w\-\s]+?){fieldLookahead}", "Color", remate.Detalles);
+                        // Placa: handles CL-337303, EE 038972, CBY660, MOT-454901
+                        ExtractRegexGroup(blockText, @"Placa[:\s]+([\w\-]+(?:\s[\w\-]+)?)", "Placa", remate.Detalles);
+                        ExtractRegexGroup(blockText, $@"Motor[:\s]+([\w\-\s]+?){fieldLookahead}", "Motor", remate.Detalles);
 
-                        ExtractRegexGroup(blockText, $@"Categor[íi]a[:\s]+(.*?){techLookahead}", "Categoria", remate.Detalles);
-                        ExtractRegexGroup(blockText, $@"Capacidad[:\s]+(.*?){techLookahead}", "Capacidad", remate.Detalles);
-                        // Peso regex handles explicit units or stops at lookahead
-                        ExtractRegexGroup(blockText, $@"Peso(?:\s+Neto|\s+Vac[íi]o)?[:\s]+([\w\-\s\.]+)(?:KG|Kg|kg|toneladas|ton)?{techLookahead}", "Peso", remate.Detalles);
-                        ExtractRegexGroup(blockText, $@"Tracci[óo]n[:\s]+(.*?){techLookahead}", "Traccion", remate.Detalles);
-                        ExtractRegexGroup(blockText, $@"Carrocer[íi]a[:\s]+(.*?){techLookahead}", "Carroceria", remate.Detalles);
+                        // Serie/VIN: capture the actual alphanumeric value (e.g., LVVDB21B3SE004854)
+                        ExtractRegexGroup(blockText, @"(?:#\s*de\s*)?(?:Serie|VIN)[:\s]+([\w\d][\w\d\-]{4,})", "Serie", remate.Detalles);
 
-                        // Serie/VIN regex (specific handling for '# de Serie')
-                        ExtractRegexGroup(blockText, $"(?:#\\s*de\\s*)?(?:Serie|VIN)[:\\s]+(.*?){techLookahead}", "Serie", remate.Detalles);
+                        // Technical Fields
+                        ExtractRegexGroup(blockText, $@"Categor[íi]a[:\s]+([\w\-\s]+?){fieldLookahead}", "Categoria", remate.Detalles);
+                        ExtractRegexGroup(blockText, $@"Capacidad[:\s]+([\w\-\s]+?){fieldLookahead}", "Capacidad", remate.Detalles);
+                        ExtractRegexGroup(blockText, $@"Peso(?:\s+Neto|\s+Vac[íi]o)?[:\s]+([\w\-\s\.]+?)(?:KG|Kg|kg|toneladas|ton)?{fieldLookahead}", "Peso", remate.Detalles);
+                        ExtractRegexGroup(blockText, $@"Tracci[óo]n[:\s]+([\w\-\s]+?){fieldLookahead}", "Traccion", remate.Detalles);
+                        ExtractRegexGroup(blockText, $@"Carrocer[íi]a[:\s]+([\w\-\s]+?){fieldLookahead}", "Carroceria", remate.Detalles);
+                        ExtractRegexGroup(blockText, $@"Chasis[:\s]+([\w\d][\w\d\-]{{4,}})", "Chasis", remate.Detalles);
+                        ExtractRegexGroup(blockText, $@"Cilindrada[:\s]+([\w\-\s\.]+?){fieldLookahead}", "Cilindrada", remate.Detalles);
+                        ExtractRegexGroup(blockText, $@"Combustible[:\s]+([\w\-\s]+?){fieldLookahead}", "Combustible", remate.Detalles);
 
-                        // Try to find Year (Anio) explicitly if labelled 'Año' or 'Modelo' followed by 4 digits
-                        ExtractRegexGroup(blockText, @"A[ñn]o[:\s]+(\d{4})", "Anio", remate.Detalles);
+                        // Year (Anio): handle "Año: 2015", "Año Fabricación: 2025", "Año fab 2022"
+                        ExtractRegexGroup(blockText, @"A[ñn]o(?:\s+(?:de\s+)?[Ff]abricaci[óo]n)?[:\s]+(\d{4})", "Anio", remate.Detalles);
                         if (!remate.Detalles.ContainsKey("Anio"))
                         {
-                            // Fallback: sometimes 'Modelo 2024' implies year
+                            // Fallback: try "Modelo 2024" pattern
                             var modeloYearMatch = Regex.Match(blockText, @"Modelo\s+(\d{4})", RegexOptions.IgnoreCase);
                             if (modeloYearMatch.Success) remate.Detalles["Anio"] = modeloYearMatch.Groups[1].Value;
                         }
@@ -712,13 +712,57 @@ namespace Backend.Services
                         remate.Tipo = "Propiedad";
 
                         // Extract Property Details
-                        // Updated to handle "matrícula número", "folio real", "finca" AND allow dashes/spaces in ID (e.g. 1-12345-000)
-                        ExtractRegexGroup(blockText, @"(?:Finca|matrícula|folio real|matricula)\s*(?:número|N°|#|del Partido de \w+)?\s*[:\s]*([\d\-]+)", "Matricula", remate.Detalles);
+                        // Matrícula: handle "46202-F", "1-12345-000", "matrícula número 469228"
+                        ExtractRegexGroup(blockText, @"(?:Finca|matrícula|folio real|matricula)\s*(?:número|N°|#|del Partido de \w+)?\s*[:\s]*([\d\-]+[A-Za-z]?)", "Matricula", remate.Detalles);
                         ExtractRegexGroup(blockText, @"derecho\s*(\d+)", "Derecho", remate.Detalles);
-                        ExtractRegexGroup(blockText, @"MIDE[:\s]+(.*?)(\.|PLANO|COLINDA)", "Medida", remate.Detalles);
-                        ExtractRegexGroup(blockText, @"Naturaleza[:\s]+(.*?)(?:Si|situada)", "Naturaleza", remate.Detalles);
-                        ExtractRegexGroup(blockText, @"Situada en (.*?)(?:,|;|\.|$)", "Ubicacion", remate.Detalles);
-                        ExtractRegexGroup(blockText, @"COLINDA[:\s]+(.*?)(?:MIDE|\.|$)", "Colindantes", remate.Detalles);
+
+                        // Medida: case-insensitive, handles "MIDE:", "mide:", "Mide:"
+                        ExtractRegexGroup(blockText, @"(?i)MIDE[:\s]+(.*?)(?:\.|PLANO|COLINDA)", "Medida", remate.Detalles);
+
+                        // Naturaleza: "Naturaleza: terreno", "la cual es terreno", "que es lote"
+                        ExtractRegexGroup(blockText, @"Naturaleza[:\s]+(.*?)(?:,|;|\.|Si|situada|MIDE)", "Naturaleza", remate.Detalles);
+                        if (!remate.Detalles.ContainsKey("Naturaleza"))
+                        {
+                            ExtractRegexGroup(blockText, @"(?:la cual es|que es|se trata de)\s+([\w\s]+?)(?:,|;|\.|apta|para|con|ubicad)", "Naturaleza", remate.Detalles);
+                        }
+
+                        // Ubicación: "Situada en...", "ubicada en...", "sita en..."
+                        ExtractRegexGroup(blockText, @"(?:[Ss]ituada?|[Uu]bicada?|[Ss]ita)\s+en\s+(.*?)(?:,\s*(?:matr|que|la cual)|;|\.\s|$)", "Ubicacion", remate.Detalles);
+                        if (!remate.Detalles.ContainsKey("Ubicacion"))
+                        {
+                            // Fallback: "partido de Alajuela", "provincia de X"
+                            ExtractRegexGroup(blockText, @"(?:partido|provincia)\s+de\s+(\w[\w\s]*?)(?:,|;|\.|matr[ií]cula)", "Ubicacion", remate.Detalles);
+                        }
+
+                        // Colindantes
+                        ExtractRegexGroup(blockText, @"(?i)COLINDA[NSN]?(?:CIAS)?[:\s]+(.*?)(?:MIDE|\.\s|$)", "Colindantes", remate.Detalles);
+
+                        // Gravámenes: "soportando hipoteca", "libre de gravámenes", "RESERVAS DE LEY"
+                        var gravamenesText = "";
+                        var hipotecaMatch = Regex.Match(blockText, @"soportando\s+(.*?)(?:,\s*s[áa]quese|;\s*s[áa]quese)", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                        if (hipotecaMatch.Success)
+                        {
+                            gravamenesText = hipotecaMatch.Groups[1].Value.Trim();
+                        }
+                        else if (Regex.IsMatch(blockText, @"libre de grav[áa]menes", RegexOptions.IgnoreCase))
+                        {
+                            gravamenesText = "Libre de gravámenes y anotaciones";
+                        }
+                        if (!string.IsNullOrEmpty(gravamenesText))
+                        {
+                            remate.Detalles["Gravamenes"] = gravamenesText;
+                        }
+
+                        // Demandante/Acreedor: "de NOMBRE contra DEMANDADO"
+                        var demandanteMatch = Regex.Match(blockText, @"(?:de|por)\s+([A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ\s,]+?)\s+contra\s+", RegexOptions.None);
+                        if (demandanteMatch.Success)
+                        {
+                            var demandante = demandanteMatch.Groups[1].Value.Trim().TrimEnd(',');
+                            if (demandante.Length > 3 && demandante.Length < 100) // Sanity check
+                            {
+                                remate.Detalles["Demandante"] = demandante;
+                            }
+                        }
 
                         // If "Medida" contains a number, use it for Area
                         if (remate.Detalles.ContainsKey("Medida"))
@@ -993,22 +1037,29 @@ namespace Backend.Services
                 Console.WriteLine($"✓ Successfully extracted {remates.Count} remate(s) from Text");
             }
 
-            // --- AI Extraction for Incomplete Records ---
-            // Identify records that are missing critical fields
-            // Core vehicle fields that constitute a "Ficha Técnica"
+            // --- AI Extraction for ALL Records ---
+            // Always call AI to fill any missing details for BOTH vehicles and properties
             string[] vehicleCoreFields = ["Marca", "Placa", "Estilo", "Color", "Motor", "Serie", "Anio", "Categoria", "Modelo"];
+            string[] propertyCoreFields = ["Matricula", "Ubicacion", "Medida", "Naturaleza", "Gravamenes", "Colindantes", "Demandante"];
 
-            var incompleteRemates = remates.Where(r =>
-                r.PrecioBase == 0 ||
-                string.IsNullOrEmpty(r.Expediente) ||
-                (!r.Tipo.Equals("Vehiculo", StringComparison.OrdinalIgnoreCase) && !r.Detalles.ContainsKey("Matricula")) ||
-                // Force AI if Vehicle has fewer than 3 core technical fields filled
-                (r.Tipo.Equals("Vehiculo", StringComparison.OrdinalIgnoreCase) &&
-                 vehicleCoreFields.Count(f => r.Detalles.ContainsKey(f)) < 3) ||
-                // Safety net: Trigger AI if text mentions 2nd/3rd auction but we missed them
-                (r.TextoOriginal.Contains("segundo remate", StringComparison.OrdinalIgnoreCase) && r.Remates.Count < 2) ||
-                (r.TextoOriginal.Contains("tercer remate", StringComparison.OrdinalIgnoreCase) && r.Remates.Count < 3)
-            ).ToList();
+            // ALL records get AI enhancement to ensure consistent field coverage
+            var incompleteRemates = remates.ToList();
+
+            // Log what regex found for vehicles
+            foreach (var r in remates.Where(r => r.Tipo.Equals("Vehiculo", StringComparison.OrdinalIgnoreCase)))
+            {
+                var found = vehicleCoreFields.Where(f => r.Detalles.ContainsKey(f)).ToList();
+                var missing = vehicleCoreFields.Where(f => !r.Detalles.ContainsKey(f)).ToList();
+                Console.WriteLine($"  📋 Vehicle '{r.Titulo}': Regex found [{string.Join(", ", found)}] | Missing [{string.Join(", ", missing)}]");
+            }
+
+            // Log what regex found for properties
+            foreach (var r in remates.Where(r => r.Tipo.Equals("Propiedad", StringComparison.OrdinalIgnoreCase)))
+            {
+                var found = propertyCoreFields.Where(f => r.Detalles.ContainsKey(f)).ToList();
+                var missing = propertyCoreFields.Where(f => !r.Detalles.ContainsKey(f)).ToList();
+                Console.WriteLine($"  🏠 Property '{r.Titulo}': Regex found [{string.Join(", ", found)}] | Missing [{string.Join(", ", missing)}]");
+            }
 
             if (incompleteRemates.Count != 0)
             {
