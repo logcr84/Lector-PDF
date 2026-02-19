@@ -995,12 +995,16 @@ namespace Backend.Services
 
             // --- AI Extraction for Incomplete Records ---
             // Identify records that are missing critical fields
+            // Core vehicle fields that constitute a "Ficha Técnica"
+            string[] vehicleCoreFields = ["Marca", "Placa", "Estilo", "Color", "Motor", "Serie", "Anio", "Categoria", "Modelo"];
+
             var incompleteRemates = remates.Where(r =>
                 r.PrecioBase == 0 ||
                 string.IsNullOrEmpty(r.Expediente) ||
                 (!r.Tipo.Equals("Vehiculo", StringComparison.OrdinalIgnoreCase) && !r.Detalles.ContainsKey("Matricula")) ||
-                // Force AI if Vehicle details (technical sheet) are missing
-                (r.Tipo.Equals("Vehiculo", StringComparison.OrdinalIgnoreCase) && !r.Detalles.ContainsKey("Anio")) ||
+                // Force AI if Vehicle has fewer than 3 core technical fields filled
+                (r.Tipo.Equals("Vehiculo", StringComparison.OrdinalIgnoreCase) &&
+                 vehicleCoreFields.Count(f => r.Detalles.ContainsKey(f)) < 3) ||
                 // Safety net: Trigger AI if text mentions 2nd/3rd auction but we missed them
                 (r.TextoOriginal.Contains("segundo remate", StringComparison.OrdinalIgnoreCase) && r.Remates.Count < 2) ||
                 (r.TextoOriginal.Contains("tercer remate", StringComparison.OrdinalIgnoreCase) && r.Remates.Count < 3)
