@@ -26,7 +26,7 @@ namespace Backend.Services
     /// Implementa lógica avanzada para reconocer y extraer fechas, montos, números de expediente y otros datos relevantes
     /// de documentos en español, incluyendo manejo de errores comunes de OCR.
     /// </summary>
-    public class PdfParserService : IPdfParserService
+    public partial class PdfParserService : IPdfParserService
     {
         private readonly IAiExtractionService _aiExtractionService;
 
@@ -82,10 +82,10 @@ namespace Backend.Services
             text = text.ToLower();
 
             // Common hour concatenations
-            text = Regex.Replace(text, @"\blas(diez|once|doce|trece|catorce|quince|dieciséis|dieciseis|diecisiete|dieciocho|diecinueve|veinte|veintiuno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve)\b", "las $1", RegexOptions.IgnoreCase);
+            text = MyRegex1().Replace(text, "las $1");
 
             // "Xhoras" -> "X horas"
-            text = Regex.Replace(text, @"\b(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciséis|dieciseis|diecisiete|dieciocho|diecinueve|veinte|veintiuno)horas?\b", "$1 horas", RegexOptions.IgnoreCase);
+            text = MyRegex2().Replace(text, "$1 horas");
 
             // "Xminutos" -> "X minutos"
             text = Regex.Replace(text, @"\b(cero|un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciséis|dieciseis|veinte|veinticinco|treinta|cuarenta|cincuenta)minutos?\b", "$1 minutos", RegexOptions.IgnoreCase);
@@ -641,7 +641,7 @@ namespace Backend.Services
                     // --- Validation ---
                     // Skip blocks that don't look like valid edicts (e.g., headers like "Boletín Judicial...")
                     // A valid edict should at least mention "Expediente", "Remate", "Subasta", "Finca", or "Vehículo"
-                    if (!Regex.IsMatch(blockText, @"(Expediente|EXP|autos?|remate|subasta|finca|veh[íi]culo|placa)", RegexOptions.IgnoreCase))
+                    if (!MyRegex().IsMatch(blockText))
                     {
                         Console.WriteLine("  >> SKIPPED: no key terms found");
                         continue;
@@ -657,9 +657,9 @@ namespace Backend.Services
                     remate.Tipo = "Propiedad"; // Default
 
                     // Vehicle detection: "remate el vehículo" is definitive, overrides any finca mentions
-                    bool isExplicitVehicle = Regex.IsMatch(blockText, @"remate\s+el\s+veh[íi]culo", RegexOptions.IgnoreCase);
-                    bool hasVehicleKeywords = Regex.IsMatch(blockText, @"(veh[íi]culo|placa|marca[:\s]|estilo[:\s])", RegexOptions.IgnoreCase);
-                    bool hasFincaKeywords = Regex.IsMatch(blockText, @"(finca|lote|terreno|matrícula|matricula)", RegexOptions.IgnoreCase);
+                    bool isExplicitVehicle = MyRegex3().IsMatch(blockText);
+                    bool hasVehicleKeywords = MyRegex5().IsMatch(blockText);
+                    bool hasFincaKeywords = MyRegex4().IsMatch(blockText);
 
                     if (isExplicitVehicle || (hasVehicleKeywords && !hasFincaKeywords))
                     {
@@ -673,13 +673,39 @@ namespace Backend.Services
                         // Updated Placa regex to capture alphanumeric with dashes (e.g., CL-123456)
                         ExtractRegexGroup(blockText, @"Placa[:\s]+([\w\-]+)", "Placa", remate.Detalles);
                         ExtractRegexGroup(blockText, @"Motor[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Motor", remate.Detalles);
-                        ExtractRegexGroup(blockText, @"(Serie|VIN)[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Serie", remate.Detalles);
+                        // Updated Serie regex to handle '# de Serie'
+                        ExtractRegexGroup(blockText, @"(?:#\s*de\s*)?(?:Serie|VIN)[:\s]+([\w\-\s]+?)(?:,|;|\.|$)", "Serie", remate.Detalles);
+
+                        // New Technical Fields with Robust Lookaheads (Stop at next field label or punctuation)
+                        // Note: We use \s* in lookahead to catch "Capacidad:" immediately following value
+                        var techLookahead = @"(?=\s+(?:Capacidad|Peso|Tracci[óo]n|Carrocer[íi]a|#|Serie|VIN|Placa|Motor|Color|Estilo|Modelo|Marca|A[ñn]o)|$|;|\.|,|:)";
+
+                        ExtractRegexGroup(blockText, $@"Categor[íi]a[:\s]+(.*?){techLookahead}", "Categoria", remate.Detalles);
+                        ExtractRegexGroup(blockText, $@"Capacidad[:\s]+(.*?){techLookahead}", "Capacidad", remate.Detalles);
+                        // Peso regex handles explicit units or stops at lookahead
+                        ExtractRegexGroup(blockText, $@"Peso(?:\s+Neto|\s+Vac[íi]o)?[:\s]+([\w\-\s\.]+)(?:KG|Kg|kg|toneladas|ton)?{techLookahead}", "Peso", remate.Detalles);
+                        ExtractRegexGroup(blockText, $@"Tracci[óo]n[:\s]+(.*?){techLookahead}", "Traccion", remate.Detalles);
+                        ExtractRegexGroup(blockText, $@"Carrocer[íi]a[:\s]+(.*?){techLookahead}", "Carroceria", remate.Detalles);
+
+                        // Serie/VIN regex (specific handling for '# de Serie')
+                        ExtractRegexGroup(blockText, $"(?:#\\s*de\\s*)?(?:Serie|VIN)[:\\s]+(.*?){techLookahead}", "Serie", remate.Detalles);
+
+                        // Try to find Year (Anio) explicitly if labelled 'Año' or 'Modelo' followed by 4 digits
+                        ExtractRegexGroup(blockText, @"A[ñn]o[:\s]+(\d{4})", "Anio", remate.Detalles);
+                        if (!remate.Detalles.ContainsKey("Anio"))
+                        {
+                            // Fallback: sometimes 'Modelo 2024' implies year
+                            var modeloYearMatch = Regex.Match(blockText, @"Modelo\s+(\d{4})", RegexOptions.IgnoreCase);
+                            if (modeloYearMatch.Success) remate.Detalles["Anio"] = modeloYearMatch.Groups[1].Value;
+                        }
 
                         // Construct Title
                         var marca = remate.Detalles.ContainsKey("Marca") ? remate.Detalles["Marca"] : "Vehículo";
                         var estilo = remate.Detalles.ContainsKey("Estilo") ? remate.Detalles["Estilo"] : "";
                         var modelo = remate.Detalles.ContainsKey("Modelo") ? remate.Detalles["Modelo"] : "";
-                        remate.Titulo = $"{marca} {estilo} {modelo}".Trim();
+                        var anio = remate.Detalles.ContainsKey("Anio") ? $" {remate.Detalles["Anio"]}" : "";
+
+                        remate.Titulo = $"{marca} {estilo} {modelo}{anio}".Trim();
                     }
                     else
                     {
@@ -715,7 +741,7 @@ namespace Backend.Services
                         {
                             remate.Titulo = remate.Detalles["Ubicacion"].Trim();
                             // Truncate if too long
-                            if (remate.Titulo.Length > 50) remate.Titulo = remate.Titulo.Substring(0, 47) + "...";
+                            if (remate.Titulo.Length > 50) remate.Titulo = string.Concat(remate.Titulo.AsSpan(0, 47), "...");
                         }
                         else
                         {
@@ -837,7 +863,7 @@ namespace Backend.Services
                     Console.WriteLine($"  >> Price={price1}, Currency={currencySymbol}, Display={remate.PrecioBaseDisplay}, Exp={remate.Expediente ?? "N/A"}");
 
                     // Extract Dates and specific prices for subsequent auctions
-                    var dateMatches = Regex.Matches(blockText, @"(?:(primer|segundo|tercer)[oa]?\s+)?(?:remate|subasta)\s+(?:se\s+)?(?:señalan|fijan)\s+(?:las|para el)\s+(.*?)(?:\.|;|,|\scon\b)", RegexOptions.IgnoreCase);
+                    var dateMatches = MyRegex7().Matches(blockText);
 
                     // This simple regex loop is okay, but often 2nd/3rd auctions are separate sentences with their own prices.
                     // Let's look for specific sentences.
@@ -845,20 +871,20 @@ namespace Backend.Services
                     // 1st - Try multiple patterns for date extraction
                     string date1 = "";
                     // Pattern 1: "se señalan las X HORAS DEL..." (without "remate" prefix)
-                    var match1 = Regex.Match(blockText, @"se\s+señalan?\s+(?:las\s+)?(.*?)(?:\)|\.|;)", RegexOptions.IgnoreCase);
+                    var match1 = MyRegex8().Match(blockText);
                     if (match1.Success) date1 = ParseSpanishDate(match1.Groups[1].Value);
 
                     // Pattern 2: Parenthetical date like "(9:00 AM DEL 12-02-2026)"
                     if (string.IsNullOrEmpty(date1) || date1.Length > 30)
                     {
-                        var parenDate = Regex.Match(blockText, @"\((\d{1,2}:\d{2}\s*(?:AM|PM)?\s+DEL?\s+\d{1,2}[\-/]\d{1,2}[\-/]\d{2,4})\)", RegexOptions.IgnoreCase);
+                        var parenDate = MyRegex9().Match(blockText);
                         if (parenDate.Success) date1 = ParseSpanishDate(parenDate.Groups[1].Value);
                     }
 
                     // Pattern 3: Direct numeric date near "señal" keyword
                     if (string.IsNullOrEmpty(date1) || date1.Length > 30)
                     {
-                        var numDate = Regex.Match(blockText, @"señal\w*.*?(\d{1,2}[\-/]\d{1,2}[\-/]\d{2,4})", RegexOptions.IgnoreCase);
+                        var numDate = MyRegex10().Match(blockText);
                         if (numDate.Success) date1 = ParseSpanishDate(numDate.Groups[1].Value);
                     }
 
@@ -877,16 +903,16 @@ namespace Backend.Services
                     string date2 = "";
                     decimal price2 = price1 > 0 ? price1 * 0.75m : 0;
                     // Look for "segundo remate... base de X"
-                    var match2Block = Regex.Match(blockText, @"segundo\s+remate.*?(?:\.|;|$)", RegexOptions.IgnoreCase);
+                    var match2Block = MyRegex11().Match(blockText);
                     if (match2Block.Success)
                     {
                         var segText = match2Block.Value;
                         // Extract date - Broadened keywords
-                        var d2 = Regex.Match(segText, @"(?:señalan|efectuará|realizará|celebrará|fijaron)\s+(?:las|para|a\s+las)\s+(.*?)(?:\.|;|,|con|base|\bbaja\b)", RegexOptions.IgnoreCase);
+                        var d2 = MyRegex12().Match(segText);
                         if (d2.Success) date2 = ParseSpanishDate(d2.Groups[1].Value);
 
                         // Extract specific price if mentioned
-                        var p2Match = Regex.Match(segText, @"base\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-ZáéíóúñÁÉÍÓÚÑ\s,\.]+)");
+                        var p2Match = MyRegex13().Match(segText);
                         if (p2Match.Success)
                         {
                             var p2Val = ConvertSpanishTextToDecimal(p2Match.Groups[1].Value);
@@ -980,7 +1006,7 @@ namespace Backend.Services
                 (r.TextoOriginal.Contains("tercer remate", StringComparison.OrdinalIgnoreCase) && r.Remates.Count < 3)
             ).ToList();
 
-            if (incompleteRemates.Any())
+            if (incompleteRemates.Count != 0)
             {
                 Console.WriteLine($"\n🤖 AI Repairing: Found {incompleteRemates.Count} incomplete records. Querying OpenAI...");
 
@@ -1011,7 +1037,7 @@ namespace Backend.Services
                                 {
                                     r.Remates = aiResult.Remates;
                                     // Update main price from the first auction in the list
-                                    var firstDate = r.Remates.FirstOrDefault(x => x.Label.Contains("1") || x.Label.Contains("Primer"));
+                                    var firstDate = r.Remates.FirstOrDefault(x => x.Label.Contains('1') || x.Label.Contains("Primer"));
                                     if (firstDate != null && firstDate.Precio > 0)
                                     {
                                         r.PrecioBase = firstDate.Precio;
@@ -1073,5 +1099,34 @@ namespace Backend.Services
                 }
             }
         }
+
+        [GeneratedRegex(@"(Expediente|EXP|autos?|remate|subasta|finca|veh[íi]culo|placa)", RegexOptions.IgnoreCase, "es-CR")]
+        private static partial Regex MyRegex();
+        [GeneratedRegex(@"\blas(diez|once|doce|trece|catorce|quince|dieciséis|dieciseis|diecisiete|dieciocho|diecinueve|veinte|veintiuno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve)\b", RegexOptions.IgnoreCase, "es-CR")]
+        private static partial Regex MyRegex1();
+        [GeneratedRegex(@"\b(un|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciséis|dieciseis|diecisiete|dieciocho|diecinueve|veinte|veintiuno)horas?\b", RegexOptions.IgnoreCase, "es-CR")]
+        private static partial Regex MyRegex2();
+        [GeneratedRegex(@"remate\s+el\s+veh[íi]culo", RegexOptions.IgnoreCase, "es-CR")]
+        private static partial Regex MyRegex3();
+        [GeneratedRegex(@"(finca|lote|terreno|matrícula|matricula)", RegexOptions.IgnoreCase, "es-CR")]
+        private static partial Regex MyRegex4();
+        [GeneratedRegex(@"(veh[íi]culo|placa|marca[:\s]|estilo[:\s])", RegexOptions.IgnoreCase, "es-CR")]
+        private static partial Regex MyRegex5();
+        [GeneratedRegex(@"Modelo\s+(\d{4})", RegexOptions.IgnoreCase, "es-CR")]
+        private static partial Regex MyRegex6();
+        [GeneratedRegex(@"(?:(primer|segundo|tercer)[oa]?\s+)?(?:remate|subasta)\s+(?:se\s+)?(?:señalan|fijan)\s+(?:las|para el)\s+(.*?)(?:\.|;|,|\scon\b)", RegexOptions.IgnoreCase, "es-CR")]
+        private static partial Regex MyRegex7();
+        [GeneratedRegex(@"se\s+señalan?\s+(?:las\s+)?(.*?)(?:\)|\.|;)", RegexOptions.IgnoreCase, "es-CR")]
+        private static partial Regex MyRegex8();
+        [GeneratedRegex(@"\((\d{1,2}:\d{2}\s*(?:AM|PM)?\s+DEL?\s+\d{1,2}[\-/]\d{1,2}[\-/]\d{2,4})\)", RegexOptions.IgnoreCase, "es-CR")]
+        private static partial Regex MyRegex9();
+        [GeneratedRegex(@"señal\w*.*?(\d{1,2}[\-/]\d{1,2}[\-/]\d{2,4})", RegexOptions.IgnoreCase, "es-CR")]
+        private static partial Regex MyRegex10();
+        [GeneratedRegex(@"segundo\s+remate.*?(?:\.|;|$)", RegexOptions.IgnoreCase, "es-CR")]
+        private static partial Regex MyRegex11();
+        [GeneratedRegex(@"(?:señalan|efectuará|realizará|celebrará|fijaron)\s+(?:las|para|a\s+las)\s+(.*?)(?:\.|;|,|con|base|\bbaja\b)", RegexOptions.IgnoreCase, "es-CR")]
+        private static partial Regex MyRegex12();
+        [GeneratedRegex(@"base\s+(?:de\s+)?(?:la suma de\s+)?([a-zA-ZáéíóúñÁÉÍÓÚÑ\s,\.]+)")]
+        private static partial Regex MyRegex13();
     }
 }
