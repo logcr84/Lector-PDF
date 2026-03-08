@@ -670,15 +670,31 @@ namespace Backend.Services
 
                         // Extract Vehicle Details using shared lookahead
                         ExtractRegexGroup(blockText, $@"Marca[:\s]+([\w\-\s]+?){fieldLookahead}", "Marca", remate.Detalles);
+                        // Fallback: "el vehículo TOYOTA COROLLA" or "vehículo de marca TOYOTA" (no Marca: label)
+                        if (!remate.Detalles.ContainsKey("Marca"))
+                        {
+                            ExtractRegexGroup(blockText,
+                                @"veh[íi]culo\s+(?:de\s+(?:la\s+)?marca\s+)?([A-ZÁÉÍÓÚÑA-Z][A-ZÁÉÍÓÚÑ\w\-]+(?:\s+[A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ\w\-]+)*?)(?:\s+[Pp]laca|\s+[Mm]odelo|\s+[Aa][ñn]o|\s+[Cc]olor|,|\.|$)",
+                                "Marca", remate.Detalles);
+                        }
+
                         ExtractRegexGroup(blockText, $@"Estilo[:\s]+([\w\-\s]+?){fieldLookahead}", "Estilo", remate.Detalles);
                         ExtractRegexGroup(blockText, $@"Modelo[:\s]+([\w\-\s]+?){fieldLookahead}", "Modelo", remate.Detalles);
                         ExtractRegexGroup(blockText, $@"Color[:\s]+([\w\-\s]+?){fieldLookahead}", "Color", remate.Detalles);
                         // Placa: handles CL-337303, EE 038972, CBY660, MOT-454901
                         ExtractRegexGroup(blockText, @"Placa[:\s]+([\w\-]+(?:\s[\w\-]+)?)", "Placa", remate.Detalles);
-                        ExtractRegexGroup(blockText, $@"Motor[:\s]+([\w\-\s]+?){fieldLookahead}", "Motor", remate.Detalles);
+                        // Motor: handles "Motor:", "N. Motor:", "Núm. Motor:", "N° Motor:"
+                        ExtractRegexGroup(blockText, $@"(?:[Nn][°º\.]?\s*)?Motor[:\s]+([\w\d][\w\d\-]{{3,}})", "Motor", remate.Detalles);
 
-                        // Serie/VIN: capture the actual alphanumeric value (e.g., LVVDB21B3SE004854)
-                        ExtractRegexGroup(blockText, @"(?:#\s*de\s*)?(?:Serie|VIN)[:\s]+([\w\d][\w\d\-]{4,})", "Serie", remate.Detalles);
+                        // Serie/VIN: handles "# de Serie:", "N° de Serie:", "No. Serie:", "VIN:", "Serie:"
+                        ExtractRegexGroup(blockText,
+                            @"(?:(?:[Nn][°º\.]?\s*(?:de\s+)?|#\s*de\s*)?(?:Serie|VIN|Chasis\s+N[°º]?)|N[°º]\.\s*Serie)[:\s]+([\w\d][\w\d\-]{5,})",
+                            "Serie", remate.Detalles);
+                        if (!remate.Detalles.ContainsKey("Serie"))
+                        {
+                            // Fallback: bare VIN-like alphanumeric (17 chars typical for VINs)
+                            ExtractRegexGroup(blockText, @"(?:Serie|VIN)[:\s]+([\w\d\-]{6,})", "Serie", remate.Detalles);
+                        }
 
                         // Technical Fields
                         ExtractRegexGroup(blockText, $@"Categor[íi]a[:\s]+([\w\-\s]+?){fieldLookahead}", "Categoria", remate.Detalles);
